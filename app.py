@@ -15,7 +15,11 @@ from linebot.v3.messaging import (
 )
 from linebot.v3.webhooks import ImageMessageContent, MessageEvent
 
+from src import clip_model
 from src.pipeline import run as pipeline_run
+
+# 啟動時預載 CLIP 模型，避免第一個請求才觸發載入
+clip_model.get_model()
 
 app = Flask(__name__)
 
