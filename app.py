@@ -38,13 +38,17 @@ def webhook():
     return "OK"
 
 
-def _process_image(reply_token, image_bytes):
+def _process_image(reply_token, message_id):
+    with ApiClient(_config) as api_client:
+        blob_api = MessagingApiBlob(api_client)
+        image_bytes = blob_api.get_message_content(message_id)
+
     with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp:
         tmp.write(image_bytes)
         tmp_path = tmp.name
 
     try:
-        reply_text = pipeline_run(tmp_path)
+        reply_text = pipeline_run(tmp_path, index_path="index.npz")
     except Exception:
         import traceback
         traceback.print_exc()
@@ -68,13 +72,9 @@ def _process_image(reply_token, image_bytes):
 
 @_handler.add(MessageEvent, message=ImageMessageContent)
 def handle_image(event):
-    with ApiClient(_config) as api_client:
-        blob_api = MessagingApiBlob(api_client)
-        image_bytes = blob_api.get_message_content(event.message.id)
-
     threading.Thread(
         target=_process_image,
-        args=(event.reply_token, image_bytes),
+        args=(event.reply_token, event.message.id),
         daemon=True,
     ).start()
 
