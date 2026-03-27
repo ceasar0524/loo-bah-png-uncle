@@ -1,8 +1,8 @@
 anthropic==0.86.0
 Pillow==12.1.1
-torch==2.2.2
-torchvision==0.17.2
-numpy==1.26.4
+torch==2.4.1
+torchvision==0.19.1
+numpy==2.0.2
 opencv-python-headless==4.13.0.92
 ftfy==6.3.1
 regex==2026.2.28
