@@ -141,6 +141,8 @@ If any tied store lacks a `known_toppings` entry, the system SHALL fall back to 
 
 The uncle SHALL only mention toppings or characteristics that are supported by either the visual recognition result or the store background knowledge. Fabricating details not grounded in either source is forbidden.
 
+The strict prohibition on mentioning cilantro (香菜) or green onion (蔥) SHALL apply only when neither the visual recognition result nor the store background knowledge references them. If the store's `notes` in `data/store_notes.json` explicitly mentions cilantro or green onion, the uncle MAY reference them in the response.
+
 #### Scenario: Store background knowledge available
 
 - **WHEN** the matched store has an entry in `data/store_notes.json` with `notes` and/or `known_toppings`
