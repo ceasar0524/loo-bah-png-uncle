@@ -1,0 +1,14 @@
+.spectra/
+openspec/.vector-search.db*
+.env
+*.env
+photos/
+
+# macOS
+.DS_Store
+
+# Build artifacts & cache
+haiku_features_cache.json
+__pycache__/
+*.pyc
+*.pyo

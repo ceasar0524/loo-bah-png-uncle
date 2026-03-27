@@ -1,0 +1,7 @@
+categories:
+  - label: with_skin
+    prompt_en: "braised pork rice with visible gelatinous pork skin on top"
+    prompt_zh: "有豬皮的魯肉飯，看得到軟爛膠質豬皮"
+  - label: no_skin
+    prompt_en: "braised pork rice without pork skin, only meat chunks"
+    prompt_zh: "沒有豬皮的魯肉飯，只有肉塊"

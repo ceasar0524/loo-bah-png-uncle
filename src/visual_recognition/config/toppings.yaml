@@ -1,0 +1,68 @@
+toppings:
+  - key: cilantro
+    name_en: cilantro
+    name_zh: 香菜
+    desc_en: "fresh cilantro coriander herb, flat jagged green leaves, small bunch garnish on rice"
+    desc_zh: "新鮮香菜葉點綴"
+    threshold: 0.45
+  - key: braised_egg
+    name_en: braised egg
+    name_zh: 滷蛋
+    desc_en: "whole dark brown braised egg, soy sauce marinated"
+    desc_zh: "深褐色整顆滷蛋"
+  - key: tofu
+    name_en: braised tofu
+    name_zh: 豆腐
+    desc_en: "braised tofu block, dark brown surface from soy sauce"
+    desc_zh: "滷豆腐，表面深褐色"
+  - key: pickled_mustard
+    name_en: pickled mustard greens
+    name_zh: 酸菜
+    desc_en: "pale yellow-green pickled mustard greens, fermented"
+    desc_zh: "淡黃綠色醃製酸菜"
+  - key: soft_boiled_egg
+    name_en: soft boiled egg
+    name_zh: 半熟荷包蛋
+    desc_en: "fried egg with runny yolk on top of rice"
+    desc_zh: "半熟蛋黃的荷包蛋"
+  - key: hard_boiled_egg
+    name_en: hard boiled egg
+    name_zh: 全熟荷包蛋
+    desc_en: "fully cooked fried egg with solid yolk on top of rice"
+    desc_zh: "全熟蛋黃的荷包蛋"
+  - key: oyster
+    name_en: fresh oyster
+    name_zh: 鮮蚵
+    desc_en: "plump fresh oyster, grey or cream colored shellfish meat"
+    desc_zh: "飽滿鮮蚵，灰白色貝肉"
+  - key: pickled_radish
+    name_en: pickled yellow radish
+    name_zh: 醃黃蘿蔔
+    desc_en: "sliced yellow pickled radish, bright yellow color"
+    desc_zh: "切片醃黃蘿蔔，鮮黃色"
+  - key: cucumber
+    name_en: sliced cucumber
+    name_zh: 小黃瓜
+    desc_en: "thin sliced green cucumber, bright green color"
+    desc_zh: "薄切小黃瓜，鮮綠色"
+  - key: pork_floss
+    name_en: pork floss
+    name_zh: 肉鬆
+    desc_en: "fluffy light brown pork floss on top of rice"
+    desc_zh: "蓬鬆淡褐色肉鬆"
+  - key: shredded_chicken
+    name_en: shredded chicken
+    name_zh: 雞肉絲
+    desc_en: "pale white shredded chicken meat strips"
+    desc_zh: "淡白色雞肉絲"
+  - key: braised_cabbage
+    name_en: braised cabbage
+    name_zh: 魯白菜
+    desc_en: "soft braised cabbage leaves, pale green or white"
+    desc_zh: "軟爛滷白菜，淡綠或白色"
+  - key: green_onion
+    name_en: green onion
+    name_zh: 蔥
+    desc_en: "thin hollow tube-shaped green stalks, scallion cut into small rings or strips"
+    desc_zh: "細長中空管狀蔥段，切成小圈或絲狀"
+    threshold: 0.7

@@ -1,0 +1,13 @@
+categories:
+  - label: light
+    prompt_en: "braised pork rice with light golden-brown sauce, mild soy sauce color"
+    prompt_zh: "醬色淺褐的魯肉飯，醬汁顏色淡"
+  - label: medium
+    prompt_en: "braised pork rice with medium brown sauce, typical soy sauce braising color"
+    prompt_zh: "醬色中褐的魯肉飯，一般滷汁顏色"
+  - label: dark
+    prompt_en: "braised pork rice with very dark brown sauce, rich and deeply braised"
+    prompt_zh: "醬色深褐的魯肉飯，深色濃郁滷汁"
+  - label: black_gold
+    prompt_en: "braised pork rice with black caramelized sauce, black gold coloring"
+    prompt_zh: "黑金色醬汁的魯肉飯，焦糖化深黑色滷汁"

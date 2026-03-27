@@ -1,0 +1,145 @@
+{
+  "玉女號魯肉飯（林口區）": {
+    "notes": "簡單純粹，白飯淋上魯肉和肉汁，不加其他配料，純靠魯肉決勝負。行家吃法是把魯肉、滷汁跟飯一起拌勻再吃，口感更好。口感跟鬍鬚張有七八分像，同樣是在白飯淋上富含膠質的滷汁，讓人忍不住一口接一口，扒完滿嘴膠質口齒留香，用衛生紙擦嘴還會黏在嘴上。差別在於玉女的豬皮和魯肉切得比較碎，不像鬍鬚張多是一條條細長的瘦肉條。",
+    "known_toppings": [
+      "soft_boiled_egg"
+    ],
+    "visual_profile": {
+      "pork_part": "fatty",
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_color": "dark",
+      "rice_quality": "soft"
+    }
+  },
+  "晴光小吃(林口區)": {
+    "notes": "大叔吃的不是魯肉，是回憶。這家從小吃到大，有記憶以來的第一碗魯肉飯就是在這裡吃到，當時驚為天人，常常吵著家人帶來吃。附近醒吾、僑大的學生都是常客，中午晚上擠滿人，外地饕客也慕名而來。傳了好幾代，現在的口味和以前不太一樣——現在淋的是瘦肉肉燥，不油膩，說好吃也是好吃，但總覺得少了以前軟爛肥肉丁在嘴中融化的那種兒時感動。醃黃瓜是這碗的靈魂綠葉，來必配，提味解膩。怕鹹的可以跳過。",
+    "known_toppings": [
+      "pickled_radish"
+    ],
+    "bowl": {
+      "color": "bright_green",
+      "shape": "round_bowl",
+      "distinctive": true
+    },
+    "visual_profile": {
+      "pork_part": "lean",
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_color": "medium",
+      "rice_quality": "soft"
+    }
+  },
+  "阿興魯肉飯（中和區）": {
+    "notes": "阿興的滷肉飯很特別，除了滷肉之外還會配上新鮮香菜，是大叔第一次吃到飯上有加香菜的店，北部很少見，因此引起大叔的濃厚興趣。不愛香菜的人可以在菜單上註明不加。撇開香菜，滷肉以剁碎肥肉和豬皮為主，份量給得很多，喜歡吃肥肉的人可以吃得很開心。滷肉雖肥卻爽口不油膩，嘴裡散開的是淡淡甜味，豬皮滷透後口感肥美 Q 彈。老闆做人有愛心，會提供給需要溫飽的人。",
+    "known_toppings": [
+      "cilantro"
+    ],
+    "visual_profile": {
+      "pork_part": "fatty",
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_color": "medium",
+      "rice_quality": "soft"
+    }
+  },
+  "明志派出所對面滷肉飯(泰山區)": {
+    "notes": "這家常常無預警休息，要吃到需要碰點運氣。遵循傳統古早作法，將碎豬肉和肥肉一起剁碎成末，加醬油滷汁熬煮，鋪在白飯上，燉煮的滷肉香氣很誘人，很像家裡老媽或阿嬤煮的味道。口感像剁得更碎的瓜仔肉，但加了碎肥肉，吃起來更綿密、更軟嫩，非常下飯。飯煮得比較黏Q，配上同樣黏稠的滷肉，整個合拍——讓人不知不覺一碗接著一碗，會上癮的那種。",
+    "known_toppings": [],
+    "bowl": {
+      "color": "olive_green",
+      "shape": "round_bowl",
+      "texture": "matte_ceramic",
+      "distinctive": true
+    },
+    "visual_profile": {
+      "pork_part": "fatty",
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_color": "dark",
+      "rice_quality": "mushy"
+    }
+  },
+  "雙胖子(大同區)": {
+    "notes": "這家魯肉有甜甜的味道，還有一種說不清楚的鹹香口感，吃過的人都有同感。秘密在老闆把醃製蔭瓜和魯肉一起煮——吃到的是口感偏爛的醬瓜，和軟嫩魯肉一起配飯，別有一番滋味。醬瓜的滷汁滲透進飯粒裡，每一口都吃得到清甜口感，這就是雙胖子的獨特之處。",
+    "known_toppings": [],
+    "visual_profile": {
+      "pork_part": "fatty",
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_color": "dark",
+      "rice_quality": "soft"
+    }
+  },
+  "滷三塊五花肉飯（北投區）": {
+    "notes": "晚上才開店，開到半夜，很多人把它當宵夜吃。每到晚上大排長龍，要吃到得先做好排隊的心理準備。肉燥是帶皮肥肉那種，而且不小塊——每塊滷肉軟爛，肥肉加豬皮入口即化。口感有點像北投的矮仔財，但比較不甜，甜度剛剛好。",
+    "known_toppings": [
+      "pork_floss"
+    ],
+    "visual_profile": {
+      "pork_part": "belly",
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_color": "dark",
+      "rice_quality": "soft"
+    }
+  },
+  "313號鵝肉擔（北投區）": {
+    "notes": "充滿鵝油香的魯肉飯，這是這家的靈魂。位於石牌振興醫院後方，距石牌夜市走路可到，但招牌不起眼，開車很容易錯過。別看它小小一間，是石牌在地人氣小吃，用餐時間人潮絡繹不絕。大叔學生時期常來，和三五好友從文化後山騎車殺過來，點幾碗魯肉飯配小菜吃飽，再去逛夜市續攤。魯肉走肥滋滋路線，大量豬皮和肥肉丁，淋在白飯上讓人享受肥肉一咬爆開的滋味；帶皮肥肉入口滿滿膠質，加上鵝油特有的香氣層層疊疊，一口接一口飯停不下來，整個非常過癮。",
+    "known_toppings": [],
+    "visual_profile": {
+      "pork_part": "skin_heavy",
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_color": "dark",
+      "rice_quality": "soft"
+    }
+  },
+  "北北車魯肉飯（中正區）": {
+    "notes": "隱身在南陽補習街小巷弄內，店內陳設走文青風，連碗公都是文青款，不講還以為在吃西式餐點。但那個魯肉一入口，就是最道地的台灣味——帶皮肥肉大塊給，滷得透亮呈黑糖色，甜度恰到好處，骨溜骨溜一下就在嘴裡化開，完全沒有油膩感。",
+    "known_toppings": [
+      "pork_floss"
+    ],
+    "bowl": {
+      "color": "white",
+      "shape": "wide_flat_plate",
+      "distinctive": true
+    },
+    "visual_profile": {
+      "pork_part": "belly",
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_color": "black_gold",
+      "rice_quality": "soft"
+    }
+  },
+  "黃記魯肉飯（中山區）": {
+    "notes": "就算愛得海枯石爛也要等。每到開店，店外肯定站一堆人，不是等內用就是排外帶，沒等上 15~20 分鐘肯定吃不到。魯肉飯同時有帶皮軟嫩肥肉、一塊塊分離的豬皮和瘦肉，鋪滿白飯再澆上黏稠膠質滷汁。整碗看起來很鹹，但實際帶有淡淡焦甜味，肥肉膠質在口中化開和飯交纏的口感，真的很難用文字形容。飯上還放一兩片醃脆瓜，拿來配飯解膩。",
+    "known_toppings": [
+      "pickled_radish"
+    ],
+    "visual_profile": {
+      "pork_part": "skin_heavy",
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_color": "dark",
+      "rice_quality": "soft"
+    }
+  },
+  "龍記小吃店（中山區）": {
+    "notes": "店家自稱賣的是肉燥飯而非魯肉飯。用幾乎全瘦肉的肉燥，口味清淡不死鹹，淋的滷汁比較像湯汁，配飯剛好。行家吃法是在飯上加幾滴醋，更夠味。因為是做學生生意，份量驚人又便宜：小碗 30 元，大碗約 40 元。",
+    "known_toppings": [],
+    "bowl": {
+      "color": "light_gray_green",
+      "shape": "round_bowl",
+      "distinctive": true
+    },
+    "visual_profile": {
+      "pork_part": "lean",
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_color": "light",
+      "rice_quality": "fluffy"
+    }
+  }
+}

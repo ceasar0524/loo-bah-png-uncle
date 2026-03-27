@@ -1,0 +1,10 @@
+categories:
+  - label: fat_heavy
+    prompt_en: "braised pork rice with fat-heavy pork, ratio approximately 7 fat to 3 lean"
+    prompt_zh: "肥肉比例高的魯肉飯，約七分肥三分瘦"
+  - label: balanced
+    prompt_en: "braised pork rice with balanced fat and lean, ratio approximately 5 to 5"
+    prompt_zh: "肥瘦均衡的魯肉飯，約五五比"
+  - label: lean_heavy
+    prompt_en: "braised pork rice with lean-heavy pork, ratio approximately 3 fat to 7 lean"
+    prompt_zh: "瘦肉比例高的魯肉飯，約三分肥七分瘦"

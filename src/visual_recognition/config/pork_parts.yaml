@@ -1,0 +1,13 @@
+categories:
+  - label: belly
+    prompt_en: "braised pork belly with alternating fat and lean layers"
+    prompt_zh: "五花肉，肥瘦相間的三層肉"
+  - label: fatty
+    prompt_en: "braised pork with mostly fat, very little lean meat"
+    prompt_zh: "肥肉多，瘦肉少的滷肉"
+  - label: lean
+    prompt_en: "braised pork with mostly lean meat, very little fat"
+    prompt_zh: "瘦肉多，肥肉少的滷肉"
+  - label: skin_heavy
+    prompt_en: "braised pork with lots of gelatinous pork skin"
+    prompt_zh: "皮多，有大量豬皮的滷肉"

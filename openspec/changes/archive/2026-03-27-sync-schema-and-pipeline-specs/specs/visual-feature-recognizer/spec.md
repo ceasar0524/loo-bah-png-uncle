@@ -1,0 +1,107 @@
+## MODIFIED Requirements
+
+### Requirement: Detect toppings using binary CLIP classification
+
+The system SHALL detect toppings from the image using the Claude Haiku vision classifier. Topping detection is performed in the same API call as lu-rou-fan classification, returning a list of detected toppings from the standard vocabulary: cilantro, braised_egg, soft_boiled_egg, pork_floss, pickled_radish, green_onion, cucumber.
+
+The CLIP-based binary topping detection is superseded by Haiku vision and SHALL NOT be used.
+
+#### Scenario: Cilantro detected
+
+- **WHEN** the image contains visible cilantro on the lu-rou-fan
+- **THEN** the Haiku classifier SHALL include "cilantro" in the toppings list
+
+#### Scenario: No toppings detected
+
+- **WHEN** the image shows plain lu-rou-fan with no identifiable toppings
+- **THEN** the system SHALL return an empty toppings list
+
+#### Scenario: Multiple toppings detected simultaneously
+
+- **WHEN** the image contains both braised egg and pickled radish
+- **THEN** both SHALL be included in the toppings list
+
+---
+### Requirement: Classify pork part from configurable categories
+
+The system SHALL classify the pork part using CLIP zero-shot classification. Default categories: belly (五花), fatty (肥肉多), lean (瘦肉多), skin_heavy (皮多). The result is used for uncle-persona food description only and SHALL NOT be used for store matching.
+
+#### Scenario: Pork part classified by highest CLIP similarity
+
+- **WHEN** pork part classification is performed
+- **THEN** the system SHALL return the label of the category whose prompt has the highest cosine similarity to the image
+
+#### Scenario: Missing pork part config falls back to defaults
+
+- **WHEN** the pork_parts config file does not exist
+- **THEN** the system SHALL use the built-in default categories and SHALL NOT crash
+
+---
+### Requirement: Classify fat-to-lean ratio from configurable categories
+
+The system SHALL classify the fat-to-lean ratio of the pork using CLIP zero-shot classification. Default categories: fat_heavy (7:3), balanced (5:5), lean_heavy (3:7). The result is used for uncle-persona food description only and SHALL NOT be used for store matching.
+
+#### Scenario: Fat ratio classified by highest CLIP similarity
+
+- **WHEN** fat ratio classification is performed
+- **THEN** the system SHALL return the label of the category whose prompt has the highest cosine similarity to the image
+
+#### Scenario: Missing fat ratio config falls back to defaults
+
+- **WHEN** the fat_ratio config file does not exist
+- **THEN** the system SHALL use the built-in default categories and SHALL NOT crash
+
+---
+### Requirement: Detect pork skin presence from configurable categories
+
+The system SHALL classify whether the pork includes skin using CLIP zero-shot classification. Default categories: with_skin, no_skin. The result is used for uncle-persona food description only and SHALL NOT be used for store matching.
+
+#### Scenario: Pork with skin detected
+
+- **WHEN** the image shows braised pork with visible skin and gelatinous texture
+- **THEN** the system SHALL return skin: "with_skin"
+
+#### Scenario: Missing skin config falls back to defaults
+
+- **WHEN** the skin config file does not exist
+- **THEN** the system SHALL use the built-in default categories and SHALL NOT crash
+
+---
+### Requirement: Classify sauce color from configurable categories
+
+The system SHALL classify the braising sauce color using CLIP zero-shot classification. Default categories: light, medium, dark, black_gold. The result is used for uncle-persona food description only and SHALL NOT be used for store matching.
+
+#### Scenario: Sauce color classified by highest CLIP similarity
+
+- **WHEN** sauce color classification is performed
+- **THEN** the system SHALL return the label of the category whose prompt has the highest cosine similarity to the image
+
+#### Scenario: Missing sauce color config falls back to defaults
+
+- **WHEN** the sauce_colors config file does not exist
+- **THEN** the system SHALL use the built-in default categories and SHALL NOT crash
+
+---
+### Requirement: Classify rice quality from configurable categories
+
+The system SHALL classify the rice texture using CLIP zero-shot classification. Default categories: fluffy, soft, mushy. The result is used for uncle-persona food description only and SHALL NOT be used for store matching.
+
+#### Scenario: Rice quality classified by highest CLIP similarity
+
+- **WHEN** rice quality classification is performed
+- **THEN** the system SHALL return the label of the category whose prompt has the highest cosine similarity to the image
+
+#### Scenario: Missing rice quality config falls back to defaults
+
+- **WHEN** the rice_qualities config file does not exist
+- **THEN** the system SHALL use the built-in default categories and SHALL NOT crash
+
+---
+### Requirement: Feature recognition only runs on confirmed lu-rou-fan
+
+The system SHALL only perform CLIP feature recognition when is_lu_rou_fan is true. If the classifier returns false, all feature fields SHALL be skipped and set to None or empty.
+
+#### Scenario: Feature recognition skipped for non-lu-rou-fan
+
+- **WHEN** the lu-rou-fan classifier returns is_lu_rou_fan: false
+- **THEN** the system SHALL NOT invoke CLIP feature recognition and SHALL return None for all feature fields

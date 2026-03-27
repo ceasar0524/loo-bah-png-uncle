@@ -1,0 +1,10 @@
+categories:
+  - label: fluffy
+    prompt_en: "braised pork rice with fluffy separated rice grains, each grain distinct"
+    prompt_zh: "米粒鬆散分明、粒粒清晰的魯肉飯"
+  - label: soft
+    prompt_en: "braised pork rice with soft tender rice, slightly sticky and moist"
+    prompt_zh: "米飯軟嫩帶點黏性、入口即化的魯肉飯"
+  - label: mushy
+    prompt_en: "braised pork rice with very soft well-absorbed rice, fully soaked in sauce"
+    prompt_zh: "米飯充分吸飽醬汁、軟爛入味的魯肉飯"
