@@ -13,4 +13,4 @@
 ## 3. 本機驗證
 
 - [x] 3.1 安裝新依賴，確認 `app.py` 可正常啟動（`python app.py`）
-- [ ] 3.2 用 ngrok 暴露本機 port，填入 LINE Developers webhook URL，傳照片測試完整流程（需先建立 LINE Bot channel）
+- [x] 3.2 用 ngrok 暴露本機 port，填入 LINE Developers webhook URL，傳照片測試完整流程（需先建立 LINE Bot channel）
