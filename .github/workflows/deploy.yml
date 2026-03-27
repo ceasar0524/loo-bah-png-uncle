@@ -38,4 +38,6 @@ jobs:
             --region=asia-east1 \
             --platform=managed \
             --allow-unauthenticated \
+            --memory=2Gi \
+            --cpu=2 \
             --set-env-vars="ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }},LINE_CHANNEL_SECRET=${{ secrets.LINE_CHANNEL_SECRET }},LINE_CHANNEL_ACCESS_TOKEN=${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}"
