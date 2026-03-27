@@ -2,12 +2,60 @@
 
 傳一張魯肉飯照片給 LINE Bot，30 年老饕大叔幫你品評這碗飯。
 
+## Demo
+
+加入 LINE Bot，傳照片試試看：
+
+[![加入魯肉飯大叔](assets/line-qr.png)](https://line.me/R/ti/p/%40940srtss)
+
+👉 [https://line.me/R/ti/p/@940srtss](https://line.me/R/ti/p/%40940srtss)
+
+---
+
 ## 功能
 
 - 辨識照片是否為魯肉飯
 - 分析視覺特徵（肉型、醬汁、配料等）
 - KNN 比對資料庫中的店家
 - 以大叔口吻回覆品評
+
+## 系統架構
+
+```
+LINE Bot (使用者傳照片)
+        ↓
+Flask Webhook (app.py)
+        ↓
+Pipeline (src/pipeline.py)
+    ├── 圖片前處理 (preprocessing.py)
+    ├── 視覺辨識 (visual_recognition/)
+    │       ├── CLIP 圖片向量化
+    │       ├── Claude Haiku 分類器（是否為魯肉飯 + 配料辨識）
+    │       └── CLIP 特徵辨識（肉型、醬汁、米飯風格）
+    ├── 店家比對 (store_matching/)
+    │       └── KNN 向量相似度比對 (index.npz)
+    └── 大叔回覆生成 (uncle_persona/)
+            └── Claude Haiku + System Prompt
+        ↓
+LINE Bot 回覆訊息
+```
+
+## 使用工具
+
+| 工具 | 用途 |
+|------|------|
+| [CLIP](https://github.com/openai/CLIP) | 圖片向量化與特徵辨識 |
+| [Claude Haiku](https://www.anthropic.com) | 魯肉飯分類、大叔回覆生成 |
+| [LINE Messaging API](https://developers.line.biz) | Bot 入口 |
+| [Flask](https://flask.palletsprojects.com) | Webhook server |
+| [GCP Cloud Run](https://cloud.google.com/run) | 無伺服器部署 |
+| [GitHub Actions](https://github.com/features/actions) | CI/CD 自動部署 |
+
+## 開發方式
+
+本專案透過 **Claude Code**（AI 編程助理）與 **Spectra**（Spec-Driven Development 工具）協作完成。由人主導需求與決策，AI 協助實作與規格管理。
+
+規格文件存放於 `openspec/`，每個功能都有對應的 proposal、spec、design 與 tasks。
 
 ## 本機執行
 
