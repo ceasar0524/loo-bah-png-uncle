@@ -43,13 +43,13 @@ toppings:
   - key: pickled_cucumber
     name_en: pickled cucumber
     name_zh: 醃小黃瓜
-    desc_en: "thin sliced pickled cucumber, bright green translucent color"
-    desc_zh: "薄切醃小黃瓜，鮮綠半透明"
+    desc_en: "thin sliced bright green cucumber pieces"
+    desc_zh: "薄切亮綠色小黃瓜片"
   - key: yin_gua
     name_en: braised pickled melon
     name_zh: 醬瓜
-    desc_en: "dark brown braised pickled melon chunks, deep soy sauce color"
-    desc_zh: "深褐色醬瓜塊，醬油深色"
+    desc_en: "dark brown soft braised melon chunks"
+    desc_zh: "深褐色軟爛醬瓜塊"
   - key: pork_floss
     name_en: pork floss
     name_zh: 肉鬆
