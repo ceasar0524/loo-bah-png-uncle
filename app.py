@@ -14,6 +14,7 @@ from linebot.v3.messaging import (
     MessagingApi,
     MessagingApiBlob,
     ReplyMessageRequest,
+    ShowLoadingAnimationRequest,
     TextMessage,
 )
 from linebot.v3.webhooks import ImageMessageContent, MessageEvent
@@ -79,6 +80,18 @@ def _process_image(reply_token, message_id):
 
 @_handler.add(MessageEvent, message=ImageMessageContent)
 def handle_image(event):
+    try:
+        with ApiClient(_config) as api_client:
+            messaging_api = MessagingApi(api_client)
+            messaging_api.show_loading_animation(
+                ShowLoadingAnimationRequest(
+                    chat_id=event.source.user_id,
+                    loading_seconds=20,
+                )
+            )
+    except Exception:
+        pass
+
     threading.Thread(
         target=_process_image,
         args=(event.reply_token, event.message.id),
