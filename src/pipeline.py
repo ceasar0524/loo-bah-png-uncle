@@ -5,6 +5,7 @@
 """
 import json
 import logging
+import time
 from pathlib import Path
 from typing import Optional, Union
 
@@ -47,22 +48,29 @@ def run(
     Returns:
         大叔回應字串
     """
+    t_start = time.perf_counter()
+
     # 1. 前處理
     pil_img = preprocess(image_source)
     if pil_img is None:
         raise ValueError(f"無法讀取圖片：{image_source}")
+    logger.info("[timing] preprocess: %.3fs", time.perf_counter() - t_start)
 
     # 2. 視覺辨識（含碗特徵，單次 Haiku call）
+    t1 = time.perf_counter()
     visual = visual_recognize(pil_img, threshold=threshold)
+    logger.info("[timing] visual_recognize: %.3fs", time.perf_counter() - t1)
 
     # 3. 店家比對（僅在確認為魯肉飯且有索引時執行）
     matching: MatchingResult = MatchingResult(is_tie=False, matches=[])
     if visual["is_lu_rou_fan"] and index_path:
         index_file = Path(index_path)
         if index_file.exists():
+            t2 = time.perf_counter()
             index = load_index(str(index_file))
             from src import clip_model
             img_feat = clip_model.encode_image(pil_img).squeeze().numpy()
+            logger.info("[timing] clip_encode: %.3fs", time.perf_counter() - t2)
 
             # 載入 store_notes 供 Haiku override 使用
             notes_file = Path(store_notes_path) if store_notes_path else _DEFAULT_STORE_NOTES
@@ -80,14 +88,21 @@ def run(
                 "toppings": visual.get("toppings", []),
             }
 
+            t3 = time.perf_counter()
             matching = match_store(
                 img_feat, index,
                 haiku_features=haiku_features,
                 store_notes=store_notes,
             )
+            logger.info("[timing] match_store: %.3fs", time.perf_counter() - t3)
         else:
             logger.warning("索引檔不存在：%s，跳過店家比對", index_path)
 
     # 4. 大叔回應
+    t4 = time.perf_counter()
     persona = _get_persona()
-    return persona.generate(visual, matching)
+    response = persona.generate(visual, matching)
+    logger.info("[timing] persona.generate: %.3fs", time.perf_counter() - t4)
+
+    logger.info("[timing] total: %.3fs", time.perf_counter() - t_start)
+    return response
