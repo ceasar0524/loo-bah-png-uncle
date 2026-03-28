@@ -28,6 +28,31 @@
 - KNN 比對資料庫中的店家
 - 以大叔口吻回覆品評
 
+## 判斷邏輯
+
+辨識流程分為兩個階段：
+
+**第一階段：判斷是哪一家店**
+
+1. CLIP 將照片向量化，與資料庫中各店家的照片向量做 KNN 相似度比對，選出最像的店家
+2. 同時，Claude Haiku 分析照片中的碗色、碗形、配料等視覺特徵
+3. 將 Haiku 偵測結果與 `store_notes.json` 中各店家的 `known_toppings`（已知配料）和 `bowl`（碗型特徵）交叉比對，計算各店家得分
+4. 若某家店得分明顯高於其他店（例如偵測到香菜，而只有阿興才有香菜），則覆蓋 CLIP 的結果，直接鎖定該店；若多家同分，則退回 CLIP 的判斷
+
+**第二階段：決定說什麼**
+
+1. 根據第一階段確定的店家，從 `store_notes.json` 讀取該店的 `notes`（背景故事）與 `known_toppings`
+2. 過濾 Haiku 偵測到的配料——只保留 `known_toppings` 中有記錄的，避免大叔亂說這家沒有的配料
+3. 將視覺辨識結果、店家背景知識一起傳給 Claude Haiku，由大叔以台灣大叔口吻生成回覆
+
+**`store_notes.json` 的角色**
+
+| 欄位 | 用於第一階段 | 用於第二階段 |
+|------|------------|------------|
+| `known_toppings` | ✓ Haiku override 比對依據 | ✓ 配料過濾 |
+| `bowl` | ✓ Haiku override 比對依據 | — |
+| `notes` | — | ✓ 大叔回覆的背景知識 |
+
 ## 系統架構
 
 ```
@@ -42,9 +67,10 @@ Pipeline (src/pipeline.py)
     │       ├── Claude Haiku 分類器（是否為魯肉飯 + 配料辨識）
     │       └── CLIP 特徵辨識（肉型、醬汁、米飯風格）
     ├── 店家比對 (store_matching/)
-    │       └── KNN 向量相似度比對 (index.npz)
+    │       ├── KNN 向量相似度比對 (index.npz)
+    │       └── Haiku 特徵覆蓋（store_notes.json）
     └── 大叔回覆生成 (uncle_persona/)
-            └── Claude Haiku + System Prompt
+            └── Claude Haiku + System Prompt + 店家背景知識
         ↓
 LINE Bot 回覆訊息
 ```
