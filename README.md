@@ -47,6 +47,8 @@
 
 **`store_notes.json` 的角色**
 
+`store_notes.json` 兩個階段都會用到，不同欄位在不同階段發揮作用：
+
 | 欄位 | 用於第一階段 | 用於第二階段 |
 |------|------------|------------|
 | `known_toppings` | ✓ Haiku override 比對依據 | ✓ 配料過濾 |
