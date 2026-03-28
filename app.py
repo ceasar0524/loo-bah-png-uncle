@@ -1,6 +1,9 @@
+import logging
 import os
 import tempfile
 import threading
+
+logging.basicConfig(level=logging.INFO)
 
 from flask import Flask, request, abort
 from linebot.v3 import WebhookHandler
