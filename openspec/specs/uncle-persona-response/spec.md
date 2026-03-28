@@ -69,12 +69,12 @@ The system SHALL return an in-character fallback message in Traditional Chinese 
 
 The system SHALL return a hardcoded in-character response when `is_lu_rou_fan` is false, without calling the Claude API.
 
-The fixed response SHALL be: "所以我說，那個滷肉呢？大叔千里迢迢來鑑定，你給我看這個？"
+The system SHALL maintain a pool of multiple response variants and randomly select one per invocation, so repeated non-lu-rou-fan inputs do not always return the same string.
 
 #### Scenario: Non-lu-rou-fan input returns hardcoded response
 
 - **WHEN** visual.is_lu_rou_fan is false
-- **THEN** the module SHALL immediately return the hardcoded uncle response without calling the Claude API, regardless of confidence level
+- **THEN** the module SHALL immediately return a randomly selected response from the hardcoded pool without calling the Claude API, regardless of confidence level
 
 ---
 ### Requirement: Low confidence photo handling
@@ -148,10 +148,20 @@ The strict prohibition on mentioning cilantro (香菜) or green onion (蔥) SHAL
 - **WHEN** the matched store has an entry in `data/store_notes.json` with `notes` and/or `known_toppings`
 - **THEN** the response SHALL reference relevant details from that entry (e.g., the shop's story, signature toppings), blended naturally into the uncle's voice
 
+#### Scenario: Store-specific topping display names used
+
+- **WHEN** a store's entry in `data/store_notes.json` includes a `topping_names` map (e.g., `{"yin_gua": "蔭瓜"}`)
+- **THEN** the system SHALL use that store's display name for the topping in the input passed to Claude, overriding the global default name (e.g., showing "蔭瓜" instead of "醬瓜" for that specific store)
+
 #### Scenario: No store background knowledge available
 
 - **WHEN** the matched store has no entry in `data/store_notes.json`
 - **THEN** the response SHALL rely solely on the visual recognition results, with no fabricated store details
+
+#### Scenario: Tie response avoids self-narration
+
+- **WHEN** matching.is_tie is true
+- **THEN** the uncle SHALL NOT use phrases like "分不出"、"無法判斷"、"無法確定" to announce inability to decide. Instead, the uncle SHALL naturally mention the candidate stores as possibilities, as if sharing impressions with a friend (e.g., "看了這碗，XX 或 YY 那種路線都說得通").
 
 #### Scenario: Tie with shared toppings
 

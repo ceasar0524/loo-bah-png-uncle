@@ -63,13 +63,18 @@
   },
   "雙胖子(大同區)": {
     "notes": "這家魯肉有甜甜的味道，還有一種說不清楚的鹹香口感，吃過的人都有同感。秘密在老闆把醃製蔭瓜和魯肉一起煮——吃到的是口感偏爛的醬瓜，和軟嫩魯肉一起配飯，別有一番滋味。醬瓜的滷汁滲透進飯粒裡，每一口都吃得到清甜口感，這就是雙胖子的獨特之處。魯汁濃稠迷人，鹹香味十足。",
-    "known_toppings": ["yin_gua"],
+    "known_toppings": [
+      "yin_gua"
+    ],
     "visual_profile": {
       "pork_part": "fatty",
       "fat_ratio": "fat_heavy",
       "skin": "no_skin",
       "sauce_color": "dark",
       "rice_quality": "soft"
+    },
+    "topping_names": {
+      "yin_gua": "蔭瓜"
     }
   },
   "滷三塊五花肉飯（北投區）": {
@@ -112,7 +117,7 @@
   "黃記魯肉飯（中山區）": {
     "notes": "就算愛得海枯石爛也要等。每到開店，店外肯定站一堆人，不是等內用就是排外帶，沒等上 15~20 分鐘肯定吃不到。魯肉飯同時有帶皮軟嫩肥肉、一塊塊分離的豬皮和瘦肉，鋪滿白飯再澆上黏稠膠質滷汁。整碗看起來很鹹，但實際帶有淡淡焦甜味，肥肉膠質在口中化開和飯交纏的口感，真的很難用文字形容。飯上還放一兩片醃脆瓜，拿來配飯解膩。",
     "known_toppings": [
-      "pickled_cucumber"
+      "yin_gua"
     ],
     "visual_profile": {
       "pork_part": "skin_heavy",
@@ -120,6 +125,9 @@
       "skin": "with_skin",
       "sauce_color": "dark",
       "rice_quality": "soft"
+    },
+    "topping_names": {
+      "yin_gua": "醬瓜"
     }
   },
   "龍記小吃店（中山區）": {

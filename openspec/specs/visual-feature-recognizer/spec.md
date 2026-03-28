@@ -12,6 +12,11 @@ The system SHALL detect toppings from the image using the Claude Haiku vision cl
 
 The CLIP-based binary topping detection is superseded by Haiku vision and SHALL NOT be used.
 
+The standard topping vocabulary includes: cilantro, braised_egg, soft_boiled_egg, hard_boiled_egg, pork_floss, pickled_radish, green_onion, pickled_cucumber, yin_gua, oyster, shredded_chicken, braised_cabbage.
+
+- `pickled_cucumber`: thin-sliced green pickled cucumber, bright green translucent colour
+- `yin_gua`: dark brown braised pickled melon chunks, deep caramel/soy-sauce colour, soft cooked texture — visually distinct from `pickled_cucumber`
+
 #### Scenario: Cilantro detected
 
 - **WHEN** the image contains visible cilantro on the lu-rou-fan

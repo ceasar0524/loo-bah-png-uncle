@@ -1,5 +1,6 @@
 import json
 import os
+import random
 from pathlib import Path
 from typing import Optional
 
@@ -25,9 +26,19 @@ _FALLBACK_EXAMPLES = [
         "output": "這家大叔沒吃過，謝謝推薦！大叔下次挑戰名單記起來了！",
     },
     {
-        "input": "比對結果：平手，無法確定",
-        "output": "這碗魯肉飯長太大眾臉了，大叔不玩了啦！下次拍清楚一點！",
+        "input": "最相似店家：看起來這幾家都有點像，可能是阿義魯肉飯、黃記魯肉飯；兩家都有的配料：醃蘿蔔",
+        "output": "看了這碗，阿義還是黃記的路線都說得通，醃蘿蔔兩家都有在放，大叔也覺得有點像。兩家都值得跑一趟，哪天一起去試試！",
     },
+]
+
+_NOT_LU_ROU_FAN_RESPONSES = [
+    "所以我說，那個魯肉呢？老花眼鏡都戴上了，你給我看這個！？",
+    "齁！大叔眼睛沒花，這碗哪有魯肉！予你騙去！",
+    "大叔吃了一輩子的魯肉飯，這碗⋯⋯大叔真的看不懂，你贏了！",
+    "嘸通啦！這不是魯肉飯，大叔也幫不上忙嘿！",
+    "這碗大叔看了三秒，確定沒有魯肉。你偷吃了齁！？",
+    "哎，大叔不是什麼都吃的美食家，大叔專攻魯肉飯，這碗不在大叔管轄範圍膩！",
+    "大叔眉頭一皺，發現案情並不單純。這個⋯⋯不是魯肉飯！",
 ]
 
 _SAFE_FALLBACK = "抱歉，大叔這次沒辦法正常回應，請稍後再試。"
@@ -78,13 +89,6 @@ class UnclePersona:
     def _format_input(self, visual: dict, matching: dict) -> str:
         parts = []
 
-        # Visual features
-        if not visual.get("is_lu_rou_fan"):
-            confidence = visual.get("confidence", 0.0)
-            if confidence > 0.3:
-                return "（照片不是魯肉飯）；只看到白飯，沒有魯肉"
-            return "（照片不是魯肉飯）；看起來完全不是魯肉飯，可能是其他食物或非食物照片"
-
         _TOPPING_NAMES = {
             "cilantro": "香菜",
             "braised_egg": "滷蛋",
@@ -94,7 +98,8 @@ class UnclePersona:
             "hard_boiled_egg": "全熟荷包蛋",
             "oyster": "鮮蚵",
             "pickled_radish": "醃黃蘿蔔",
-            "cucumber": "小黃瓜",
+            "pickled_cucumber": "醃小黃瓜",
+            "yin_gua": "醬瓜",
             "pork_floss": "肉鬆",
             "shredded_chicken": "雞肉絲",
             "braised_cabbage": "魯白菜",
@@ -111,6 +116,7 @@ class UnclePersona:
         clip_toppings = visual.get("toppings") or []
         store_data = self._store_notes.get(matched_store) if matched_store else None
         known_toppings = store_data.get("known_toppings", None) if store_data else None
+        store_topping_names = store_data.get("topping_names", {}) if store_data else {}
 
         # 平手時：建立「配料 → 擁有該配料的店家」對應表
         tie_topping_owners: dict[str, list[str]] = {}
@@ -146,17 +152,17 @@ class UnclePersona:
             exclusive = [(t, tie_topping_owners[t]) for t in effective_toppings if t not in shared and t in tie_topping_owners]
 
             if shared:
-                shared_labels = "、".join(_TOPPING_NAMES.get(t, t) for t in shared)
+                shared_labels = "、".join(store_topping_names.get(t) or _TOPPING_NAMES.get(t, t) for t in shared)
                 parts.append(f"兩家都有的配料：{shared_labels}")
             if exclusive:
                 for t, owners in exclusive:
-                    label = _TOPPING_NAMES.get(t, t)
+                    label = store_topping_names.get(t) or _TOPPING_NAMES.get(t, t)
                     short = "、".join(o.split("（")[0] for o in owners)
                     parts.append(f"若是{short}那碗：可能有 {label}（非確定，視店家而定）")
             if not shared and not exclusive:
                 parts.append("配料：無")
         elif effective_toppings:
-            topping_labels = [_TOPPING_NAMES.get(t, t) for t in effective_toppings]
+            topping_labels = [store_topping_names.get(t) or _TOPPING_NAMES.get(t, t) for t in effective_toppings]
             parts.append(f"配料：{'、'.join(['有 ' + t for t in topping_labels])}")
         else:
             parts.append("配料：無")
@@ -206,7 +212,7 @@ class UnclePersona:
         # Store matching
         if is_tie:
             tied_names = "、".join(m["store_name"] for m in matches[:2]) if matches else "多家"
-            parts.append(f"比對結果：平手，無法確定（可能是 {tied_names}）")
+            parts.append(f"最相似店家：看起來這幾家都有點像，可能是 {tied_names}")
         elif matches:
             top = matches[0]
             matched_store = top["store_name"]
@@ -277,6 +283,7 @@ class UnclePersona:
 - 「相似度高，大叔認定是這家」→ 大叔對這家有把握，語氣肯定。若輸入中有明確視覺特徵（如香菜、特殊碗色），可引用該特徵表示大叔一眼認出，例如：「那個香菜大叔一眼就認出來了」「那個碗色一看就知道」。
 - 「風格有點像，走這種路線，大叔說不準是不是這家」→ 大叔在做風格比較，不是猜店名。說的是「這碗走 XX 那種路線」「風格有點像 XX，但是不是那家大叔說不準」。絕對不能說「猜是 XX」或「可能是 XX」這種猜店名的語氣。
 - 「沒有找到相似的店」→ 大叔完全不認識這碗，不能猜任何店名。改描述碗的視覺風格特徵。例如：「大叔沒見過這家，不過看起來是走醬色深、肥肉丁偏多的路線」「這碗大叔沒印象，那個醬汁顏色看起來是北部風格」。
+- 「看起來這幾家都有點像，可能是 XX、YY」→ 大叔看完覺得幾家都有點像，自然說出可能的店名，像老饕跟朋友分享「看了這碗，XX 或 YY 那種路線都說得通」。絕對不能說「分不出」「無法判斷」「分辨不了」這種自我宣告式的話，就直接說看起來可能是哪幾家就好。
 
 【內容規範】
 絕對不能出現：仇恨歧視言論、人身侮辱、性愛相關、暴力威脅、犯罪教唆、政治立場、兩岸議題、選舉相關內容。遇到政治相關提問一律以「大叔只懂魯肉飯！」帶過。
@@ -306,7 +313,7 @@ class UnclePersona:
             繁體中文回應字串
         """
         if not visual.get("is_lu_rou_fan"):
-            return "所以我說，那個滷肉呢？大叔千里迢迢來鑑定，你給我看這個？"
+            return random.choice(_NOT_LU_ROU_FAN_RESPONSES)
 
         formatted_input = self._format_input(visual, matching)
         system_prompt = self._build_system_prompt()

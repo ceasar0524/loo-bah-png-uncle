@@ -103,7 +103,7 @@ The override SHALL consult `data/store_notes.json` for each store's `bowl` entry
 - Cilantro (`cilantro`) detected and present in a store's `known_toppings`: +0.8
 - Other topping detected and present in a store's `known_toppings`: +0.3
 
-The override SHALL only fire when a single store reaches or exceeds the override threshold (default: 0.5) with no tie. If multiple stores reach the threshold simultaneously, the override SHALL be suppressed and the CLIP result SHALL be used.
+The override SHALL only fire when a single store reaches or exceeds the override threshold (default: 0.75) with no tie. If multiple stores reach the threshold simultaneously, the override SHALL be suppressed and the CLIP result SHALL be used.
 
 When the override fires, the matched store SHALL be returned with `confidence_level: "high"` regardless of the underlying CLIP similarity score.
 
