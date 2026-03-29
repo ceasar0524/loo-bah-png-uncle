@@ -14,8 +14,14 @@ The CLIP-based binary topping detection is superseded by Haiku vision and SHALL 
 
 The standard topping vocabulary includes: cilantro, braised_egg, soft_boiled_egg, hard_boiled_egg, pork_floss, pickled_radish, green_onion, pickled_cucumber, yin_gua, oyster, shredded_chicken, braised_cabbage.
 
-- `pickled_cucumber`: thin-sliced green pickled cucumber, bright green translucent colour
-- `yin_gua`: dark brown braised pickled melon chunks, deep caramel/soy-sauce colour, soft cooked texture — visually distinct from `pickled_cucumber`
+- `pickled_cucumber`: Pickled cucumber slices, bright green colour
+- `yin_gua`: dark brown soft braised melon chunks, deep soy-sauce colour — visually distinct from `pickled_cucumber`
+
+The classifier SHALL return a `bowl_color` field using the following vocabulary:
+`bright_green` | `olive_green` | `light_gray_green` | `white` | `yellow` | `red` | `black` | `brown` | `silver` (stainless steel metallic) | `other`
+
+The classifier SHALL return a `bowl_texture` field using the following vocabulary:
+`matte_ceramic` | `glossy_ceramic` | `plastic` | `styrofoam` | `metal` | `other`
 
 #### Scenario: Cilantro detected
 
