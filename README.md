@@ -23,11 +23,19 @@
 
 ## 怎麼用
 
-1. 加入 LINE Bot
+1. 掃 QR code 或點連結加入 LINE Bot
 2. 丟一張魯肉飯照片
 3. 看大叔怎麼說
 
-目前 LINE Bot 為邀請制，如有興趣體驗請聯絡作者。
+<p align="center">
+  <a href="https://line.me/R/ti/p/%40940srtss">
+    <img src="assets/line-qr.png" width="160" alt="加入魯肉飯評論器 LINE Bot">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://line.me/R/ti/p/%40940srtss">點此加入 LINE Bot</a>
+</p>
 
 ---
 
