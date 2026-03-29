@@ -27,11 +27,11 @@ Return JSON only, no other text:
 {
   "is_lu_rou_fan": "yes" or "no",
   "confidence": integer 0-10,
-  "bowl_color": one of "bright_green" (vivid neon green) | "olive_green" (dark muted green) | "light_gray_green" (pale green-gray) | "white" | "yellow" | "red" | "black" | "brown" | "other",
+  "bowl_color": one of "bright_green" (vivid neon green) | "olive_green" (dark muted green) | "light_gray_green" (pale green-gray) | "white" | "yellow" | "red" | "black" | "brown" | "silver" (stainless steel metallic) | "other",
   "bowl_shape": one of "round_bowl" | "wide_flat_plate" | "rectangular_box" | "other",
-  "bowl_texture": one of "matte_ceramic" | "glossy_ceramic" | "plastic" | "styrofoam" | "other",
-  "toppings": array from ["cilantro", "braised_egg", "soft_boiled_egg", "pork_floss", "pickled_radish", "pickled_cucumber", "green_onion", "cucumber", "yin_gua"]
-  (pickled_radish = yellow pickled daikon; pickled_cucumber = dark-colored braised cucumber/醬瓜; cucumber = fresh cucumber)
+  "bowl_texture": one of "matte_ceramic" | "glossy_ceramic" | "plastic" | "styrofoam" | "metal" | "other",
+  "toppings": array from ["cilantro", "braised_egg", "soft_boiled_egg", "pork_floss", "pickled_radish", "pickled_cucumber", "green_onion", "yin_gua"]
+  (pickled_radish = bright yellow pickled daikon; pickled_cucumber = bright green thin-sliced cucumber; yin_gua = dark brown soft braised melon chunks)
 }
 
 Lu rou fan typically has white rice in a bowl with braised pork (minced or belly chunks) and dark soy sauce.
