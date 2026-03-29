@@ -8,12 +8,13 @@ TBD - created by archiving change 'visual-recognition'. Update Purpose after arc
 
 ### Requirement: Detect toppings using binary CLIP classification
 
-The system SHALL detect toppings from the image using the Claude Haiku vision classifier. Topping detection is performed in the same API call as lu-rou-fan classification, returning a list of detected toppings from the standard vocabulary: cilantro, braised_egg, soft_boiled_egg, pork_floss, pickled_radish, green_onion, pickled_cucumber, yin_gua.
+The system SHALL detect toppings from the image using the Claude Haiku vision classifier. Topping detection is performed in the same API call as lu-rou-fan classification, returning a list of detected toppings from the standard vocabulary: cilantro, egg, pork_floss, pickled_radish, green_onion, pickled_cucumber, yin_gua.
 
 The CLIP-based binary topping detection is superseded by Haiku vision and SHALL NOT be used.
 
-The standard topping vocabulary includes: cilantro, braised_egg, soft_boiled_egg, hard_boiled_egg, pork_floss, pickled_radish, green_onion, pickled_cucumber, yin_gua, oyster, shredded_chicken, braised_cabbage.
+The standard topping vocabulary includes: cilantro, egg, pork_floss, pickled_radish, green_onion, pickled_cucumber, yin_gua, oyster, shredded_chicken, braised_cabbage.
 
+- `egg`: Any egg placed on top of the rice, including braised egg (滷蛋), soft-boiled egg (溏心蛋), or fried egg (荷包蛋). The classifier SHALL use a single `egg` label regardless of egg type. Store-specific display names (e.g. 溏心蛋, 半熟荷包蛋, 魯蛋) SHALL be resolved from `store_notes.json` `topping_names` at persona response time.
 - `pickled_radish`: Bright yellow pickled daikon slices placed directly on top of the rice. The classifier SHALL NOT report `pickled_radish` based on bowl background, table surface, or non-food objects of similar colour.
 - `pickled_cucumber`: Pickled cucumber slices, bright green colour.
 - `yin_gua`: Dark brown soft braised melon chunks, deep soy-sauce colour — visually distinct from `pickled_cucumber`.

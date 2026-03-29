@@ -91,11 +91,13 @@ class UnclePersona:
 
         _TOPPING_NAMES = {
             "cilantro": "香菜",
+            "egg": "蛋",
             "braised_egg": "滷蛋",
             "tofu": "豆腐",
             "pickled_mustard": "酸菜",
             "soft_boiled_egg": "半熟荷包蛋",
             "hard_boiled_egg": "全熟荷包蛋",
+            "fried_egg": "荷包蛋",
             "oyster": "鮮蚵",
             "pickled_radish": "醃黃蘿蔔",
             "pickled_cucumber": "醃小黃瓜",
