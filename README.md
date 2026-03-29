@@ -27,11 +27,7 @@
 2. 丟一張魯肉飯照片
 3. 看大叔怎麼說
 
-加入 LINE Bot，傳照片試試看：
-
-[![加入魯肉飯大叔](assets/line-qr.png)](https://line.me/R/ti/p/%40940srtss)
-
-👉 [https://line.me/R/ti/p/@940srtss](https://line.me/R/ti/p/%40940srtss)
+目前 LINE Bot 為邀請制，如有興趣體驗請聯絡作者。
 
 ---
 
