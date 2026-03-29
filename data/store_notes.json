@@ -130,6 +130,65 @@
       "yin_gua": "醬瓜"
     }
   },
+  "矮仔財滷肉飯（北投區）": {
+    "notes": "北投知名滷肉飯老店，愛吃魯肉飯的捧友肯定不陌生，假日大排長龍。店位在北投公有市場2樓，常客都知道直接從市場6號門口進。一鍋黑金色滷汁相當吸引人，看得出店家的真功夫和用心。魯肉屬於黑金色、入口即化那種，滷肉香氣和黏口膠質搭配米飯一口下去，超級刷嘴，讓人想一再回訪。",
+    "known_toppings": [],
+    "visual_profile": {
+      "pork_part": "fatty",
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_color": "black_gold",
+      "rice_quality": "soft"
+    }
+  },
+  "司機俱樂部（松山區）": {
+    "notes": "老司機的深夜食堂，台北少數半夜吃得到的魯肉飯，可以說是運將大哥的最愛。魯肉以肥肉偏多為主，一塊塊帶皮的肥肉塊切得整齊，滷得極軟嫩，放進嘴巴一抿馬上化開，帶著黏嘴的膠質感。除了帶皮肥肉外，還吃得到一些肉絲。",
+    "known_toppings": [],
+    "visual_profile": {
+      "pork_part": "skin_heavy",
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_color": "dark",
+      "rice_quality": "soft"
+    }
+  },
+  "一甲子餐飲（萬華區）": {
+    "notes": "看起來肥肥油油的黑金滷肉，吃起來卻一點都不油，反而充滿焦糖香氣，甜度剛剛好。滷肉滷得極軟嫩，入口輕輕一咬就化開。搭配醃製小黃瓜，酸甜口感非常下飯。每到中午排隊隊伍綿延不絕，在地人和外國遊客都慕名而來，想現場吃到需要相當毅力。",
+    "known_toppings": [
+      "pickled_cucumber"
+    ],
+    "visual_profile": {
+      "pork_part": "fatty",
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_color": "black_gold",
+      "rice_quality": "soft"
+    }
+  },
+  "天天利美食坊（萬華區）": {
+    "notes": "再來一碗的邪惡滷肉飯。位在西門町徒步區，店裡經常坐滿滿，年輕人和外國遊客都不少。滷肉以瘦肉肉燥居多，滷得香噴噴，鹹香中帶一絲甘甜，單吃就好吃。最邪惡的是搭配半熟荷包蛋的組合，用筷子戳破蛋黃，濃稠蛋液流進飯裡，光看就是享受。蛋黃包覆著滷肉跟飯一起入口，滋味難以形容，這時候只能借用《孤獨的美食家》中的五郎金句：「感覺要墮落在這個美味裡了！」讓人忍不住再點一碗。",
+    "known_toppings": [
+      "soft_boiled_egg"
+    ],
+    "visual_profile": {
+      "pork_part": "lean",
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_color": "medium",
+      "rice_quality": "soft"
+    }
+  },
+  "珠記大橋頭油飯（大同區）": {
+    "notes": "台北橋旁的人氣油飯老店，魯肉飯同樣深得人心。魯肉看起來肥滋滋，口感卻屬清淡風格，早餐來一碗也完全沒問題。店家將魯肉和滷汁分開放，先鋪魯肉再澆上用控肉燉煮的滷汁，所以吃得到控肉的香氣。吃到一半加一點店家自製的油飯甜醬一起配，鹹甜鹹甜非常刷嘴。特別推薦加上一片煎得恰恰的半熟荷包蛋，蛋液流進米飯裡，讓人回味無窮。",
+    "known_toppings": [],
+    "visual_profile": {
+      "pork_part": "fatty",
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_color": "medium",
+      "rice_quality": "soft"
+    }
+  },
   "龍記小吃店（中山區）": {
     "notes": "店家自稱賣的是肉燥飯而非魯肉飯。用幾乎全瘦肉的肉燥，口味清淡不死鹹，淋的滷汁比較像湯汁，配飯剛好。肉燥切得細碎，吃起來不油膩，口感很清爽。行家吃法是在飯上加幾滴醋，更夠味。因為是做學生生意，份量驚人又便宜：小碗 30 元，大碗約 40 元。",
     "known_toppings": [],
