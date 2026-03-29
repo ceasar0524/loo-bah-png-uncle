@@ -31,7 +31,7 @@ Return JSON only, no other text:
   "bowl_shape": one of "round_bowl" | "wide_flat_plate" | "rectangular_box" | "other",
   "bowl_texture": one of "matte_ceramic" | "glossy_ceramic" | "plastic" | "styrofoam" | "metal" | "other",
   "toppings": array from ["cilantro", "braised_egg", "soft_boiled_egg", "pork_floss", "pickled_radish", "pickled_cucumber", "green_onion", "yin_gua"]
-  (cilantro = fresh herb with flat jagged leaves and thin stems, leafy NOT sliced; pickled_radish = bright yellow pickled daikon slices; pickled_cucumber = bright green flat round cucumber slices, NOT leafy; yin_gua = dark brown soft braised melon chunks)
+  (cilantro = fresh herb with flat jagged leaves and thin stems, leafy NOT sliced; pickled_radish = bright yellow pickled daikon slices placed directly on top of the rice; pickled_cucumber = bright green flat round cucumber slices, NOT leafy; yin_gua = dark brown soft braised melon chunks)
 }
 
 Lu rou fan typically has white rice in a bowl with braised pork (minced or belly chunks) and dark soy sauce.

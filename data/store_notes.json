@@ -19,8 +19,6 @@
     ],
     "bowl": {
       "color": "bright_green",
-      "shape": "round_bowl",
-      "texture": "plastic",
       "distinctive": true
     },
     "visual_profile": {
@@ -150,6 +148,10 @@
   "司機俱樂部（松山區）": {
     "notes": "老司機的深夜食堂，台北少數半夜吃得到的魯肉飯，可以說是運將大哥的最愛。魯肉以肥肉偏多為主，一塊塊帶皮的肥肉塊切得整齊，滷得極軟嫩，放進嘴巴一抿馬上化開，帶著黏嘴的膠質感。除了帶皮肥肉外，還吃得到一些肉絲。",
     "known_toppings": [],
+    "bowl": {
+      "color": "bright_green",
+      "distinctive": true
+    },
     "visual_profile": {
       "pork_part": "skin_heavy",
       "fat_ratio": "fat_heavy",

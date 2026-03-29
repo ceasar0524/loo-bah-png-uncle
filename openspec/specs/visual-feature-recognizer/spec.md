@@ -8,14 +8,15 @@ TBD - created by archiving change 'visual-recognition'. Update Purpose after arc
 
 ### Requirement: Detect toppings using binary CLIP classification
 
-The system SHALL detect toppings from the image using the Claude Haiku vision classifier. Topping detection is performed in the same API call as lu-rou-fan classification, returning a list of detected toppings from the standard vocabulary: cilantro, braised_egg, soft_boiled_egg, pork_floss, pickled_radish, green_onion, cucumber.
+The system SHALL detect toppings from the image using the Claude Haiku vision classifier. Topping detection is performed in the same API call as lu-rou-fan classification, returning a list of detected toppings from the standard vocabulary: cilantro, braised_egg, soft_boiled_egg, pork_floss, pickled_radish, green_onion, pickled_cucumber, yin_gua.
 
 The CLIP-based binary topping detection is superseded by Haiku vision and SHALL NOT be used.
 
 The standard topping vocabulary includes: cilantro, braised_egg, soft_boiled_egg, hard_boiled_egg, pork_floss, pickled_radish, green_onion, pickled_cucumber, yin_gua, oyster, shredded_chicken, braised_cabbage.
 
-- `pickled_cucumber`: Pickled cucumber slices, bright green colour
-- `yin_gua`: dark brown soft braised melon chunks, deep soy-sauce colour — visually distinct from `pickled_cucumber`
+- `pickled_radish`: Bright yellow pickled daikon slices placed directly on top of the rice. The classifier SHALL NOT report `pickled_radish` based on bowl background, table surface, or non-food objects of similar colour.
+- `pickled_cucumber`: Pickled cucumber slices, bright green colour.
+- `yin_gua`: Dark brown soft braised melon chunks, deep soy-sauce colour — visually distinct from `pickled_cucumber`.
 
 The classifier SHALL return a `bowl_color` field using the following vocabulary:
 `bright_green` | `olive_green` | `light_gray_green` | `white` | `yellow` | `red` | `black` | `brown` | `silver` (stainless steel metallic) | `other`
@@ -37,6 +38,21 @@ The classifier SHALL return a `bowl_texture` field using the following vocabular
 
 - **WHEN** the image contains both braised egg and pickled radish
 - **THEN** both SHALL be included in the toppings list
+
+#### Scenario: pickled_radish not reported from table background
+
+- **WHEN** the image shows lu-rou-fan on a yellow wooden table with no pickled radish on the rice
+- **THEN** the classifier SHALL NOT include "pickled_radish" in the toppings list
+
+
+<!-- @trace
+source: tune-haiku-override-and-add-stores
+updated: 2026-03-29
+code:
+  - src/visual_recognition/classifier.py
+  - data/store_notes.json
+  - eval_hybrid.py
+-->
 
 ---
 ### Requirement: Classify pork part from configurable categories

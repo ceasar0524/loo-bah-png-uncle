@@ -19,7 +19,7 @@ _CACHE_FILE = Path("haiku_features_cache.json")
 _SUPPORTED = {".jpg", ".jpeg", ".png"}
 
 # Haiku 特徵覆蓋門檻：達到此分數才覆蓋 CLIP 結果
-_HAIKU_OVERRIDE_THRESHOLD = 0.5
+_HAIKU_OVERRIDE_THRESHOLD = 0.75
 
 # 特徵分數（累加後與門檻比較）
 _BOWL_COLOR_SCORE = 0.5

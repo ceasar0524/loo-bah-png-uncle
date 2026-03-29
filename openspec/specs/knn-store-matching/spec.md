@@ -109,10 +109,20 @@ When the override fires, the matched store SHALL be returned with `confidence_le
 
 When the override does not fire, the CLIP KNN result SHALL be returned unchanged.
 
-#### Scenario: Distinctive bowl colour triggers override
+#### Scenario: Distinctive bowl colour alone does not trigger override when threshold is 0.75
 
-- **WHEN** the classifier detects `bowl_color: "bright_green"` and store 晴光小吃 has `bowl.color: "bright_green"` with `distinctive: true`
-- **THEN** the system SHALL override the CLIP result and return 晴光小吃 with `confidence_level: "high"`
+- **WHEN** the classifier detects `bowl_color: "bright_green"` and store 晴光小吃 has `bowl.color: "bright_green"` with `distinctive: true` but no matching topping is detected
+- **THEN** the score for 晴光小吃 SHALL be 0.5, which is below the 0.75 threshold, and the override SHALL NOT fire
+
+#### Scenario: Bowl colour plus topping triggers override for 晴光
+
+- **WHEN** the classifier detects `bowl_color: "bright_green"` and `pickled_radish` in toppings, and store 晴光小吃 has `bowl.color: "bright_green"` with `distinctive: true` and `pickled_radish` in `known_toppings`
+- **THEN** the score for 晴光小吃 SHALL be 0.5 + 0.3 = 0.8, which meets the threshold, and the system SHALL override the CLIP result and return 晴光小吃 with `confidence_level: "high"`
+
+#### Scenario: Competing stores with same distinctive bowl colour — no override
+
+- **WHEN** two stores (e.g., 晴光小吃 and 司機俱樂部) both have `bowl.color: "bright_green"` with `distinctive: true` and no matching topping is detected
+- **THEN** both stores SHALL score 0.5, neither reaches the 0.75 threshold, the override SHALL be suppressed, and the CLIP KNN result SHALL be returned unchanged
 
 #### Scenario: Cilantro triggers override for 阿興
 
@@ -128,6 +138,16 @@ When the override does not fire, the CLIP KNN result SHALL be returned unchanged
 
 - **WHEN** no detected feature scores any store at or above the override threshold
 - **THEN** the system SHALL return the CLIP KNN result unchanged
+
+
+<!-- @trace
+source: tune-haiku-override-and-add-stores
+updated: 2026-03-29
+code:
+  - src/visual_recognition/classifier.py
+  - data/store_notes.json
+  - eval_hybrid.py
+-->
 
 ---
 ### Requirement: Result conforms to store-matching-schema
