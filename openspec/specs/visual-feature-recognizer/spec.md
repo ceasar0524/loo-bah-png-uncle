@@ -16,7 +16,8 @@ The standard topping vocabulary includes: cilantro, egg, pork_floss, pickled_rad
 
 - `egg`: Any egg placed on top of the rice, including braised egg (滷蛋), soft-boiled egg (溏心蛋), or fried egg (荷包蛋). The classifier SHALL use a single `egg` label regardless of egg type. Store-specific display names (e.g. 溏心蛋, 半熟荷包蛋, 魯蛋) SHALL be resolved from `store_notes.json` `topping_names` at persona response time.
 - `pickled_radish`: Bright yellow pickled daikon slices placed directly on top of the rice. The classifier SHALL NOT report `pickled_radish` based on bowl background, table surface, or non-food objects of similar colour.
-- `pickled_cucumber`: Pickled cucumber slices, bright green colour.
+- `cilantro`: Fresh herb with flat jagged leaves and thin stems. The classifier SHALL NOT report `cilantro` based on flat round slices or other non-herb green garnishes; visible herb leaf structure is required.
+- `pickled_cucumber`: Pickled cucumber slices, bright green flat round discs.
 - `yin_gua`: Dark brown soft braised melon chunks, deep soy-sauce colour — visually distinct from `pickled_cucumber`.
 
 The classifier SHALL return a `bowl_color` field using the following vocabulary:
