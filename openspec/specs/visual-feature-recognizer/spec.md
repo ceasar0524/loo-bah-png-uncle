@@ -21,7 +21,7 @@ The standard topping vocabulary includes: cilantro, egg, pork_floss, pickled_rad
 - `yin_gua`: Dark brown soft braised melon chunks, deep soy-sauce colour — visually distinct from `pickled_cucumber`.
 
 The classifier SHALL return a `bowl_color` field using the following vocabulary:
-`bright_green` | `olive_green` | `light_gray_green` | `white` | `yellow` | `red` | `black` | `brown` | `silver` (stainless steel metallic) | `other`
+`bright_green` | `olive_green` | `light_gray_green` | `white` | `yellow` | `red` | `black` | `brown` | `silver` (stainless steel metallic) | `blue` (blue or blue-and-white patterned ceramic) | `other`
 
 The classifier SHALL return a `bowl_texture` field using the following vocabulary:
 `matte_ceramic` | `glossy_ceramic` | `plastic` | `styrofoam` | `metal` | `other`

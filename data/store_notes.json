@@ -208,6 +208,39 @@
       "rice_quality": "soft"
     }
   },
+  "小王煮瓜（萬華區）": {
+    "notes": "這碗不是魯肉飯，是回憶。華西街有名的魯肉飯老店，這家店可以說是大叔愛上魯肉飯的啟蒙。店就開在外婆家旁邊，又是親戚經營的，每次回外婆家，大叔總是一定要來上一碗。雖然現在已由年輕一代接手，店面也變得更有現代感，但大叔反而更懷念以前的老店面，總覺得多了一股濃濃的人情味。這家店最有特色的是黑金色的魯肉，因此被不少人稱為「黑金魯肉飯」。魯肉以長條狀為主，帶皮肥肉經過黑色老滷汁長時間熬製而成，色澤黑亮，入口黏稠滑順。帶著微甜卻不膩口，是一種讓人吃過就難忘的老派美味。",
+    "known_toppings": [],
+    "bowl": {
+      "color": "blue",
+      "shape": "round_bowl",
+      "texture": "glossy_ceramic",
+      "distinctive": true
+    },
+    "visual_profile": {
+      "pork_part": "skin_heavy",
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_color": "black_gold",
+      "rice_quality": "soft"
+    }
+  },
+  "今大魯肉飯（三重區）": {
+    "notes": "三重有名的魯肉飯老店，常常一早開門，門口就已經大排長龍，更是許多遊子心心念念的家鄉味。每次回到三重，總要來上一碗。這裡的魯肉以帶皮肥肉為主，入口幾乎一抿就化開，還帶著微微甜味。喜歡肥魯肉的人，肯定會吃得相當過癮。再搭配店家自製醃醬瓜，整碗吃起來鹹甜平衡，讓人一口接一口停不下來。",
+    "known_toppings": [
+      "yin_gua"
+    ],
+    "topping_names": {
+      "yin_gua": "醬瓜"
+    },
+    "visual_profile": {
+      "pork_part": "skin_heavy",
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_color": "medium",
+      "rice_quality": "soft"
+    }
+  },
   "龍記小吃店（中山區）": {
     "notes": "店家自稱賣的是肉燥飯而非魯肉飯。用幾乎全瘦肉的肉燥，口味清淡不死鹹，淋的滷汁比較像湯汁，配飯剛好。肉燥切得細碎，吃起來不油膩，口感很清爽。行家吃法是在飯上加幾滴醋，更夠味。因為是做學生生意，份量驚人又便宜：小碗 30 元，大碗約 40 元。",
     "known_toppings": [],

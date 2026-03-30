@@ -27,7 +27,7 @@ Return JSON only, no other text:
 {
   "is_lu_rou_fan": "yes" or "no",
   "confidence": integer 0-10,
-  "bowl_color": one of "bright_green" (vivid neon green) | "olive_green" (dark muted green) | "light_gray_green" (pale green-gray) | "white" | "yellow" | "red" | "black" | "brown" | "silver" (stainless steel metallic) | "other",
+  "bowl_color": one of "bright_green" (vivid neon green) | "olive_green" (dark muted green) | "light_gray_green" (pale green-gray) | "white" | "yellow" | "red" | "black" | "brown" | "silver" (stainless steel metallic) | "blue" (blue or blue-and-white patterned ceramic) | "other",
   "bowl_shape": one of "round_bowl" | "wide_flat_plate" | "rectangular_box" | "other",
   "bowl_texture": one of "matte_ceramic" | "glossy_ceramic" | "plastic" | "styrofoam" | "metal" | "other",
   "toppings": array from ["cilantro", "egg", "pork_floss", "pickled_radish", "pickled_cucumber", "green_onion", "yin_gua"]
