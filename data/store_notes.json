@@ -8,7 +8,7 @@
       "egg": "溏心蛋"
     },
     "visual_profile": {
-      "pork_part": "fatty",
+      "pork_part": "lean",
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "dark",
@@ -55,10 +55,10 @@
       "distinctive": true
     },
     "visual_profile": {
-      "pork_part": "fatty",
-      "fat_ratio": "fat_heavy",
+      "pork_part": "lean",
+      "fat_ratio": "lean_heavy",
       "skin": "no_skin",
-      "sauce_color": "dark",
+      "sauce_color": "light",
       "rice_quality": "mushy"
     }
   },
@@ -84,7 +84,7 @@
       "pork_floss"
     ],
     "visual_profile": {
-      "pork_part": "belly",
+      "pork_part": "fatty",
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "dark",
@@ -108,7 +108,7 @@
       "pork_floss"
     ],
     "visual_profile": {
-      "pork_part": "belly",
+      "pork_part": "fatty",
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "black_gold",
@@ -148,7 +148,7 @@
     "visual_profile": {
       "pork_part": "fatty",
       "fat_ratio": "fat_heavy",
-      "skin": "no_skin",
+      "skin": "with_skin",
       "sauce_color": "black_gold",
       "rice_quality": "soft"
     }
@@ -164,7 +164,7 @@
       "pork_part": "skin_heavy",
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
-      "sauce_color": "dark",
+      "sauce_color": "light",
       "rice_quality": "soft"
     }
   },
@@ -176,7 +176,7 @@
     "visual_profile": {
       "pork_part": "fatty",
       "fat_ratio": "fat_heavy",
-      "skin": "no_skin",
+      "skin": "with_skin",
       "sauce_color": "black_gold",
       "rice_quality": "soft"
     }
@@ -203,7 +203,7 @@
     "visual_profile": {
       "pork_part": "fatty",
       "fat_ratio": "fat_heavy",
-      "skin": "no_skin",
+      "skin": "with_skin",
       "sauce_color": "medium",
       "rice_quality": "soft"
     }
