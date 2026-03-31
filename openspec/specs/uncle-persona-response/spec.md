@@ -65,15 +65,27 @@ The system SHALL return an in-character fallback message in Traditional Chinese 
 - **THEN** the module SHALL return a fallback message in the uncle's voice (e.g., "大叔出去買魯肉飯，等一下") without raising an exception
 
 ---
+### Requirement: Kong-rou-fan input handling
+
+The system SHALL return a hardcoded in-character response when `food_type` is `kong_rou_fan`, acknowledging the regional naming difference between northern Taiwan (爌肉飯) and southern Taiwan (滷肉飯), without calling the Claude API.
+
+The system SHALL maintain a pool of multiple response variants and randomly select one per invocation.
+
+#### Scenario: Kong-rou-fan input returns regional naming response
+
+- **WHEN** visual.food_type is "kong_rou_fan"
+- **THEN** the module SHALL return a randomly selected response from the kong-rou-fan pool that explains the north/south naming difference, without calling the Claude API
+
+---
 ### Requirement: Non-lu-rou-fan input handling
 
-The system SHALL return a hardcoded in-character response when `is_lu_rou_fan` is false, without calling the Claude API.
+The system SHALL return a hardcoded in-character response when `is_lu_rou_fan` is false and `food_type` is not `kong_rou_fan`, without calling the Claude API.
 
 The system SHALL maintain a pool of multiple response variants and randomly select one per invocation, so repeated non-lu-rou-fan inputs do not always return the same string.
 
 #### Scenario: Non-lu-rou-fan input returns hardcoded response
 
-- **WHEN** visual.is_lu_rou_fan is false
+- **WHEN** visual.is_lu_rou_fan is false and visual.food_type is not "kong_rou_fan"
 - **THEN** the module SHALL immediately return a randomly selected response from the hardcoded pool without calling the Claude API, regardless of confidence level
 
 ---
@@ -209,12 +221,12 @@ The system prompt SHALL embed correct Taiwan lu-rou-fan knowledge so the uncle s
 - The classic version is braised pork + sauce + white rice, optionally with pickled radish — simple is the soul
 - Toppings such as bamboo shoots, pickled mustard, and braised cabbage are regional additions appreciated by the uncle
 - Adding black vinegar (烏醋) is considered a knowing move — it cuts the richness and adds aroma
-- The egg pairing is a half-cooked sunny-side-up egg (半熟荷包蛋), not braised egg (滷蛋); braised egg is a separate side dish
+- Egg topping display names are store-specific and resolved from `store_notes.json` `topping_names` (e.g., 魯蛋, 溏心蛋, 半熟荷包蛋). The uncle SHALL use the display name as provided in the input, not substitute a generic term.
 
-#### Scenario: Egg recommendation uses correct terminology
+#### Scenario: Egg display name follows store-specific topping_names
 
-- **WHEN** the uncle suggests adding an egg
-- **THEN** the response SHALL say "半熟荷包蛋" and SHALL NOT say "滷蛋"
+- **WHEN** the input topping list includes an egg topping with a store-specific display name (e.g., "魯蛋", "溏心蛋", "半熟荷包蛋")
+- **THEN** the uncle SHALL use that exact name in the response and SHALL NOT substitute it with a different term
 
 ---
 ### Requirement: Language and locale constraints
