@@ -1,5 +1,7 @@
 # 魯肉飯評論器
 
+> A LINE Bot that identifies Taiwanese braised pork rice (魯肉飯) from photos, matches it to known restaurants using CLIP KNN, and responds as an opinionated Taiwanese uncle persona powered by Claude Haiku.
+
 丟一張魯肉飯照片，讓大叔來評論。
 
 ---
@@ -57,7 +59,11 @@
 | 龍記小吃店 | 中山區 |
 | 天天利美食坊 | 萬華區 |
 | 一甲子餐飲 | 萬華區 |
+| 小王煮瓜 | 萬華區 |
 | 司機俱樂部 | 松山區 |
+| 今大魯肉飯 | 三重區 |
+| 阿英滷肉飯 | 大安區 |
+| 大稻埕魯肉飯 | 大同區 |
 
 持續擴充中。
 
