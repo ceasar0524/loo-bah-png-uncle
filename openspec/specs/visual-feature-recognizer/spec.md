@@ -132,6 +132,23 @@ The system SHALL classify the rice texture using CLIP zero-shot classification. 
 - **THEN** the system SHALL use the built-in default categories and SHALL NOT crash
 
 ---
+### Requirement: Distinguish kong-rou-fan from lu-rou-fan
+
+The classifier SHALL return `food_type` field with one of three values: `lu_rou_fan` | `kong_rou_fan` | `other`.
+
+- `lu_rou_fan`: many small diced or minced braised pork pieces covering the rice surface evenly.
+- `kong_rou_fan`: ONE single large whole block of braised pork belly placed on rice. SHALL only be used when there is clearly just one (or at most two) large whole pork belly block on the rice.
+- `other`: not a rice dish with braised pork.
+
+When `food_type` is `kong_rou_fan`, the uncle persona SHALL respond with a message acknowledging the regional naming difference (北部叫爌肉飯，南部叫滷肉飯) instead of the standard not-lu-rou-fan response.
+
+#### Scenario: Kong-rou-fan detected
+
+- **WHEN** the image shows a single large whole braised pork belly slab on rice
+- **THEN** the classifier SHALL return `food_type: "kong_rou_fan"` and `is_lu_rou_fan: false`
+- **AND** the persona SHALL respond with the kong-rou-fan regional naming response
+
+---
 ### Requirement: Feature recognition only runs on confirmed lu-rou-fan
 
 The system SHALL only perform CLIP feature recognition when is_lu_rou_fan is true. If the classifier returns false, all feature fields SHALL be skipped and set to None or empty.

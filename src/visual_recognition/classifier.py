@@ -25,7 +25,7 @@ Look at this image and analyze it.
 
 Return JSON only, no other text:
 {
-  "is_lu_rou_fan": "yes" or "no",
+  "is_lu_rou_fan": "yes", "kong_rou_fan", or "no",
   "confidence": integer 0-10,
   "bowl_color": one of "bright_green" (vivid neon green) | "olive_green" (dark muted green) | "light_gray_green" (pale green-gray) | "white" | "yellow" | "red" | "black" | "brown" | "silver" (stainless steel metallic) | "blue" (blue or blue-and-white patterned ceramic) | "other",
   "bowl_shape": one of "round_bowl" | "wide_flat_plate" | "rectangular_box" | "other",
@@ -34,9 +34,11 @@ Return JSON only, no other text:
   (cilantro = fresh herb with flat jagged leaves and thin stems, leafy NOT sliced, must have visible herb leaf structure NOT flat round slices; egg = any egg on top of rice, including braised egg, soft-boiled egg, or fried egg; pickled_radish = bright yellow pickled daikon slices placed directly on top of the rice; pickled_cucumber = bright green flat round cucumber slices, NOT leafy; yin_gua = dark brown soft braised melon chunks)
 }
 
-Lu rou fan typically has white rice in a bowl with braised pork (minced or belly chunks) and dark soy sauce.
+Lu rou fan = many small pieces or minced braised pork covering the rice surface evenly.
+Kong rou fan = ONE single large whole block of braised pork belly placed on rice. If there are multiple pieces or the pork is spread across the rice, it is lu rou fan.
+Use "kong_rou_fan" ONLY when there is clearly just one (or at most two) large whole pork belly block on the rice.
 Be precise about bowl color. Only include toppings clearly visible in the photo.
-When is_lu_rou_fan is "no", still return bowl_color, bowl_shape, bowl_texture, and toppings fields.
+When is_lu_rou_fan is "no" or "kong_rou_fan", still return bowl_color, bowl_shape, bowl_texture, and toppings fields.
 """
 
 _FALLBACK = {
@@ -109,10 +111,13 @@ def classify(
 
     score = int(data.get("confidence", 0))
     confidence = score / 10.0
-    is_lu_rou_fan = data.get("is_lu_rou_fan") == "yes" and confidence >= threshold
+    raw_type = data.get("is_lu_rou_fan")
+    is_lu_rou_fan = raw_type == "yes" and confidence >= threshold
+    food_type = "lu_rou_fan" if is_lu_rou_fan else ("kong_rou_fan" if raw_type == "kong_rou_fan" else "other")
 
     if is_lu_rou_fan:
         features = {
+            "food_type": food_type,
             "bowl_color": data.get("bowl_color"),
             "bowl_shape": data.get("bowl_shape"),
             "bowl_texture": data.get("bowl_texture"),
@@ -120,6 +125,7 @@ def classify(
         }
     else:
         features = {
+            "food_type": food_type,
             "bowl_color": None,
             "bowl_shape": None,
             "bowl_texture": None,
@@ -127,8 +133,8 @@ def classify(
         }
 
     logger.debug(
-        "classify: is_lrf=%s confidence=%.2f threshold=%.2f bowl_color=%s toppings=%s",
-        is_lu_rou_fan, confidence, threshold,
+        "classify: is_lrf=%s food_type=%s confidence=%.2f threshold=%.2f bowl_color=%s toppings=%s",
+        is_lu_rou_fan, food_type, confidence, threshold,
         features["bowl_color"], features["toppings"],
     )
     return is_lu_rou_fan, confidence, features

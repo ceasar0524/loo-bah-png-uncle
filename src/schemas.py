@@ -29,6 +29,7 @@ class VisualResult(TypedDict):
     當 is_lu_rou_fan 為 False 時，除 confidence 外所有欄位為 None 或空列表。
     """
     is_lu_rou_fan: bool
+    food_type: Optional[str]  # "lu_rou_fan" | "kong_rou_fan" | "other"
     confidence: float
     toppings: list
     bowl_color: Optional[str]

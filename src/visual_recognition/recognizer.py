@@ -46,13 +46,14 @@ def recognize(
     is_lrf, confidence, clf_features = classify(pil_img, threshold=threshold)
 
     if not is_lrf:
-        return _empty_result(confidence)
+        return _empty_result(confidence, clf_features.get("food_type", "other"))
 
     # CLIP 特徵辨識（肉型、醬汁等；只有確認是魯肉飯才執行）
     features = recognize_features(img_feat)
 
     return VisualResult(
         is_lu_rou_fan=True,
+        food_type="lu_rou_fan",
         confidence=confidence,
         toppings=clf_features.get("toppings", []),
         bowl_color=clf_features.get("bowl_color"),
@@ -66,9 +67,10 @@ def recognize(
     )
 
 
-def _empty_result(confidence: float) -> VisualResult:
+def _empty_result(confidence: float, food_type: str = "other") -> VisualResult:
     return VisualResult(
         is_lu_rou_fan=False,
+        food_type=food_type,
         confidence=confidence,
         toppings=[],
         bowl_color=None,

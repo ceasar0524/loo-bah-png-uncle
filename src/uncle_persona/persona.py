@@ -31,6 +31,12 @@ _FALLBACK_EXAMPLES = [
     },
 ]
 
+_KONG_ROU_FAN_RESPONSES = [
+    "你很懂唷！北部叫爌肉飯，南部叫滷肉飯，整塊五花肉滷得軟爛，是不同的美味路線！",
+    "哎唷，這碗大叔認得！北部叫爌肉飯，南部叫滷肉飯，整塊五花肉滷透，吃法不同風情也不同，厲害！",
+    "這個有料！整塊五花肉滷得入味，南部的滷肉飯就是這款霸氣風格，跟北部碎肉燥是兩個世界，各有各的迷人！",
+]
+
 _NOT_LU_ROU_FAN_RESPONSES = [
     "所以我說，那個魯肉呢？老花眼鏡都戴上了，你給我看這個！？",
     "齁！大叔眼睛沒花，這碗哪有魯肉！予你騙去！",
@@ -313,6 +319,9 @@ class UnclePersona:
         Returns:
             繁體中文回應字串
         """
+        if visual.get("food_type") == "kong_rou_fan":
+            return random.choice(_KONG_ROU_FAN_RESPONSES)
+
         if not visual.get("is_lu_rou_fan"):
             return random.choice(_NOT_LU_ROU_FAN_RESPONSES)
 
