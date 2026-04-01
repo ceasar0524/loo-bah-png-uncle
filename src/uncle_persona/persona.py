@@ -178,16 +178,10 @@ class UnclePersona:
         else:
             parts.append("配料：無")
 
-        _PORK_PART_LABELS = {
-            "belly": "五花肉（肥瘦相間）",
-            "fatty": "肥肉多",
-            "lean": "瘦肉多",
-            "skin_heavy": "皮多",
-        }
         _FAT_RATIO_LABELS = {
-            "fat_heavy": "偏肥（約七分肥三分瘦）",
-            "balanced": "肥瘦均衡（約五五比）",
-            "lean_heavy": "偏瘦（約三分肥七分瘦）",
+            "fat_heavy": "偏肥",
+            "balanced": "均衡",
+            "lean_heavy": "偏瘦",
         }
         _SAUCE_COLOR_LABELS = {
             "light": "淡色",
@@ -195,9 +189,6 @@ class UnclePersona:
             "dark": "深褐色",
             "black_gold": "黑金色",
         }
-        if visual.get("pork_part"):
-            label = _PORK_PART_LABELS.get(visual["pork_part"], visual["pork_part"])
-            parts.append(f"肉的部位：{label}")
         if visual.get("fat_ratio"):
             label = _FAT_RATIO_LABELS.get(visual["fat_ratio"], visual["fat_ratio"])
             parts.append(f"肥瘦比例：{label}")
