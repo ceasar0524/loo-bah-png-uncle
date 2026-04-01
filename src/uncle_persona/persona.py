@@ -344,7 +344,12 @@ class UnclePersona:
 
             return response
 
+        except anthropic.APIStatusError as e:
+            if e.status_code == 529:
+                return random.choice([
+                    "哎唷！大叔被太多人圍攻，喘不過氣啦！等一下再丟給我！",
+                    "夭壽喔，今天大家都在吃魯肉飯嗎！大叔招架不住，等一下再試！",
+                ])
+            return "大叔出去買魯肉飯，等一下！網路好像有問題，再試一次啦！"
         except Exception:
-            if not visual.get("is_lu_rou_fan"):
-                return "所以我說，那個魯肉呢？大叔看不到魯肉沒辦法鑑定啦！"
             return "大叔出去買魯肉飯，等一下！網路好像有問題，再試一次啦！"
