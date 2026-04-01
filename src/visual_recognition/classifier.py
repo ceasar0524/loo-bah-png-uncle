@@ -76,26 +76,30 @@ def classify(
     """
     img_b64 = _pil_to_base64(pil_image)
 
-    message = _client.messages.create(
-        model="claude-haiku-4-5-20251001",
-        max_tokens=256,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image",
-                        "source": {
-                            "type": "base64",
-                            "media_type": "image/jpeg",
-                            "data": img_b64,
+    try:
+        message = _client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=256,
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "image",
+                            "source": {
+                                "type": "base64",
+                                "media_type": "image/jpeg",
+                                "data": img_b64,
+                            },
                         },
-                    },
-                    {"type": "text", "text": _PROMPT},
-                ],
-            }
-        ],
-    )
+                        {"type": "text", "text": _PROMPT},
+                    ],
+                }
+            ],
+        )
+    except Exception as e:
+        logger.warning("classify: API call failed (%s), using fallback", e)
+        return False, 0.0, dict(_FALLBACK)
 
     raw = message.content[0].text.strip()
     if "```" in raw:
