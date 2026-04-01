@@ -29,6 +29,14 @@
 2. 丟一張魯肉飯照片
 3. 看大叔怎麼說
 
+## 範例回覆
+
+<p align="center">
+  <img src="assets/demo-1.png" width="320" alt="範例回覆 1">
+  &nbsp;&nbsp;
+  <img src="assets/demo-2.png" width="320" alt="範例回覆 2">
+</p>
+
 <p align="center">
   <a href="https://line.me/R/ti/p/%40940srtss">
     <img src="assets/line-qr.png" width="160" alt="加入魯肉飯評論器 LINE Bot">
