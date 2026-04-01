@@ -232,6 +232,20 @@ class UnclePersona:
             if notes:
                 parts.append(f"大叔對這家的了解：{notes}")
 
+            # 肉質不一致提示
+            profile = store_data.get("visual_profile", {})
+            _FAT_RATIO_DISPLAY = {
+                "fat_heavy": "偏肥",
+                "balanced": "均衡",
+                "lean_heavy": "偏瘦",
+            }
+            profile_fat = profile.get("fat_ratio")
+            detected_fat = visual.get("fat_ratio")
+            if profile_fat and detected_fat and profile_fat != detected_fat:
+                remembered = _FAT_RATIO_DISPLAY.get(profile_fat, profile_fat)
+                seen = _FAT_RATIO_DISPLAY.get(detected_fat, detected_fat)
+                parts.append(f"肉質不一致提示：大叔記憶中這家是{remembered}，但這張照片中看起來{seen}，回應中必須出現「照片」這個詞，自然帶出「記得是{remembered}，但照片中看起來{seen}」的落差感")
+
         return "；".join(parts)
 
     def _build_system_prompt(self) -> str:

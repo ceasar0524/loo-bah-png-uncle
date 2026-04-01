@@ -196,6 +196,23 @@ The strict prohibition on mentioning cilantro (香菜) or green onion (蔥) SHAL
 - **THEN** the system SHALL fall back to trusting CLIP detections unfiltered
 
 ---
+### Requirement: Meat quality discrepancy handling
+
+When a store match is found and the store has a `visual_profile.fat_ratio` entry in `data/store_notes.json`, the system SHALL compare it against the visual recognition result's `fat_ratio`. If they differ, the system SHALL pass a discrepancy hint to the uncle indicating what the uncle remembers vs. what the photo shows.
+
+The uncle SHALL naturally express this discrepancy in the response, using the word "照片" to distinguish the photo observation from memory (e.g., "記得是偏肥，但照片中看起來偏瘦"). The uncle SHALL NOT fabricate a reason for the discrepancy.
+
+#### Scenario: Fat ratio matches store background
+
+- **WHEN** the visual recognition fat_ratio matches the store's visual_profile fat_ratio
+- **THEN** the response SHALL describe the meat quality normally, with no discrepancy remark
+
+#### Scenario: Fat ratio differs from store background
+
+- **WHEN** the visual recognition fat_ratio differs from the store's visual_profile fat_ratio
+- **THEN** the response SHALL include a natural remark contrasting the uncle's memory with the photo observation, using the word "照片" to mark the distinction
+
+---
 ### Requirement: Sensory storytelling style
 
 The uncle's descriptions SHALL originate from eating experience, not observation. The system prompt SHALL instruct the model to describe how food feels and tastes, not just how it looks. Descriptions SHALL have rhythm and emotional texture, like telling a story to a friend.
