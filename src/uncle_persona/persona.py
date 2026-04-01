@@ -129,6 +129,26 @@ class UnclePersona:
         known_toppings = store_data.get("known_toppings", None) if store_data else None
         store_topping_names = store_data.get("topping_names", {}) if store_data else {}
 
+        # 預先決定肥瘦比輸出方式
+        _FAT_RATIO_DISPLAY = {
+            "fat_heavy": "偏肥",
+            "balanced": "均衡",
+            "lean_heavy": "偏瘦",
+        }
+        profile_fat = (store_data.get("visual_profile", {}) or {}).get("fat_ratio") if store_data else None
+        detected_fat = visual.get("fat_ratio")
+        fat_ratio_hint = None
+        if profile_fat and detected_fat and profile_fat != detected_fat:
+            if random.random() < 1 / 3:
+                remembered = _FAT_RATIO_DISPLAY.get(profile_fat, profile_fat)
+                seen = _FAT_RATIO_DISPLAY.get(detected_fat, detected_fat)
+                fat_ratio_hint = f"肉質不一致提示：大叔記憶中這家是{remembered}，但這張照片中看起來{seen}，回應中必須出現「照片」這個詞，自然帶出「記得是{remembered}，但照片中看起來{seen}」的落差感"
+                effective_fat_ratio = None  # 不輸出肥瘦比，改用落差提示
+            else:
+                effective_fat_ratio = profile_fat  # 用背景知識覆蓋
+        else:
+            effective_fat_ratio = detected_fat  # 正常用視覺辨識結果
+
         # 平手時：建立「配料 → 擁有該配料的店家」對應表
         tie_topping_owners: dict[str, list[str]] = {}
         if known_toppings is None and is_tie and matches:
@@ -189,8 +209,8 @@ class UnclePersona:
             "dark": "深褐色",
             "black_gold": "黑金色",
         }
-        if visual.get("fat_ratio"):
-            label = _FAT_RATIO_LABELS.get(visual["fat_ratio"], visual["fat_ratio"])
+        if effective_fat_ratio:
+            label = _FAT_RATIO_LABELS.get(effective_fat_ratio, effective_fat_ratio)
             parts.append(f"肥瘦比例：{label}")
         if visual.get("skin"):
             parts.append(f"是否有皮：{'有皮' if visual['skin'] == 'with_skin' else '無皮'}")
@@ -232,19 +252,9 @@ class UnclePersona:
             if notes:
                 parts.append(f"大叔對這家的了解：{notes}")
 
-            # 肉質不一致提示
-            profile = store_data.get("visual_profile", {})
-            _FAT_RATIO_DISPLAY = {
-                "fat_heavy": "偏肥",
-                "balanced": "均衡",
-                "lean_heavy": "偏瘦",
-            }
-            profile_fat = profile.get("fat_ratio")
-            detected_fat = visual.get("fat_ratio")
-            if profile_fat and detected_fat and profile_fat != detected_fat:
-                remembered = _FAT_RATIO_DISPLAY.get(profile_fat, profile_fat)
-                seen = _FAT_RATIO_DISPLAY.get(detected_fat, detected_fat)
-                parts.append(f"肉質不一致提示：大叔記憶中這家是{remembered}，但這張照片中看起來{seen}，回應中必須出現「照片」這個詞，自然帶出「記得是{remembered}，但照片中看起來{seen}」的落差感")
+            # 肉質不一致落差提示（若有）
+            if fat_ratio_hint:
+                parts.append(fat_ratio_hint)
 
         return "；".join(parts)
 
