@@ -1,6 +1,7 @@
 import json
 import os
 import random
+import time
 from pathlib import Path
 from typing import Optional
 
@@ -330,26 +331,35 @@ class UnclePersona:
         formatted_input = self._format_input(visual, matching)
         system_prompt = self._build_system_prompt()
 
-        try:
-            message = self._client.messages.create(
-                model="claude-haiku-4-5-20251001",
-                max_tokens=400,
-                system=system_prompt,
-                messages=[{"role": "user", "content": formatted_input}],
-            )
-            response = message.content[0].text.strip()
+        last_exc = None
+        for attempt in range(3):
+            try:
+                message = self._client.messages.create(
+                    model="claude-haiku-4-5-20251001",
+                    max_tokens=400,
+                    system=system_prompt,
+                    messages=[{"role": "user", "content": formatted_input}],
+                )
+                response = message.content[0].text.strip()
 
-            if not self._check_safety(response):
-                return _SAFE_FALLBACK
+                if not self._check_safety(response):
+                    return _SAFE_FALLBACK
 
-            return response
+                return response
 
-        except anthropic.APIStatusError as e:
-            if e.status_code == 529:
-                return random.choice([
-                    "哎唷！大叔被太多人圍攻，喘不過氣啦！等一下再丟給我！",
-                    "夭壽喔，今天大家都在吃魯肉飯嗎！大叔招架不住，等一下再試！",
-                ])
-            return "大叔出去買魯肉飯，等一下！網路好像有問題，再試一次啦！"
-        except Exception:
-            return "大叔出去買魯肉飯，等一下！網路好像有問題，再試一次啦！"
+            except anthropic.APIStatusError as e:
+                last_exc = e
+                if e.status_code == 529 and attempt < 2:
+                    time.sleep(1)
+                else:
+                    break
+            except Exception as e:
+                last_exc = e
+                break
+
+        if isinstance(last_exc, anthropic.APIStatusError) and last_exc.status_code == 529:
+            return random.choice([
+                "哎唷！大叔被太多人圍攻，喘不過氣啦！等一下再丟給我！",
+                "夭壽喔，今天大家都在吃魯肉飯嗎！大叔招架不住，等一下再試！",
+            ])
+        return "大叔出去買魯肉飯，等一下！網路好像有問題，再試一次啦！"

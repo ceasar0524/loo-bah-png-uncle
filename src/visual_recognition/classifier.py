@@ -11,6 +11,7 @@ import base64
 import io
 import json
 import logging
+import time
 
 import anthropic
 
@@ -76,29 +77,43 @@ def classify(
     """
     img_b64 = _pil_to_base64(pil_image)
 
-    try:
-        message = _client.messages.create(
-            model="claude-haiku-4-5-20251001",
-            max_tokens=256,
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image",
-                            "source": {
-                                "type": "base64",
-                                "media_type": "image/jpeg",
-                                "data": img_b64,
+    last_exc = None
+    for attempt in range(3):
+        try:
+            message = _client.messages.create(
+                model="claude-haiku-4-5-20251001",
+                max_tokens=256,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "image",
+                                "source": {
+                                    "type": "base64",
+                                    "media_type": "image/jpeg",
+                                    "data": img_b64,
+                                },
                             },
-                        },
-                        {"type": "text", "text": _PROMPT},
-                    ],
-                }
-            ],
-        )
-    except Exception as e:
-        logger.warning("classify: API call failed (%s), using fallback", e)
+                            {"type": "text", "text": _PROMPT},
+                        ],
+                    }
+                ],
+            )
+            break
+        except anthropic.APIStatusError as e:
+            last_exc = e
+            if e.status_code == 529 and attempt < 2:
+                logger.warning("classify: 529 overloaded, retrying in 1s (attempt %d)", attempt + 1)
+                time.sleep(1)
+            else:
+                logger.warning("classify: API error (%s), using fallback", e)
+                return False, 0.0, dict(_FALLBACK)
+        except Exception as e:
+            logger.warning("classify: API call failed (%s), using fallback", e)
+            return False, 0.0, dict(_FALLBACK)
+    else:
+        logger.warning("classify: all retries failed (%s), using fallback", last_exc)
         return False, 0.0, dict(_FALLBACK)
 
     raw = message.content[0].text.strip()
