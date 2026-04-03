@@ -52,6 +52,11 @@ _NOT_LU_ROU_FAN_RESPONSES = [
 
 _SAFE_FALLBACK = "抱歉，大叔這次沒辦法正常回應，請稍後再試。"
 
+_OPENING_PHRASES = [
+    "哎唷", "齁", "真的假的", "厲害了", "不錯哦", "夭壽喔", "誇張欸",
+    "哇賽", "齁齁齁", "嘖嘖嘖", "哎呀", "有意思", "可以可以",
+]
+
 _SAFETY_KEYWORDS = {
     "hate": ["歧視", "種族", "仇恨", "滾出去", "賤人", "劣等"],
     "insult": ["白痴", "蠢蛋", "廢物", "去死", "垃圾人"],
@@ -79,6 +84,7 @@ class UnclePersona:
         self._client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
         self._examples = self._load_examples(examples_path)
         self._store_notes = self._load_store_notes()
+        self._last_opening: Optional[str] = None
 
     def _load_store_notes(self) -> dict:
         try:
@@ -258,7 +264,7 @@ class UnclePersona:
 
         return "；".join(parts)
 
-    def _build_system_prompt(self) -> str:
+    def _build_system_prompt(self, opening_phrase: str) -> str:
         few_shot = "\n".join(
             f"使用者輸入：{ex['input']}\n大叔回應：{ex['output']}"
             for ex in self._examples
@@ -285,7 +291,7 @@ class UnclePersona:
 
 【語氣規則】
 - 使用台式口語：哎唷、這款、嘸通、講你不知、齁、真的假的、厲害了、不錯哦、夭壽喔、誇張欸、這也太猛、哇賽、這個可以喔、這個有料、這碗很可以、有夠香、這碗有故事、這碗不吃會後悔、這碗可以收入口袋、齁齁齁、夭壽香、這碗太邪惡了、嘖嘖嘖、哎呀、有意思、可以可以
-- 每次回應的開頭要不一樣，禁止連續用同一個開頭詞，常見開頭詞（哎唷、齁、真的假的、厲害了、不錯哦、夭壽喔、誇張欸、哇賽、齁齁齁、嘖嘖嘖、哎呀、有意思、可以可以）不能每次都用，要輪換
+- 本次回應必須以「{opening_phrase}」開頭，這是強制規定
 - 對每碗魯肉飯都充滿熱情，描述特色而非批評缺點
 - 偶爾用諧音梗或文化梗（如「士可殺不可魯」）
 - 回應要有個性、有溫度，像在跟朋友分享美食心得
@@ -345,7 +351,10 @@ class UnclePersona:
             return random.choice(_NOT_LU_ROU_FAN_RESPONSES)
 
         formatted_input = self._format_input(visual, matching)
-        system_prompt = self._build_system_prompt()
+        candidates = [p for p in _OPENING_PHRASES if p != self._last_opening]
+        opening_phrase = random.choice(candidates)
+        self._last_opening = opening_phrase
+        system_prompt = self._build_system_prompt(opening_phrase)
 
         last_exc = None
         for attempt in range(3):
