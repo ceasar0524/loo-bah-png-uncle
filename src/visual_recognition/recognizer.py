@@ -48,9 +48,6 @@ def recognize(
     if not is_lrf:
         return _empty_result(confidence, clf_features.get("food_type", "other"))
 
-    # CLIP 特徵辨識（肉型、醬汁等；只有確認是魯肉飯才執行）
-    features = recognize_features(img_feat)
-
     return VisualResult(
         is_lu_rou_fan=True,
         food_type="lu_rou_fan",
@@ -59,11 +56,11 @@ def recognize(
         bowl_color=clf_features.get("bowl_color"),
         bowl_shape=clf_features.get("bowl_shape"),
         bowl_texture=clf_features.get("bowl_texture"),
-        pork_part=features["pork_part"],
-        fat_ratio=features["fat_ratio"],
-        skin=features["skin"],
-        sauce_color=features["sauce_color"],
-        rice_quality=features["rice_quality"],
+        pork_part=clf_features.get("pork_part"),
+        fat_ratio=clf_features.get("fat_ratio"),
+        skin=clf_features.get("skin"),
+        sauce_color=clf_features.get("sauce_color"),
+        rice_quality=clf_features.get("rice_quality"),
     )
 
 

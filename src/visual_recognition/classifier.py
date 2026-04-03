@@ -32,14 +32,19 @@ Return JSON only, no other text:
   "bowl_shape": one of "round_bowl" | "wide_flat_plate" | "rectangular_box" | "other",
   "bowl_texture": one of "matte_ceramic" | "glossy_ceramic" | "plastic" | "styrofoam" | "metal" | "other",
   "toppings": array from ["cilantro", "egg", "pork_floss", "pickled_radish", "pickled_cucumber", "green_onion", "yin_gua"]
-  (cilantro = fresh herb with flat jagged leaves and thin stems, leafy NOT sliced, must have visible herb leaf structure NOT flat round slices; egg = any egg on top of rice, including braised egg, soft-boiled egg, or fried egg; pickled_radish = bright yellow pickled daikon slices placed directly on top of the rice; pickled_cucumber = bright green flat round cucumber slices, NOT leafy; yin_gua = dark brown soft braised melon chunks)
+  (cilantro = fresh herb with flat jagged leaves and thin stems, leafy NOT sliced, must have visible herb leaf structure NOT flat round slices; egg = any egg on top of rice, including braised egg, soft-boiled egg, or fried egg; pickled_radish = bright yellow pickled daikon slices placed directly on top of the rice; pickled_cucumber = bright green flat round cucumber slices, NOT leafy; yin_gua = dark brown soft braised melon chunks),
+  "fat_ratio": one of "lean" | "balanced" | "fat_heavy" (lean = mostly lean meat with little fat; balanced = mix of lean and fat; fat_heavy = mostly fatty with lots of marbling or gelatinous fat),
+  "skin": one of "with_skin" | "no_skin" (with_skin = visible pork skin or rind on the meat; no_skin = no skin visible),
+  "sauce_color": one of "light" | "medium" | "dark" | "black_gold" (light = pale golden or light brown sauce; medium = medium brown sauce; dark = deep dark brown sauce; black_gold = very dark almost black glossy sauce),
+  "rice_quality": one of "fluffy" | "soft" | "wet" (fluffy = dry and separate grains; soft = slightly moist and tender; wet = very moist or sticky grains),
+  "pork_part": one of "minced" | "chunky" | "mixed" (minced = finely ground or minced pork; chunky = visible chunks or slices of pork belly; mixed = both minced and chunky pieces)
 }
 
 Lu rou fan = braised pork (minced, diced, or chopped chunks of any size) with sauce poured over rice. Fatty pork belly pieces, skin-on chunks, and small minced pieces all count as lu rou fan as long as the pork is in multiple pieces distributed over the rice.
 Kong rou fan = ONE single large whole uncut block of braised pork belly placed on rice like a thick slab. If the pork is in multiple pieces or spread across the rice, it is lu rou fan.
 Use "kong_rou_fan" ONLY when there is clearly just one large whole uncut pork belly slab on the rice. Eggs (braised egg, fried egg, soft-boiled egg) on top of rice do NOT count as kong rou fan — ignore eggs when making this judgment.
 Be precise about bowl color. Only include toppings clearly visible in the photo.
-When is_lu_rou_fan is "no" or "kong_rou_fan", still return bowl_color, bowl_shape, bowl_texture, and toppings fields.
+When is_lu_rou_fan is "no" or "kong_rou_fan", still return bowl_color, bowl_shape, bowl_texture, and toppings fields but set fat_ratio, skin, sauce_color, rice_quality, pork_part to null.
 """
 
 _FALLBACK = {
@@ -49,6 +54,11 @@ _FALLBACK = {
     "bowl_shape": None,
     "bowl_texture": None,
     "toppings": [],
+    "fat_ratio": None,
+    "skin": None,
+    "sauce_color": None,
+    "rice_quality": None,
+    "pork_part": None,
 }
 
 
@@ -141,6 +151,11 @@ def classify(
             "bowl_shape": data.get("bowl_shape"),
             "bowl_texture": data.get("bowl_texture"),
             "toppings": data.get("toppings", []),
+            "fat_ratio": data.get("fat_ratio"),
+            "skin": data.get("skin"),
+            "sauce_color": data.get("sauce_color"),
+            "rice_quality": data.get("rice_quality"),
+            "pork_part": data.get("pork_part"),
         }
     else:
         features = {
@@ -149,11 +164,16 @@ def classify(
             "bowl_shape": None,
             "bowl_texture": None,
             "toppings": [],
+            "fat_ratio": None,
+            "skin": None,
+            "sauce_color": None,
+            "rice_quality": None,
+            "pork_part": None,
         }
 
     logger.debug(
-        "classify: is_lrf=%s food_type=%s confidence=%.2f threshold=%.2f bowl_color=%s toppings=%s",
+        "classify: is_lrf=%s food_type=%s confidence=%.2f threshold=%.2f bowl_color=%s toppings=%s fat_ratio=%s sauce_color=%s",
         is_lu_rou_fan, food_type, confidence, threshold,
-        features["bowl_color"], features["toppings"],
+        features["bowl_color"], features["toppings"], features["fat_ratio"], features["sauce_color"],
     )
     return is_lu_rou_fan, confidence, features
