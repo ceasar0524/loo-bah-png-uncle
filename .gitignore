@@ -3,6 +3,7 @@ openspec/.vector-search.db*
 .env
 *.env
 photos/
+data/recommendation_profiles.json
 
 # macOS
 .DS_Store
