@@ -44,7 +44,6 @@ _NOT_LU_ROU_FAN_RESPONSES = [
     "所以我說，那個滷肉呢？老花眼鏡都戴上了，你給我看這個！？",
     "齁！大叔眼睛沒花，這碗哪有滷肉！予你騙去！",
     "大叔吃了一輩子的魯肉飯，這碗⋯⋯大叔真的看不懂，你贏了！",
-    "嘸通啦！這不是魯肉飯，大叔也幫不上忙嘿！",
     "這碗大叔看了三秒，確定沒有滷肉。你偷吃了齁！？",
     "哎，大叔不是什麼都吃的美食家，大叔專攻魯肉飯，這碗不在大叔管轄範圍膩！",
     "大叔眉頭一皺，發現案情並不單純。這個⋯⋯不是魯肉飯！",
@@ -54,6 +53,7 @@ _NOT_LU_ROU_FAN_RESPONSES = [
     "該來的總會來，但看來今天滷肉沒有來！",
     "夜路走多了，照片看多了，大叔還是遇不到滷肉～",
     "我懷疑滷肉被你吃掉了，但大叔沒有證據～",
+    "年輕人，不講武德，居然把滷肉藏起來！",
 ]
 
 _SAFE_FALLBACK = "抱歉，大叔這次沒辦法正常回應，請稍後再試。"
@@ -91,6 +91,7 @@ class UnclePersona:
         self._examples = self._load_examples(examples_path)
         self._store_notes = self._load_store_notes()
         self._last_opening: Optional[str] = None
+        self._last_not_lrf: Optional[str] = None
 
     def _load_store_notes(self) -> dict:
         try:
@@ -364,7 +365,10 @@ class UnclePersona:
             return random.choice(_KONG_ROU_FAN_RESPONSES)
 
         if not visual.get("is_lu_rou_fan"):
-            return random.choice(_NOT_LU_ROU_FAN_RESPONSES)
+            candidates = [r for r in _NOT_LU_ROU_FAN_RESPONSES if r != self._last_not_lrf]
+            response = random.choice(candidates)
+            self._last_not_lrf = response
+            return response
 
         formatted_input = self._format_input(visual, matching)
         candidates = [p for p in _OPENING_PHRASES if p != self._last_opening]
