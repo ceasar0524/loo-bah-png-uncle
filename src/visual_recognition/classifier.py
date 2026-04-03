@@ -43,6 +43,7 @@ Return JSON only, no other text:
 Lu rou fan = braised pork (minced, diced, or chopped chunks of any size) with sauce poured over rice. Fatty pork belly pieces, skin-on chunks, and small minced pieces all count as lu rou fan as long as the pork is in multiple pieces distributed over the rice.
 Kong rou fan = ONE single large whole uncut block of braised pork belly placed on rice like a thick slab. If the pork is in multiple pieces or spread across the rice, it is lu rou fan.
 Use "kong_rou_fan" ONLY when there is clearly just one large whole uncut pork belly slab on the rice. Eggs (braised egg, fried egg, soft-boiled egg) on top of rice do NOT count as kong rou fan — ignore eggs when making this judgment.
+NOT lu rou fan: If you can see noodles (any kind) or a large amount of soup broth filling the bowl, it is NOT lu rou fan — use "no" regardless of what the meat looks like.
 Be precise about bowl color. Only include toppings clearly visible in the photo.
 When is_lu_rou_fan is "no" or "kong_rou_fan", still return bowl_color, bowl_shape, bowl_texture, and toppings fields but set fat_ratio, skin, sauce_color, rice_quality, pork_part to null.
 """
