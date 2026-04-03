@@ -155,6 +155,11 @@ class UnclePersona:
         else:
             effective_fat_ratio = detected_fat  # 正常用視覺辨識結果
 
+        # 醬汁顏色：不一致時用背景知識覆蓋
+        profile_sauce = (store_data.get("visual_profile", {}) or {}).get("sauce_color") if store_data else None
+        detected_sauce = visual.get("sauce_color")
+        effective_sauce_color = profile_sauce if (profile_sauce and detected_sauce and profile_sauce != detected_sauce) else detected_sauce
+
         # 平手時：建立「配料 → 擁有該配料的店家」對應表
         tie_topping_owners: dict[str, list[str]] = {}
         if known_toppings is None and is_tie and matches:
@@ -220,8 +225,8 @@ class UnclePersona:
             parts.append(f"肥瘦比例：{label}")
         if visual.get("skin"):
             parts.append(f"是否有皮：{'有皮' if visual['skin'] == 'with_skin' else '無皮'}")
-        if visual.get("sauce_color"):
-            label = _SAUCE_COLOR_LABELS.get(visual["sauce_color"], visual["sauce_color"])
+        if effective_sauce_color:
+            label = _SAUCE_COLOR_LABELS.get(effective_sauce_color, effective_sauce_color)
             parts.append(f"醬汁顏色：{label}")
         if visual.get("rice_quality"):
             rice_labels = {
