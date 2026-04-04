@@ -56,6 +56,9 @@ def _process_image(reply_token, message_id):
         tmp_path = tmp.name
 
     try:
+        from PIL import Image as _PIL
+        with _PIL.open(tmp_path) as _img:
+            print(f"[image size] {_img.size}", flush=True)
         reply_text = pipeline_run(tmp_path, index_path="index.npz")
     except Exception:
         import traceback
