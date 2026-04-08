@@ -56,10 +56,17 @@ The system SHALL detect when multiple stores are sufficiently close in normalize
 
 A tie SHALL be declared when two or more stores have normalized vote counts within a configurable margin (default: 0.15) of the highest normalized vote count. This replaces the previous requirement of strictly equal normalized vote counts.
 
+When a tie is detected and Haiku features are available, the system SHALL rank tied stores using a combined score of Haiku feature compatibility and average cosine similarity. The Haiku feature scoring SHALL use the same rules as the override mechanism (topping matches, distinctive bowl features). Stores with higher Haiku scores SHALL be ranked above stores with no Haiku score. When Haiku scores are equal, stores SHALL be ranked by average cosine similarity descending.
+
 #### Scenario: Tie returns multiple candidates
 
 - **WHEN** two or more stores have normalized vote counts within tie_margin of the highest normalized vote count
-- **THEN** the system SHALL return a result with `is_tie: true` and all tied stores listed in the matches list, ordered by average cosine similarity descending
+- **THEN** the system SHALL return a result with `is_tie: true` and all tied stores listed in the matches list, ordered by (Haiku feature score descending, average cosine similarity descending)
+
+#### Scenario: Tie ranking uses Haiku features when available
+
+- **WHEN** a tie is detected and haiku_features are provided
+- **THEN** tied stores with detected toppings or bowl features matching their store_notes SHALL be ranked above stores with no Haiku feature match
 
 #### Scenario: Clear majority not a tie
 

@@ -176,7 +176,7 @@ class UnclePersona:
         tie_topping_owners: dict[str, list[str]] = {}
         if known_toppings is None and is_tie and matches:
             all_have_notes = True
-            for m in matches:
+            for m in matches[:2]:
                 sname = m["store_name"]
                 sdata = self._store_notes.get(sname)
                 if not sdata:

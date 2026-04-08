@@ -45,11 +45,12 @@ Before the input is passed to the uncle-persona module, the following pre-proces
    - If the matched store has no `known_toppings` (or there is no store match): trust CLIP results entirely without modification.
 
 3. **Tie topping attribution** (tie case — applied when `is_tie` is true and tied stores have `known_toppings`):
-   - Compute the **union** of all tied stores' `known_toppings`.
-   - Split into **shared** (present in ALL tied stores) and **exclusive** (present in only SOME tied stores).
+   - Only the **top 2** tied stores (as ranked by the store matching result) SHALL be considered for topping attribution.
+   - Compute the **union** of the top-2 tied stores' `known_toppings`.
+   - Split into **shared** (present in ALL top-2 tied stores) and **exclusive** (present in only SOME top-2 tied stores).
    - Shared toppings SHALL be passed as confirmed present.
    - Exclusive toppings SHALL be passed with store attribution so the uncle can use conditional language.
-   - If any tied store has no `known_toppings` entry, fall back to unfiltered CLIP detections.
+   - If any of the top-2 tied stores has no `known_toppings` entry, fall back to unfiltered CLIP detections.
 
 #### Scenario: Full input with matches
 
@@ -78,7 +79,7 @@ Before the input is passed to the uncle-persona module, the following pre-proces
 
 #### Scenario: Tie topping attribution with exclusive toppings
 
-- **WHEN** matching.is_tie is true and a topping belongs to only some tied stores' known_toppings
+- **WHEN** matching.is_tie is true and a topping belongs to only some of the top-2 tied stores' known_toppings
 - **THEN** the topping SHALL be passed with attribution (which store has it) so the uncle uses conditional language
 
 #### Scenario: Topping cross-filtering without known_toppings

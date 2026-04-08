@@ -45,12 +45,6 @@
   "明志派出所對面滷肉飯(泰山區)": {
     "notes": "這家常常無預警休息，要吃到需要碰點運氣。遵循傳統古早作法，將碎豬肉和肥肉一起剁碎成末，加醬油滷汁熬煮，鋪在白飯上，燉煮的滷肉香氣很誘人，很像家裡老媽或阿嬤煮的味道。口感像剁得更碎的瓜仔肉，但加了碎肥肉，吃起來更綿密、更軟嫩，非常下飯。飯煮得比較黏Q，配上同樣黏稠的滷肉，整個合拍——讓人不知不覺一碗接著一碗，會上癮的那種。",
     "known_toppings": [],
-    "bowl": {
-      "color": "yellow",
-      "shape": "round_bowl",
-      "texture": "plastic",
-      "distinctive": true
-    },
     "visual_profile": {
       "fat_ratio": "lean_heavy",
       "skin": "no_skin",

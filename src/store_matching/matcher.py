@@ -137,7 +137,29 @@ def match_store(
     is_tie = len(tied_stores) > 1
 
     if is_tie:
-        # 平手：回傳所有平手店家，依平均相似度降序
+        # 平手：計算各店家 Haiku 特徵分，加上 CLIP 相似度排序
+        haiku_scores: dict[str, float] = {}
+        if haiku_features and store_notes:
+            toppings = set(haiku_features.get("toppings") or [])
+            bowl_color = haiku_features.get("bowl_color")
+            bowl_shape = haiku_features.get("bowl_shape")
+            bowl_texture = haiku_features.get("bowl_texture")
+            for store in tied_stores:
+                score = 0.0
+                data = store_notes.get(store, {})
+                known_toppings = set(data.get("known_toppings", []))
+                for t in known_toppings & toppings:
+                    score += _CILANTRO_SCORE if t == "cilantro" else _TOPPING_SCORE
+                bowl = data.get("bowl", {})
+                if bowl.get("distinctive"):
+                    if bowl.get("color") and bowl["color"] == bowl_color:
+                        score += _BOWL_COLOR_SCORE
+                    if bowl.get("shape") and bowl["shape"] == bowl_shape:
+                        score += _BOWL_SHAPE_SCORE
+                    if bowl.get("texture") and bowl["texture"] == bowl_texture:
+                        score += _BOWL_TEXTURE_SCORE
+                haiku_scores[store] = score
+
         candidates = []
         for store in tied_stores:
             avg_sim = float(np.mean(store_sims[store]))
@@ -149,7 +171,10 @@ def match_store(
                 confidence_level=level,
                 photo_count=count,
             ))
-        candidates.sort(key=lambda x: x["similarity"], reverse=True)
+        candidates.sort(
+            key=lambda x: (haiku_scores.get(x["store_name"], 0.0), x["similarity"]),
+            reverse=True,
+        )
         return MatchingResult(is_tie=True, matches=candidates)
 
     # 唯一勝出店家
