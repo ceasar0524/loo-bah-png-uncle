@@ -35,9 +35,9 @@ def run(
     index_path: Optional[str] = None,
     threshold: float = 0.6,
     store_notes_path: Optional[str] = None,
-) -> str:
+) -> tuple[str, Optional[str]]:
     """
-    執行完整辨識 pipeline，回傳大叔回應字串。
+    執行完整辨識 pipeline，回傳大叔回應字串與辨識到的店家名稱。
 
     Args:
         image_source:      圖片路徑
@@ -46,7 +46,8 @@ def run(
         store_notes_path:  store_notes.json 路徑；None 則使用預設路徑
 
     Returns:
-        大叔回應字串
+        (大叔回應字串, 辨識到的店家名稱或 None)
+        店家名稱為 None 表示非魯肉飯或無比對結果
     """
     t_start = time.perf_counter()
 
@@ -105,4 +106,9 @@ def run(
     logger.info("[timing] persona.generate: %.3fs", time.perf_counter() - t4)
 
     logger.info("[timing] total: %.3fs", time.perf_counter() - t_start)
-    return response
+
+    matched_store = None
+    if visual.get("is_lu_rou_fan") and matching.get("matches"):
+        matched_store = matching["matches"][0]["store_name"]
+
+    return response, matched_store

@@ -409,3 +409,71 @@ class UnclePersona:
                 "夭壽喔，今天大家都在吃魯肉飯嗎！大叔招架不住，等一下再試！",
             ])
         return "大叔出去買魯肉飯，等一下！網路好像有問題，再試一次啦！"
+
+    def generate_nearby(self, matched_store: str, results: list) -> str:
+        """
+        產生附近推薦回應。
+
+        Args:
+            matched_store: 辨識出的店家名稱
+            results:       search_nearby_stores 的回傳結果，每筆含
+                           store_name、distance_km、similarity_score
+                           最多 2 筆，已依距離升序排列
+
+        Returns:
+            繁體中文回應字串
+        """
+        if not results:
+            return random.choice([
+                "殘念！這附近大叔還在開發中...",
+                "哎，這一帶大叔還沒踩過，附近暫時是空白地帶...",
+            ])
+
+        lines = []
+        for r in results[:2]:
+            name = r["store_name"]
+            dist = r["distance_km"]
+            maps_url = self._maps_url(name)
+            lines.append(f"・{name}（距你約 {dist} 公里）\n{maps_url}")
+
+        store_list = "\n".join(lines)
+
+        system_prompt = f"""你是一個愛吃魯肉飯的大叔評論員。
+用台式幽默、in-character 的語氣，推薦用戶去附近風格相近的魯肉飯店家。
+語氣要像老饕朋友在分享，不超過 50 字。
+單獨提到肉的時候用「滷肉」，不用「魯肉」；只有「魯肉飯」這個詞組維持原樣。
+絕對不能出現政治、性愛、暴力、仇恨等不當內容。"""
+
+        user_content = f"剛辨識出是「{matched_store}」的風格，附近還有這幾家走類似路線的：\n{store_list}\n\n用大叔的語氣推薦一下（不超過 50 字），推薦完直接列出店名和距離，格式維持原樣。"
+
+        last_exc = None
+        for attempt in range(3):
+            try:
+                message = self._client.messages.create(
+                    model="claude-haiku-4-5-20251001",
+                    max_tokens=200,
+                    system=system_prompt,
+                    messages=[{"role": "user", "content": user_content}],
+                )
+                intro = message.content[0].text.strip()
+                return f"{intro}\n\n{store_list}"
+
+            except anthropic.APIStatusError as e:
+                last_exc = e
+                if e.status_code == 529 and attempt < 2:
+                    time.sleep(1)
+                else:
+                    break
+            except Exception as e:
+                last_exc = e
+                break
+
+        return f"大叔覺得這幾家走類似路線，可以去試試：\n\n{store_list}"
+
+    def _maps_url(self, store_name: str) -> str:
+        """產生店家的 Google Maps 靜態連結。"""
+        data = self._store_notes.get(store_name, {})
+        loc = data.get("location")
+        if loc:
+            return f"https://maps.google.com/?q={loc['lat']},{loc['lng']}"
+        return f"https://maps.google.com/?q={store_name}"
