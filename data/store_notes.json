@@ -401,7 +401,8 @@
     "visual_profile": {
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
-      "sauce_color": "light"
+      "sauce_color": "light",
+      "rice_quality": "soft"
     },
     "available_toppings": [
       "魯蛋"

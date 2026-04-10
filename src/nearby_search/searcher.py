@@ -21,14 +21,14 @@ def haversine_km(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
     return R * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
 
-_PROFILE_FIELDS = ["fat_ratio", "skin", "sauce_color", "rice_quality"]
+_PROFILE_FIELDS = ["fat_ratio", "skin", "sauce_color"]
 
 
 def profile_similarity(profile_a: dict, profile_b: dict) -> float:
     """
     計算兩家店 visual_profile 的相似度。
-    比對 fat_ratio、skin、sauce_color、rice_quality 四個欄位。
-    每個相符欄位貢獻 1/4 分，回傳 0.0 ~ 1.0。
+    比對 fat_ratio、skin、sauce_color 三個欄位（rice_quality 鑑別力低，排除）。
+    每個相符欄位貢獻 1/3 分，回傳 0.0 ~ 1.0。
     缺少的欄位視為不相符。
     """
     if not profile_a or not profile_b:
@@ -87,6 +87,9 @@ def search_nearby_stores(
         similarity = profile_similarity(source_profile, data.get("visual_profile", {}))
         if source_is_poached and _is_poached_egg_store(data):
             similarity += 0.2
+
+        if similarity < 0.5:
+            continue
 
         candidates.append({
             "store_name": name,
