@@ -162,9 +162,9 @@ def handle_location(event):
     else:
         lat = event.message.latitude
         lng = event.message.longitude
-        results = search_nearby_stores(matched_store, lat, lng, _store_notes)
+        results, any_in_radius = search_nearby_stores(matched_store, lat, lng, _store_notes)
         results_for_persona = sorted(results[:2], key=lambda x: x["distance_km"])
-        reply_text = _persona.generate_nearby(matched_store, results_for_persona)
+        reply_text = _persona.generate_nearby(matched_store, results_for_persona, any_in_radius)
 
     try:
         with ApiClient(_config) as api_client:

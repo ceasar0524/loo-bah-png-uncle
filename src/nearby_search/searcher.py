@@ -73,6 +73,7 @@ def search_nearby_stores(
     source_is_poached = _is_poached_egg_store(source)
 
     candidates = []
+    any_in_radius = False
     for name, data in store_notes.items():
         if name == matched_store:
             continue
@@ -83,6 +84,8 @@ def search_nearby_stores(
         distance = haversine_km(user_lat, user_lng, loc["lat"], loc["lng"])
         if distance > radius_km:
             continue
+
+        any_in_radius = True
 
         similarity = profile_similarity(source_profile, data.get("visual_profile", {}))
         if source_is_poached and _is_poached_egg_store(data):
@@ -98,4 +101,4 @@ def search_nearby_stores(
         })
 
     candidates.sort(key=lambda x: x["similarity_score"], reverse=True)
-    return candidates[:top_n]
+    return candidates[:top_n], any_in_radius

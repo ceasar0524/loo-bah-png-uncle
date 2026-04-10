@@ -410,20 +410,23 @@ class UnclePersona:
             ])
         return "大叔出去買魯肉飯，等一下！網路好像有問題，再試一次啦！"
 
-    def generate_nearby(self, matched_store: str, results: list) -> str:
+    def generate_nearby(self, matched_store: str, results: list, any_in_radius: bool = False) -> str:
         """
         產生附近推薦回應。
 
         Args:
-            matched_store: 辨識出的店家名稱
-            results:       search_nearby_stores 的回傳結果，每筆含
-                           store_name、distance_km、similarity_score
-                           最多 2 筆，已依距離升序排列
+            matched_store:   辨識出的店家名稱
+            results:         search_nearby_stores 的回傳結果，每筆含
+                             store_name、distance_km、similarity_score
+                             最多 2 筆，已依距離升序排列
+            any_in_radius:   是否有店家在搜尋半徑內（不論風格是否相符）
 
         Returns:
             繁體中文回應字串
         """
         if not results:
+            if any_in_radius:
+                return "找了一圈，附近沒有風格相近的，大叔默默走去面壁 🧱"
             return "殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇"
 
         lines = []
