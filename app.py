@@ -55,6 +55,13 @@ _LINE_CHANNEL_ACCESS_TOKEN = os.environ["LINE_CHANNEL_ACCESS_TOKEN"]
 # 附近推薦功能開關（設為 "false" 可快速關閉，不影響辨識流程）
 NEARBY_SEARCH_ENABLED = os.getenv("NEARBY_SEARCH_ENABLED", "true").lower() == "true"
 
+# Admin user ID，過濾測試流量不計入統計
+_ADMIN_USER_ID = os.getenv("ADMIN_USER_ID", "")
+
+
+def _is_admin(user_id: str) -> bool:
+    return bool(_ADMIN_USER_ID) and user_id == _ADMIN_USER_ID
+
 # Session：暫存用戶查詢的辨識結果，供附近推薦使用
 # 格式：{user_id: (matched_store, timestamp)}
 _SESSION_TTL = 300  # 5 分鐘
@@ -105,6 +112,9 @@ def webhook():
 
 
 def _process_image(reply_token, message_id, user_id):
+    if not _is_admin(user_id):
+        logging.info("[event] image_received")
+
     with ApiClient(_config) as api_client:
         blob_api = MessagingApiBlob(api_client)
         image_bytes = blob_api.get_message_content(message_id)
@@ -122,6 +132,9 @@ def _process_image(reply_token, message_id, user_id):
         matched_store = None
     finally:
         os.unlink(tmp_path)
+
+    if not _is_admin(user_id) and matched_store:
+        logging.info("[event] recognition_success store=%s", matched_store)
 
     if NEARBY_SEARCH_ENABLED and matched_store:
         _save_session(user_id, matched_store)
@@ -160,6 +173,8 @@ def handle_location(event):
     if not matched_store:
         reply_text = "傳張照片給大叔看，大叔才知道你在找什麼路線！"
     else:
+        if not _is_admin(user_id):
+            logging.info("[event] nearby_search_triggered")
         lat = event.message.latitude
         lng = event.message.longitude
         results, any_in_radius = search_nearby_stores(matched_store, lat, lng, _store_notes)
