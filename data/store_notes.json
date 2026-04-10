@@ -219,7 +219,7 @@
     "visual_profile": {
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
-      "sauce_color": "black_gold",
+      "sauce_color": "dark",
       "rice_quality": "soft"
     },
     "location": {
@@ -379,7 +379,7 @@
     "visual_profile": {
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
-      "sauce_color": "medium",
+      "sauce_color": "dark",
       "rice_quality": "soft"
     },
     "available_toppings": [
@@ -401,7 +401,7 @@
     "visual_profile": {
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
-      "sauce_color": "light",
+      "sauce_color": "medium",
       "rice_quality": "soft"
     },
     "available_toppings": [
