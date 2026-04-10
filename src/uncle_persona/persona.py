@@ -424,10 +424,7 @@ class UnclePersona:
             繁體中文回應字串
         """
         if not results:
-            return random.choice([
-                "殘念！這附近大叔還在開發中...",
-                "哎，這一帶大叔還沒踩過，附近暫時是空白地帶...",
-            ])
+            return "殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇"
 
         lines = []
         for r in results[:2]:
@@ -437,7 +434,7 @@ class UnclePersona:
             lines.append(f"・{name}（距你約 {dist} 公里）\n{maps_url}")
 
         store_list = "\n".join(lines)
-        return f"附近走類似路線的，大叔推薦：\n\n{store_list}"
+        return f"大叔雷達掃到了！附近走類似風格的：\n\n{store_list}"
 
     def _maps_url(self, store_name: str) -> str:
         """產生店家的 Google Maps 靜態連結。"""
