@@ -83,7 +83,7 @@
     ],
     "visual_profile": {
       "fat_ratio": "fat_heavy",
-      "skin": "no_skin",
+      "skin": "with_skin",
       "sauce_color": "medium",
       "rice_quality": "soft",
       "sauce_taste": "均衡"
