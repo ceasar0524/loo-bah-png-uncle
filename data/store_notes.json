@@ -9,7 +9,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "dark",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏鹹"
     },
     "available_toppings": [
       "溏心蛋"
@@ -32,7 +33,8 @@
       "fat_ratio": "lean_heavy",
       "skin": "no_skin",
       "sauce_color": "medium",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏鹹"
     },
     "location": {
       "lat": 25.07737355278973,
@@ -48,7 +50,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "medium",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "均衡"
     },
     "available_toppings": [
       "滷蛋"
@@ -65,7 +68,8 @@
       "fat_ratio": "lean_heavy",
       "skin": "no_skin",
       "sauce_color": "light",
-      "rice_quality": "mushy"
+      "rice_quality": "mushy",
+      "sauce_taste": "偏鹹"
     },
     "location": {
       "lat": 25.04387339874715,
@@ -81,7 +85,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "no_skin",
       "sauce_color": "medium",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "均衡"
     },
     "topping_names": {
       "yin_gua": "蔭瓜"
@@ -98,7 +103,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "dark",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏甜"
     },
     "available_toppings": [
       "肉鬆"
@@ -115,7 +121,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "dark",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "均衡"
     },
     "available_toppings": [
       "滷鴨蛋"
@@ -132,7 +139,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "dark",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏甜"
     },
     "available_toppings": [
       "魚鬆",
@@ -152,7 +160,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "dark",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏甜"
     },
     "topping_names": {
       "yin_gua": "醬瓜"
@@ -180,7 +189,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "black_gold",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏甜"
     },
     "available_toppings": [
       "魯蛋"
@@ -201,7 +211,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "light",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏鹹"
     },
     "available_toppings": [
       "雞絲"
@@ -220,7 +231,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "dark",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "均衡"
     },
     "location": {
       "lat": 25.040596586220968,
@@ -237,7 +249,8 @@
       "fat_ratio": "lean_heavy",
       "skin": "no_skin",
       "sauce_color": "medium",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "均衡"
     },
     "available_toppings": [
       "半熟荷包蛋"
@@ -257,7 +270,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "medium",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏鹹"
     },
     "available_toppings": [
       "半熟荷包蛋"
@@ -279,7 +293,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "black_gold",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏鹹"
     },
     "available_toppings": [
       "滷鴨蛋",
@@ -302,7 +317,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "medium",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏甜"
     },
     "available_toppings": [
       "魯蛋"
@@ -322,7 +338,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "dark",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏甜"
     },
     "available_toppings": [
       "半熟荷包蛋",
@@ -343,7 +360,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "medium",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏甜"
     },
     "available_toppings": [
       "半熟荷包蛋",
@@ -363,7 +381,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "medium",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏甜"
     },
     "available_toppings": [
       "魯蛋"
@@ -380,7 +399,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "dark",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "偏甜"
     },
     "available_toppings": [
       "魯蛋"
@@ -402,7 +422,8 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "medium",
-      "rice_quality": "soft"
+      "rice_quality": "soft",
+      "sauce_taste": "均衡"
     },
     "available_toppings": [
       "魯蛋"
@@ -419,7 +440,8 @@
       "fat_ratio": "lean_heavy",
       "skin": "no_skin",
       "sauce_color": "light",
-      "rice_quality": "fluffy"
+      "rice_quality": "fluffy",
+      "sauce_taste": "偏鹹"
     },
     "location": {
       "lat": 25.082079151844052,

@@ -21,23 +21,53 @@ def haversine_km(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
     return R * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
 
-_PROFILE_FIELDS = ["fat_ratio", "skin", "sauce_color"]
+_PROFILE_WEIGHTS = {
+    "fat_ratio": 0.3,
+    "skin": 0.3,
+    "sauce_taste": 0.3,
+    "sauce_color": 0.1,
+}
+
+_SIMILARITY_THRESHOLD = 0.7
+
+
+def _sauce_taste_score(a: str, b: str) -> float:
+    """
+    sauce_taste 的部分相符計分：
+    - 相同：1.0
+    - 其中一方為均衡：0.5
+    - 偏甜 vs 偏鹹：0.0
+    """
+    if not a or not b:
+        return 0.0
+    if a == b:
+        return 1.0
+    if "均衡" in (a, b):
+        return 0.5
+    return 0.0
 
 
 def profile_similarity(profile_a: dict, profile_b: dict) -> float:
     """
-    計算兩家店 visual_profile 的相似度。
-    比對 fat_ratio、skin、sauce_color 三個欄位（rice_quality 鑑別力低，排除）。
-    每個相符欄位貢獻 1/3 分，回傳 0.0 ~ 1.0。
-    缺少的欄位視為不相符。
+    計算兩家店 visual_profile 的相似度（加權）。
+    - fat_ratio、skin、sauce_taste 各佔 0.3
+    - sauce_color 佔 0.1
+    - sauce_taste 支援均衡部分相符（0.5）
+    - rice_quality 鑑別力低，排除
+    回傳 0.0 ~ 1.0。
     """
     if not profile_a or not profile_b:
         return 0.0
-    matches = sum(
-        1 for field in _PROFILE_FIELDS
-        if profile_a.get(field) and profile_a.get(field) == profile_b.get(field)
-    )
-    return matches / len(_PROFILE_FIELDS)
+    score = 0.0
+    for field, weight in _PROFILE_WEIGHTS.items():
+        a = profile_a.get(field)
+        b = profile_b.get(field)
+        if field == "sauce_taste":
+            score += weight * _sauce_taste_score(a, b)
+        else:
+            if a and a == b:
+                score += weight
+    return score
 
 
 def _is_poached_egg_store(data: dict) -> bool:
@@ -91,7 +121,7 @@ def search_nearby_stores(
         if source_is_poached and _is_poached_egg_store(data):
             similarity += 0.2
 
-        if similarity < 0.5:
+        if similarity < 0.7:
             continue
 
         candidates.append({
