@@ -447,5 +447,24 @@
       "lat": 25.082079151844052,
       "lng": 121.54630535377387
     }
+  },
+  "啊興阿滷肉飯（中山區）": {
+    "notes": "隱藏在林森北路 133 巷巷口，大叔以前公司附近的私藏。某次無意發現，一吃就覺得很可以。滷肉飯走濕式路線，白飯淋滿滷汁卻不過鹹，帶皮肥肉搭油蔥香氣，滷汁滲進米飯裡油香滑順，一口接一口，默默就見底了。",
+    "known_toppings": [],
+    "topping_names": {},
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_color": "medium",
+      "sauce_taste": "均衡",
+      "rice_quality": "soft"
+    },
+    "location": {
+      "lat": 25.05073654737891,
+      "lng": 121.52733229617012
+    },
+    "bowl_color": "",
+    "bowl_shape": "",
+    "bowl_texture": ""
   }
 }
