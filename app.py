@@ -216,6 +216,21 @@ def handle_image(event):
     ).start()
 
 
+def _text_reply_greeting() -> str:
+    from datetime import datetime
+    import zoneinfo
+    hour = datetime.now(zoneinfo.ZoneInfo("Asia/Taipei")).hour
+    if 6 <= hour < 11:
+        greeting = "這位同學早安！"
+    elif 11 <= hour < 14:
+        greeting = "這位同學午安！"
+    elif 23 <= hour or hour < 6:
+        greeting = "這位同學還沒睡？"
+    else:
+        greeting = "這位同學！"
+    return f"{greeting}大叔只吃圖，不吃文字，請投餵一張魯肉飯照片 🍚"
+
+
 @_handler.add(MessageEvent, message=TextMessageContent)
 def handle_text(event):
     try:
@@ -224,7 +239,7 @@ def handle_text(event):
             messaging_api.reply_message(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text="這位同學！大叔只吃圖，不吃文字，請投餵一張魯肉飯照片 🍚")],
+                    messages=[TextMessage(text=_text_reply_greeting())],
                 )
             )
     except Exception:
