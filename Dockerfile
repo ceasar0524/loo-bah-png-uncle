@@ -16,10 +16,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 預先下載 CLIP 模型（避免 cold start 時才下載）
 RUN python -c "import clip; clip.load('ViT-B/32', device='cpu')"
 
+# 預先下載 DINOv2 模型（供 sauce consistency tiebreak 使用）
+RUN python -c "import torch; torch.hub.load('facebookresearch/dinov2', 'dinov2_vitb14', verbose=False)"
+
 # 複製程式碼與資料
 COPY src/ src/
 COPY data/ data/
 COPY index.npz .
+COPY index_sauce_crop.npz .
 COPY store_index.pkl.npz .
 COPY app.py .
 
