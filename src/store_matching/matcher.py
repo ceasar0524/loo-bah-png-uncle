@@ -250,12 +250,21 @@ def match_store(
             reverse=True,
         )
 
+        # Haiku 特徵獨贏：第一名有分、第二名為零 → 解除平手
+        haiku_resolved = False
+        if haiku_scores:
+            scores_list = [haiku_scores.get(c["store_name"], 0.0) for c in candidates]
+            if len(scores_list) >= 2 and scores_list[0] > 0 and scores_list[1] == 0.0:
+                logger.info("haiku tie resolved: %s (score=%.2f) beats %s (score=0)",
+                            candidates[0]["store_name"], scores_list[0], candidates[1]["store_name"])
+                haiku_resolved = True
+
         # Sauce consistency tiebreak（第三層）：僅在 DINO_TIEBREAK_ENABLED=true 且前兩名標記不同時啟動
         tiebreak_resolved = False
-        if os.getenv("DINO_TIEBREAK_ENABLED", "false").lower() == "true":
+        if not haiku_resolved and os.getenv("DINO_TIEBREAK_ENABLED", "false").lower() == "true":
             candidates, tiebreak_resolved = _sauce_consistency_tiebreak(candidates, store_notes, query_image)
 
-        return MatchingResult(is_tie=not tiebreak_resolved, matches=candidates)
+        return MatchingResult(is_tie=not (haiku_resolved or tiebreak_resolved), matches=candidates)
 
     # 唯一勝出店家
     winner = tied_stores[0]

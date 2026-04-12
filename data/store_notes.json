@@ -503,7 +503,7 @@
     "bowl": {
       "color": "silver",
       "texture": "metal",
-      "distinctive": false
+      "distinctive": true
     },
     "location": {
       "lat": 25.02917854098271,
