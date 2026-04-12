@@ -58,15 +58,22 @@ A tie SHALL be declared when two or more stores have normalized vote counts with
 
 When a tie is detected and Haiku features are available, the system SHALL rank tied stores using a combined score of Haiku feature compatibility and average cosine similarity. The Haiku feature scoring SHALL use the same rules as the override mechanism (topping matches, distinctive bowl features). Stores with higher Haiku scores SHALL be ranked above stores with no Haiku score. When Haiku scores are equal, stores SHALL be ranked by average cosine similarity descending.
 
+After Haiku ranking, if `DINO_TIEBREAK_ENABLED` is `"true"` and the top two candidates have different `sauce_consistency` labels in `store_notes.json`, the system SHALL apply the sauce consistency tiebreak as a final ranking step. See `sauce-consistency-tiebreak` spec for full conditions.
+
 #### Scenario: Tie returns multiple candidates
 
 - **WHEN** two or more stores have normalized vote counts within tie_margin of the highest normalized vote count
-- **THEN** the system SHALL return a result with `is_tie: true` and all tied stores listed in the matches list, ordered by (Haiku feature score descending, average cosine similarity descending)
+- **THEN** the system SHALL return a result with `is_tie: true` and all tied stores listed in the matches list, ordered by (Haiku feature score descending, average cosine similarity descending), with sauce consistency tiebreak applied last if conditions are met
 
 #### Scenario: Tie ranking uses Haiku features when available
 
 - **WHEN** a tie is detected and haiku_features are provided
 - **THEN** tied stores with detected toppings or bowl features matching their store_notes SHALL be ranked above stores with no Haiku feature match
+
+#### Scenario: Sauce consistency tiebreak applied after Haiku ranking
+
+- **WHEN** a tie remains after Haiku ranking and top two candidates have different sauce_consistency labels and DINO_TIEBREAK_ENABLED is true
+- **THEN** the candidate whose sauce_consistency matches the DINOv2 prediction SHALL be ranked first
 
 #### Scenario: Clear majority not a tie
 
@@ -77,6 +84,25 @@ When a tie is detected and Haiku features are available, the system SHALL rank t
 
 - **WHEN** the caller specifies a custom tie_margin
 - **THEN** the system SHALL apply that margin instead of the default 0.15
+
+
+<!-- @trace
+source: sauce-consistency-tiebreak
+updated: 2026-04-12
+code:
+  - src/sauce_consistency/predictor.py
+  - src/pipeline.py
+  - .github/workflows/deploy.yml
+  - index_dino_crop.npz
+  - Dockerfile
+  - src/store_matching/matcher.py
+  - index_sauce_crop.npz
+  - data/store_notes.json
+  - haiku_features_cache_v2.json
+  - eval_dino.py
+  - src/sauce_consistency/__init__.py
+  - index_vit_l14.npz
+-->
 
 ---
 ### Requirement: Similarity confidence level
