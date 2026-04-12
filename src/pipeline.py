@@ -94,6 +94,7 @@ def run(
                 img_feat, index,
                 haiku_features=haiku_features,
                 store_notes=store_notes,
+                query_image=pil_img,
             )
             logger.info("[timing] match_store: %.3fs", time.perf_counter() - t3)
         else:

@@ -4,6 +4,7 @@ KNN 店家比對模組。
 CLIP KNN 為主要信號；Haiku 偵測到高信心明確特徵時才覆蓋 CLIP 結果。
 """
 import logging
+import os
 from collections import defaultdict
 from typing import Optional
 
@@ -20,6 +21,8 @@ _TIE_MARGIN = 0.15  # 正規化票數差距在此範圍內視為平手
 
 # Haiku 特徵覆蓋門檻與分數
 _HAIKU_OVERRIDE_THRESHOLD = 0.75
+_DINO_CONFIRM_THRESHOLD = 0.65  # 確認第一名（不換位）的信心門檻
+_DINO_SWAP_THRESHOLD = 0.80    # 換位（第二名提至第一）的信心門檻
 _BOWL_COLOR_SCORE = 0.5
 _BOWL_SHAPE_SCORE = 0.2
 _BOWL_TEXTURE_SCORE = 0.3
@@ -80,6 +83,76 @@ def haiku_override(features: dict, store_notes: dict) -> tuple:
     return winner, scores[winner]
 
 
+def _sauce_consistency_tiebreak(
+    candidates: list,
+    store_notes: Optional[dict],
+    query_image,
+) -> tuple[list, bool]:
+    """
+    DINOv2 濃稠度 tiebreak：前兩名 sauce_consistency 標記不同時，
+    預測 query 圖片的類別並將吻合者提至第一名。
+    任何條件不符則回傳原 candidates 不變。
+
+    Returns:
+        (candidates, swapped) — swapped=True 表示有換位，可將 is_tie 改為 False
+    """
+    if len(candidates) < 2 or store_notes is None or query_image is None:
+        return candidates, False
+
+    c0 = store_notes.get(candidates[0]["store_name"], {}).get("sauce_consistency")
+    c1 = store_notes.get(candidates[1]["store_name"], {}).get("sauce_consistency")
+
+    if not c0 or not c1 or c0 == c1:
+        return candidates, False
+
+    logger.info(
+        "sauce_consistency tiebreak: 前兩名 %s(%s) vs %s(%s)",
+        candidates[0]["store_name"], c0, candidates[1]["store_name"], c1,
+    )
+
+    try:
+        from src.sauce_consistency import predict_consistency
+        result = predict_consistency(query_image)
+    except Exception as e:
+        logger.warning("sauce_consistency tiebreak 失敗：%s", e)
+        return candidates, False
+
+    if result is None:
+        return candidates, False
+
+    prediction, confidence = result
+    logger.info("sauce_consistency tiebreak: 預測=%s confidence=%.2f", prediction, confidence)
+
+    if c1 == prediction and c0 != prediction:
+        if confidence >= _DINO_SWAP_THRESHOLD:
+            logger.info(
+                "sauce_consistency tiebreak: 將 %s(%s) 提至第一（預測=%s confidence=%.2f）",
+                candidates[1]["store_name"], c1, prediction, confidence,
+            )
+            return [candidates[1], candidates[0]] + candidates[2:], True
+        logger.info(
+            "sauce_consistency tiebreak: 換位信心不足（%.2f < %.2f），不換位",
+            confidence, _DINO_SWAP_THRESHOLD,
+        )
+        return candidates, False
+
+    # 第一名已吻合，確認無誤
+    if c0 == prediction:
+        if confidence >= _DINO_CONFIRM_THRESHOLD:
+            logger.info(
+                "sauce_consistency tiebreak: 確認 %s(%s) 維持第一（預測=%s confidence=%.2f）",
+                candidates[0]["store_name"], c0, prediction, confidence,
+            )
+            return candidates, True
+        logger.info(
+            "sauce_consistency tiebreak: 確認信心不足（%.2f < %.2f），保持平手",
+            confidence, _DINO_CONFIRM_THRESHOLD,
+        )
+        return candidates, False
+
+    return candidates, False
+
+
 def match_store(
     query_vector: np.ndarray,
     index: dict,
@@ -87,6 +160,7 @@ def match_store(
     threshold: float = _DEFAULT_THRESHOLD,
     haiku_features: Optional[dict] = None,
     store_notes: Optional[dict] = None,
+    query_image=None,
 ) -> MatchingResult:
     """
     KNN 比對：找出最像的店家。CLIP 為主，Haiku 特徵高信心時覆蓋。
@@ -175,7 +249,13 @@ def match_store(
             key=lambda x: (haiku_scores.get(x["store_name"], 0.0), x["similarity"]),
             reverse=True,
         )
-        return MatchingResult(is_tie=True, matches=candidates)
+
+        # Sauce consistency tiebreak（第三層）：僅在 DINO_TIEBREAK_ENABLED=true 且前兩名標記不同時啟動
+        tiebreak_resolved = False
+        if os.getenv("DINO_TIEBREAK_ENABLED", "false").lower() == "true":
+            candidates, tiebreak_resolved = _sauce_consistency_tiebreak(candidates, store_notes, query_image)
+
+        return MatchingResult(is_tie=not tiebreak_resolved, matches=candidates)
 
     # 唯一勝出店家
     winner = tied_stores[0]

@@ -157,6 +157,60 @@ code:
 -->
 
 ---
+### Requirement: Sauce consistency tiebreak
+
+When a tie is detected and the top two candidates have different `sauce_consistency` labels in `store_notes.json`, the system SHALL optionally apply a DINOv2-based sauce consistency tiebreak as a third-layer signal.
+
+The tiebreak is gated by the `DINO_TIEBREAK_ENABLED` environment variable (default: `false`). When disabled, tie detection and ranking proceed unchanged.
+
+When enabled, the system SHALL:
+1. Check whether the top two tied candidates have different `sauce_consistency` labels (`稠` or `水`). If labels are the same or either is missing, skip tiebreak.
+2. Embed the query image using DINOv2 (dinov2_vitb14) with center-crop preprocessing, and predict the sauce consistency class via class-normalized KNN voting against `index_sauce_crop.npz`.
+3. Apply asymmetric confidence thresholds for the two possible actions:
+   - **Confirm** (prediction matches first candidate, no position change): threshold ≥ 0.65
+   - **Swap** (prediction matches second candidate, promote to first): threshold ≥ 0.80
+4. If neither threshold is met, retain original ordering and `is_tie: true`.
+5. When the tiebreak resolves the tie (confirm or swap), set `is_tie: false`.
+
+The DINOv2 model SHALL be loaded lazily on first use with a process-level cache. Prediction failures SHALL be handled gracefully by returning `None` and skipping the tiebreak.
+
+#### Scenario: Tiebreak confirms first candidate
+
+- **WHEN** top two tied candidates are store A (稠) and store B (水), DINOv2 predicts 稠 with confidence ≥ 0.65
+- **THEN** store A SHALL remain first, `is_tie` SHALL be set to `false`
+
+#### Scenario: Tiebreak swaps second candidate to first
+
+- **WHEN** top two tied candidates are store A (水) and store B (稠), DINOv2 predicts 稠 with confidence ≥ 0.80
+- **THEN** store B SHALL be promoted to first, `is_tie` SHALL be set to `false`
+
+#### Scenario: Swap blocked by insufficient confidence
+
+- **WHEN** DINOv2 predicts the second candidate's class but confidence < 0.80
+- **THEN** ordering SHALL remain unchanged and `is_tie` SHALL remain `true`
+
+#### Scenario: Tiebreak skipped when labels are identical
+
+- **WHEN** both top candidates have the same `sauce_consistency` label
+- **THEN** tiebreak SHALL be skipped and original ordering retained
+
+#### Scenario: Tiebreak skipped when disabled
+
+- **WHEN** `DINO_TIEBREAK_ENABLED` is `false` (default)
+- **THEN** DINOv2 SHALL NOT be loaded or invoked
+
+<!-- @trace
+source: sauce-consistency-tiebreak
+updated: 2026-04-12
+code:
+  - src/store_matching/matcher.py
+  - src/sauce_consistency/predictor.py
+  - src/sauce_consistency/__init__.py
+  - data/store_notes.json
+  - index_sauce_crop.npz
+-->
+
+---
 ### Requirement: Result conforms to store-matching-schema
 
 The system SHALL return results conforming to the store-matching-schema defined in data-schema, including store_name, similarity, and photo_count.
