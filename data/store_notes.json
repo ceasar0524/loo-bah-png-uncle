@@ -489,5 +489,26 @@
     "bowl_shape": "",
     "bowl_texture": "",
     "sauce_consistency": "稠"
+  },
+  "曉迪筒仔米糕（中正區）": {
+    "notes": "被米糕耽誤的滷肉飯店，位於南機場夜市入口處，許多人來逛夜市，第一站就是先來上一碗。雖然米糕很有名，但懂吃的都知道，很多人其實是為了滷肉飯而來。\n這家的滷肉給得相當豪氣，大塊帶皮肥肉鋪在飯上，豬皮軟Q、油香十足，入口鹹香濃郁。滷汁帶點膠質感，吃完嘴巴還會黏黏的，可以說是大叔心中「黏嘴系」排名前幾名，甚至黏到快張不開嘴。\n不過大碗份量其實不算多，對大叔來說剛剛開胃，感覺再來一碗也沒問題，是那種不知不覺就會續碗的危險系滷肉飯。",
+    "known_toppings": [],
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_color": "dark",
+      "rice_quality": "soft",
+      "sauce_taste": "均衡"
+    },
+    "bowl": {
+      "color": "silver",
+      "texture": "metal",
+      "distinctive": false
+    },
+    "location": {
+      "lat": 25.02917854098271,
+      "lng": 121.50603480185505
+    },
+    "sauce_consistency": "水"
   }
 }
