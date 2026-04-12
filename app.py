@@ -23,7 +23,7 @@ from linebot.v3.messaging import (
     QuickReply,
     QuickReplyItem,
 )
-from linebot.v3.webhooks import ImageMessageContent, LocationMessageContent, MessageEvent
+from linebot.v3.webhooks import ImageMessageContent, LocationMessageContent, MessageEvent, TextMessageContent
 
 from src import clip_model
 from src.nearby_search import search_nearby_stores
@@ -214,6 +214,22 @@ def handle_image(event):
         args=(event.reply_token, event.message.id, event.source.user_id),
         daemon=True,
     ).start()
+
+
+@_handler.add(MessageEvent, message=TextMessageContent)
+def handle_text(event):
+    try:
+        with ApiClient(_config) as api_client:
+            messaging_api = MessagingApi(api_client)
+            messaging_api.reply_message(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(text="這位同學！大叔只吃圖，不吃文字，請投餵一張魯肉飯照片 🍚")],
+                )
+            )
+    except Exception:
+        import traceback
+        traceback.print_exc()
 
 
 if __name__ == "__main__":
