@@ -34,7 +34,7 @@ from linebot.v3.messaging import (
 from linebot.v3.webhooks import ImageMessageContent, LocationMessageContent, MessageEvent, TextMessageContent
 
 from src import clip_model
-from src.nearby_search import search_nearby_stores
+from src.nearby_search import search_nearby_stores, search_random_nearby_store
 from src.pipeline import run as pipeline_run
 from src.uncle_persona.persona import UnclePersona
 
@@ -73,6 +73,7 @@ def _is_admin(user_id: str) -> bool:
 # Session：暫存用戶查詢的辨識結果，供附近推薦使用
 # 格式：{user_id: (matched_store, timestamp)}
 _SESSION_TTL = 300  # 5 分鐘
+_RANDOM_SESSION = "__random__"  # 隨機驚喜模式的 session 標記
 _sessions: dict = {}
 _sessions_lock = threading.Lock()
 
@@ -180,6 +181,13 @@ def handle_location(event):
 
     if not matched_store:
         reply_text = "傳張照片給大叔看，大叔才知道你在找什麼路線！"
+    elif matched_store == _RANDOM_SESSION:
+        if not _is_admin(user_id):
+            logging.info("[event] random_surprise_triggered")
+        lat = event.message.latitude
+        lng = event.message.longitude
+        result = search_random_nearby_store(lat, lng, _store_notes)
+        reply_text = _persona.generate_random(result)
     else:
         if not _is_admin(user_id):
             logging.info("[event] nearby_search_triggered")
@@ -360,6 +368,27 @@ def handle_text(event):
                 reply = _build_store_list_flex()
             elif text == "大叔雷達":
                 reply = TextMessage(text=_radar_text())
+            elif text == "隨機驚喜":
+                _save_session(event.source.user_id, _RANDOM_SESSION)
+                from datetime import datetime
+                import zoneinfo
+                _hour = datetime.now(zoneinfo.ZoneInfo("Asia/Taipei")).hour
+                if 6 <= _hour < 11:
+                    _meal = "早餐"
+                elif 11 <= _hour < 14:
+                    _meal = "午餐"
+                elif 14 <= _hour < 17:
+                    _meal = "下午茶"
+                elif 17 <= _hour < 21:
+                    _meal = "晚餐"
+                else:
+                    _meal = "宵夜"
+                reply = TextMessage(
+                    text=f"大叔今天幫你決定{_meal}！分享位置讓大叔看看附近有啥 🎲",
+                    quick_reply=QuickReply(items=[
+                        QuickReplyItem(action=LocationAction(label="分享位置 📍"))
+                    ]),
+                )
             else:
                 reply = TextMessage(text=_text_reply_greeting())
             messaging_api.reply_message(

@@ -75,6 +75,51 @@ def _is_poached_egg_store(data: dict) -> bool:
     return data.get("topping_names", {}).get("egg") == "半熟荷包蛋"
 
 
+def search_random_nearby_store(
+    user_lat: float,
+    user_lng: float,
+    store_notes: dict,
+    primary_radius_km: float = 3.0,
+    extended_radius_km: float = 5.0,
+) -> Optional[dict]:
+    """
+    從附近店家中隨機抽取一家（隨機驚喜功能）。
+
+    優先從 primary_radius_km 內抽取；若無店家，擴大至 extended_radius_km；
+    仍無店家則回傳 None（由呼叫方回覆「開發中」訊息）。
+
+    Args:
+        user_lat:            用戶緯度
+        user_lng:            用戶經度
+        store_notes:         store_notes.json 內容
+        primary_radius_km:   第一層搜尋半徑，預設 3.0 km
+        extended_radius_km:  第二層搜尋半徑，預設 5.0 km
+
+    Returns:
+        dict 含 store_name、distance_km；超出範圍則回傳 None
+    """
+    import random
+
+    primary = []
+    extended = []
+
+    for name, data in store_notes.items():
+        loc = data.get("location")
+        if not loc:
+            continue
+        distance = haversine_km(user_lat, user_lng, loc["lat"], loc["lng"])
+        entry = {"store_name": name, "distance_km": round(distance, 1)}
+        if distance <= primary_radius_km:
+            primary.append(entry)
+        elif distance <= extended_radius_km:
+            extended.append(entry)
+
+    pool = primary if primary else extended
+    if not pool:
+        return None
+    return random.choice(pool)
+
+
 def search_nearby_stores(
     matched_store: str,
     user_lat: float,

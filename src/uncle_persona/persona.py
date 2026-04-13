@@ -439,6 +439,24 @@ class UnclePersona:
         store_list = "\n".join(lines)
         return f"大叔雷達掃到了！附近走類似風格的：\n\n{store_list}"
 
+    def generate_random(self, result: dict) -> str:
+        """
+        產生隨機驚喜推薦回應。
+
+        Args:
+            result: search_random_nearby_store 的回傳結果，含 store_name、distance_km
+
+        Returns:
+            繁體中文回應字串
+        """
+        if not result:
+            return "殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇"
+
+        name = result["store_name"]
+        dist = result["distance_km"]
+        maps_url = self._maps_url(name)
+        return f"大叔今天幫你決定！🎲\n\n・{name}（距你約 {dist} 公里）\n{maps_url}\n\n⏰ 出發前請參考各家營業時間"
+
     def _maps_url(self, store_name: str) -> str:
         """產生店家的 Google Maps 靜態連結。"""
         data = self._store_notes.get(store_name, {})
