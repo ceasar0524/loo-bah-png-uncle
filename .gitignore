@@ -3,6 +3,7 @@ openspec/.vector-search.db*
 .env
 *.env
 photos/
+photos_sauce_crop/
 data/recommendation_profiles.json
 
 # macOS
@@ -10,6 +11,10 @@ data/recommendation_profiles.json
 
 # Build artifacts & cache
 haiku_features_cache.json
+haiku_features_cache_v2.json
+index_dino_crop.npz
+index_vit_l14.npz
+eval_dino.py
 __pycache__/
 *.pyc
 *.pyo

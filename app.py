@@ -90,7 +90,12 @@ def _cleanup_sessions() -> None:
 def _save_session(user_id: str, matched_store: str) -> None:
     with _sessions_lock:
         _cleanup_sessions()
-        _sessions[user_id] = {"store": matched_store, "ts": time.time(), "seen": set()}
+        existing = _sessions.get(user_id)
+        if existing and existing.get("store") == matched_store:
+            # 同模式連按：保留 seen，只更新 ts
+            existing["ts"] = time.time()
+        else:
+            _sessions[user_id] = {"store": matched_store, "ts": time.time(), "seen": set()}
 
 
 def _get_session(user_id: str):
