@@ -271,7 +271,7 @@ def _build_store_list_flex() -> FlexMessage:
                 )
             )
 
-    header_text = f"目前收錄 {n} 家店，準確率仍在優化中\n（魯肉飯真的都長太像了 XD）\n但已經可以玩玩看！"
+    header_text = f"目前收錄大台北 {n} 家店，準確率仍在優化中\n（魯肉飯真的都長太像了 XD）\n但已經可以玩玩看！"
     footer_text = "持續擴充中… 🍚\n\n💡 即使丟的店家不在收錄名單中，大叔仍會分析這碗魯肉飯/滷肉飯的風格，並從現有店家中找出相似風格的供參考。"
 
     bubble = FlexBubble(
@@ -293,6 +293,24 @@ def _build_store_list_flex() -> FlexMessage:
         ),
     )
     return FlexMessage(alt_text=f"收錄店家清單（{n} 家）", contents=bubble)
+
+
+def _radar_text() -> str:
+    n = len(_store_notes)
+    return f"""📡 大叔雷達：
+
+1. 傳一張魯肉飯照片給大叔
+2. 大叔評論完後，點下方「找附近類似的 📍」按鈕
+3. 分享你的位置
+4. 大叔雷達會幫你比對：
+    肥肉派？還是瘦肉派？
+    有沒有帶皮？
+    醬汁是深色還是清爽？
+
+幫你找附近風格相近的店 🗺️
+
+📍 目前收錄大台北 {n} 家店家
+（大叔還在努力吃更多店擴充中 😆）"""
 
 
 _HOW_TO_USE_TEXT = """怎麼用：
@@ -340,6 +358,8 @@ def handle_text(event):
                 reply = TextMessage(text=_HOW_TO_USE_TEXT)
             elif text == "店家清單":
                 reply = _build_store_list_flex()
+            elif text == "大叔雷達":
+                reply = TextMessage(text=_radar_text())
             else:
                 reply = TextMessage(text=_text_reply_greeting())
             messaging_api.reply_message(
