@@ -29,6 +29,7 @@ from linebot.v3.messaging import (
     FlexBox,
     FlexButton,
     FlexText,
+    FlexSeparator,
     URIAction,
 )
 from linebot.v3.webhooks import ImageMessageContent, LocationMessageContent, MessageEvent, TextMessageContent
@@ -171,6 +172,47 @@ def _process_image(reply_token, message_id, user_id):
         traceback.print_exc()
 
 
+def _build_random_flex(result: dict) -> FlexMessage:
+    """組裝隨機驚喜的 Flex Message。"""
+    name = result["store_name"]
+    dist = result["distance_km"]
+    maps_url = _persona.maps_url(name)
+    far_phrase = _persona.get_random_far_phrase(dist)
+
+    contents = [
+        FlexText(text="大叔今天幫你決定！🎲", weight="bold", size="md"),
+    ]
+
+    if far_phrase:
+        contents += [
+            FlexSeparator(margin="lg"),
+            FlexText(text=f"📜  {far_phrase}", weight="bold", size="xl",
+                     color="#8B4513", align="center", margin="lg"),
+            FlexSeparator(margin="lg"),
+        ]
+    else:
+        contents.append(FlexSeparator(margin="md"))
+
+    contents += [
+        FlexText(text=name, weight="bold", size="md", margin="md", wrap=True),
+        FlexText(text=f"距你約 {dist} 公里", size="sm", color="#888888"),
+        FlexButton(
+            action=URIAction(label="📍 地圖", uri=maps_url),
+            style="primary",
+            margin="md",
+            height="sm",
+        ),
+        FlexSeparator(margin="md"),
+        FlexText(text="⏰ 出發前請參考各家營業時間",
+                 size="xs", color="#888888", wrap=True, margin="md"),
+    ]
+
+    bubble = FlexBubble(
+        body=FlexBox(layout="vertical", contents=contents, padding_all="lg")
+    )
+    return FlexMessage(alt_text="大叔今天幫你決定！", contents=bubble)
+
+
 @_handler.add(MessageEvent, message=LocationMessageContent)
 def handle_location(event):
     if not NEARBY_SEARCH_ENABLED:
@@ -181,13 +223,17 @@ def handle_location(event):
 
     if not matched_store:
         reply_text = "傳張照片給大叔看，大叔才知道你在找什麼路線！"
+        reply_msg = TextMessage(text=reply_text)
     elif matched_store == _RANDOM_SESSION:
         if not _is_admin(user_id):
             logging.info("[event] random_surprise_triggered")
         lat = event.message.latitude
         lng = event.message.longitude
         result = search_random_nearby_store(lat, lng, _store_notes)
-        reply_text = _persona.generate_random(result)
+        if result:
+            reply_msg = _build_random_flex(result)
+        else:
+            reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
     else:
         if not _is_admin(user_id):
             logging.info("[event] nearby_search_triggered")
@@ -195,7 +241,7 @@ def handle_location(event):
         lng = event.message.longitude
         results, any_in_radius = search_nearby_stores(matched_store, lat, lng, _store_notes)
         results_for_persona = sorted(results[:2], key=lambda x: x["distance_km"])
-        reply_text = _persona.generate_nearby(matched_store, results_for_persona, any_in_radius)
+        reply_msg = TextMessage(text=_persona.generate_nearby(matched_store, results_for_persona, any_in_radius))
 
     try:
         with ApiClient(_config) as api_client:
@@ -203,7 +249,7 @@ def handle_location(event):
             messaging_api.reply_message(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text=reply_text)],
+                    messages=[reply_msg],
                 )
             )
     except Exception:

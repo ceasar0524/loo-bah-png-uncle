@@ -440,34 +440,20 @@ class UnclePersona:
         return f"大叔雷達掃到了！附近走類似風格的：\n\n{store_list}"
 
     _FAR_PHRASES = [
-        "📜 ───────────────\n   今日宜遠行\n──────────────────",
-        "📜 ───────────────\n   今日宜遠征\n──────────────────",
-        "📜 ───────────────\n  今日緣分在遠方\n──────────────────",
+        "今日宜遠行",
+        "今日宜遠征",
+        "今日緣分在遠方",
     ]
 
-    def generate_random(self, result: dict, primary_radius_km: float = 3.0) -> str:
-        """
-        產生隨機驚喜推薦回應。
-
-        Args:
-            result:             search_random_nearby_store 的回傳結果，含 store_name、distance_km
-            primary_radius_km:  3km 以內視為附近，超過則加上算命提示
-
-        Returns:
-            繁體中文回應字串
-        """
-        if not result:
-            return "殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇"
-
-        name = result["store_name"]
-        dist = result["distance_km"]
-        maps_url = self._maps_url(name)
-
-        far_hint = ""
+    def get_random_far_phrase(self, dist: float, primary_radius_km: float = 3.0) -> str | None:
+        """距離超過 primary_radius_km 時隨機回傳算命台詞，否則回傳 None。"""
         if dist > primary_radius_km:
-            far_hint = f"\n{random.choice(self._FAR_PHRASES)}\n"
+            return random.choice(self._FAR_PHRASES)
+        return None
 
-        return f"大叔今天幫你決定！🎲\n{far_hint}\n・{name}（距你約 {dist} 公里）\n{maps_url}\n\n⏰ 出發前請參考各家營業時間"
+    def maps_url(self, store_name: str) -> str:
+        """公開版 maps_url，供外部呼叫。"""
+        return self._maps_url(store_name)
 
     def _maps_url(self, store_name: str) -> str:
         """產生店家的 Google Maps 靜態連結。"""
