@@ -114,7 +114,8 @@ def search_random_nearby_store(
         elif distance <= extended_radius_km:
             extended.append(entry)
 
-    pool = primary if primary else extended
+    # 至少需要 2 家才留在 primary pool，否則擴大到 extended
+    pool = primary if len(primary) >= 2 else (primary + extended) if (primary + extended) else []
     if not pool:
         return None
     return random.choice(pool)
