@@ -225,31 +225,51 @@ def handle_image(event):
 
 
 def _build_store_list_flex() -> FlexMessage:
-    """動態從 store_notes.json 生成店家清單 Flex Message。"""
-    stores = list(_store_notes.keys())
-    n = len(stores)
+    """動態從 store_notes.json 生成店家清單 Flex Message，按區分組。"""
+    import re
+    from collections import defaultdict
+
+    # 按區分組
+    district_stores: dict[str, list[str]] = defaultdict(list)
+    for name in _store_notes.keys():
+        m = re.search(r'[（(](.+?)[）)]', name)
+        district = m.group(1) if m else "其他"
+        district_stores[district].append(name)
+
+    n = sum(len(v) for v in district_stores.values())
 
     rows = []
-    for name in stores:
-        loc = _store_notes[name].get("location", {})
-        lat = loc.get("lat")
-        lng = loc.get("lng")
-        map_uri = f"https://maps.google.com/?q={lat},{lng}" if lat and lng else f"https://maps.google.com/?q={name}"
-        rows.append(
-            FlexBox(
-                layout="horizontal",
-                contents=[
-                    FlexText(text=name, flex=1, size="sm", wrap=True, gravity="center"),
-                    FlexButton(
-                        action=URIAction(label="📍", uri=map_uri),
-                        flex=0,
-                        height="sm",
-                        style="link",
-                    ),
-                ],
-                spacing="sm",
+    for district, names in sorted(district_stores.items()):
+        # 區標題
+        rows.append(FlexText(
+            text=district,
+            size="xs",
+            color="#aaaaaa",
+            weight="bold",
+            margin="md",
+        ))
+        for name in names:
+            loc = _store_notes[name].get("location", {})
+            lat = loc.get("lat")
+            lng = loc.get("lng")
+            map_uri = f"https://maps.google.com/?q={lat},{lng}" if lat and lng else f"https://maps.google.com/?q={name}"
+            # 顯示名稱去掉區域後綴
+            display_name = re.sub(r'[（(].+?[）)]$', '', name)
+            rows.append(
+                FlexBox(
+                    layout="horizontal",
+                    contents=[
+                        FlexText(text=display_name, flex=1, size="sm", wrap=True, gravity="center"),
+                        FlexButton(
+                            action=URIAction(label="📍", uri=map_uri),
+                            flex=0,
+                            height="sm",
+                            style="link",
+                        ),
+                    ],
+                    spacing="sm",
+                )
             )
-        )
 
     header_text = f"目前收錄 {n} 家店，準確率仍在優化中\n（魯肉飯真的都長太像了 XD）\n但已經可以玩玩看！"
     footer_text = "持續擴充中… 🍚\n\n💡 即使丟的店家不在收錄名單中，大叔仍會分析這碗魯肉飯/滷肉飯的風格，並從現有店家中找出相似風格的供參考。\n\n注意事項：\n⚠️ 此工具為實驗性質，評論僅供參考\n每個人口味不同，最重要的是找到屬於自己心中最愛的魯肉飯 🍚"
