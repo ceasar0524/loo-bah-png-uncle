@@ -440,9 +440,9 @@ class UnclePersona:
         return f"大叔雷達掃到了！附近走類似風格的：\n\n{store_list}"
 
     _FAR_PHRASES = [
-        "大叔掐指一算，今日宜遠行 🔮",
-        "大叔掐指一算，今日宜遠征 🔮",
-        "大叔掐指一算，今日緣分在遠方 🔮",
+        "┌───── 📜 ─────┐\n│  今日宜遠行   │\n└──────────────┘",
+        "┌───── 📜 ─────┐\n│  今日宜遠征   │\n└──────────────┘",
+        "┌───── 📜 ─────┐\n│ 今日緣分在遠方 │\n└──────────────┘",
     ]
 
     def generate_random(self, result: dict, primary_radius_km: float = 3.0) -> str:
@@ -467,7 +467,7 @@ class UnclePersona:
         if dist > primary_radius_km:
             far_hint = f"\n{random.choice(self._FAR_PHRASES)}\n"
 
-        return f"大叔今天幫你決定！🎲{far_hint}\n・{name}（距你約 {dist} 公里）\n{maps_url}\n\n⏰ 出發前請參考各家營業時間"
+        return f"大叔今天幫你決定！🎲\n{far_hint}\n・{name}（距你約 {dist} 公里）\n{maps_url}\n\n⏰ 出發前請參考各家營業時間"
 
     def _maps_url(self, store_name: str) -> str:
         """產生店家的 Google Maps 靜態連結。"""
