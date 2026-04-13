@@ -23,6 +23,14 @@ from linebot.v3.messaging import (
     QuickReply,
     QuickReplyItem,
 )
+from linebot.v3.messaging import (
+    FlexMessage,
+    FlexBubble,
+    FlexBox,
+    FlexButton,
+    FlexText,
+    URIAction,
+)
 from linebot.v3.webhooks import ImageMessageContent, LocationMessageContent, MessageEvent, TextMessageContent
 
 from src import clip_model
@@ -216,6 +224,73 @@ def handle_image(event):
     ).start()
 
 
+def _build_store_list_flex() -> FlexMessage:
+    """動態從 store_notes.json 生成店家清單 Flex Message。"""
+    stores = list(_store_notes.keys())
+    n = len(stores)
+
+    rows = []
+    for name in stores:
+        loc = _store_notes[name].get("location", {})
+        lat = loc.get("lat")
+        lng = loc.get("lng")
+        map_uri = f"https://maps.google.com/?q={lat},{lng}" if lat and lng else f"https://maps.google.com/?q={name}"
+        rows.append(
+            FlexBox(
+                layout="horizontal",
+                contents=[
+                    FlexText(text=name, flex=1, size="sm", wrap=True, gravity="center"),
+                    FlexButton(
+                        action=URIAction(label="📍", uri=map_uri),
+                        flex=0,
+                        height="sm",
+                        style="link",
+                    ),
+                ],
+                spacing="sm",
+            )
+        )
+
+    header_text = f"目前收錄 {n} 家店，準確率仍在優化中\n（魯肉飯真的都長太像了 XD）\n但已經可以玩玩看！"
+    footer_text = "持續擴充中… 🍚\n\n💡 即使丟的店家不在收錄名單中，大叔仍會分析這碗魯肉飯/滷肉飯的風格，並從現有店家中找出相似風格的供參考。\n\n注意事項：\n⚠️ 此工具為實驗性質，評論僅供參考\n每個人口味不同，最重要的是找到屬於自己心中最愛的魯肉飯 🍚"
+
+    bubble = FlexBubble(
+        header=FlexBox(
+            layout="vertical",
+            contents=[FlexText(text=header_text, wrap=True, size="sm", color="#555555")],
+            padding_all="lg",
+        ),
+        body=FlexBox(
+            layout="vertical",
+            contents=rows,
+            spacing="sm",
+            padding_all="lg",
+        ),
+        footer=FlexBox(
+            layout="vertical",
+            contents=[FlexText(text=footer_text, wrap=True, size="xs", color="#888888")],
+            padding_all="lg",
+        ),
+    )
+    return FlexMessage(alt_text=f"收錄店家清單（{n} 家）", contents=bubble)
+
+
+_HOW_TO_USE_TEXT = """怎麼用：
+1. 丟一張魯肉飯照片
+📸 小提示：直接拍攝魯肉飯效果最佳，截圖或網路圖片辨識較不準。
+
+2. 看大叔怎麼說
+🧑‍🍳 小提示：大叔只看得懂魯肉飯，恕不陪聊😆（陪聊要算鐘點費XD
+
+3. ⏳ 等待說明：
+初次回應稍等幾秒暖機，之後就快了（但可能還是要幾秒～～被打）
+
+4. 📌 大叔的承諾
+大叔很健忘，看完就忘，照片不留存，放心傳、安心吃。
+
+📩 有問題或回饋歡迎寫信🙏（大叔玻璃心，鞭小力）：ceasar0524@gmail.com"""
+
+
 def _text_reply_greeting() -> str:
     from datetime import datetime
     import zoneinfo
@@ -233,13 +308,20 @@ def _text_reply_greeting() -> str:
 
 @_handler.add(MessageEvent, message=TextMessageContent)
 def handle_text(event):
+    text = event.message.text.strip() if event.message.text else ""
     try:
         with ApiClient(_config) as api_client:
             messaging_api = MessagingApi(api_client)
+            if text == "怎麼用":
+                reply = TextMessage(text=_HOW_TO_USE_TEXT)
+            elif text == "店家清單":
+                reply = _build_store_list_flex()
+            else:
+                reply = TextMessage(text=_text_reply_greeting())
             messaging_api.reply_message(
                 ReplyMessageRequest(
                     reply_token=event.reply_token,
-                    messages=[TextMessage(text=_text_reply_greeting())],
+                    messages=[reply],
                 )
             )
     except Exception:
