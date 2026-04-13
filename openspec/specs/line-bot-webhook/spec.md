@@ -199,29 +199,214 @@ code:
 ---
 ### Requirement: Handle location message
 
-The system SHALL handle LINE location message events. Upon receiving a location message, the system SHALL retrieve the stored query vector for that user, run nearby store search, and send the uncle persona's nearby recommendation response.
+The system SHALL handle LINE location message events. Upon receiving a location message, the system SHALL retrieve the stored session value for that user and branch based on the value:
 
-#### Scenario: Location received with valid session
+- If the session value is `"__random__"`: run `search_random_nearby_store` (with `seen` set) and send a Flex Message recommendation
+- If the session value is a store name: run `search_nearby_stores` and send a Flex Message recommendation
 
-- **WHEN** a location message is received and a query vector exists in session for that user
-- **THEN** the system SHALL run nearby store search and return the uncle persona recommendation response
+The session SHALL store a `seen` set tracking all stores recommended in the current random surprise flow. When `search_random_nearby_store` returns None (all stores seen), the system SHALL reset `seen` and retry once.
+
+#### Scenario: Location received with valid session (style match)
+
+- **WHEN** a location message is received and the session contains a store name (not `"__random__"`)
+- **THEN** the system SHALL run nearby store search and return the uncle persona recommendation as a Flex Message
+
+#### Scenario: Location received with random surprise session
+
+- **WHEN** a location message is received and the session value is `"__random__"`
+- **THEN** the system SHALL run `search_random_nearby_store` with the current `seen` set, add the result to `seen`, and return a Flex Message recommendation
+
+#### Scenario: All nearby stores seen — auto reset
+
+- **WHEN** `search_random_nearby_store` returns None because all stores within 5 km have been seen
+- **THEN** the system SHALL reset `seen` and call `search_random_nearby_store` again with an empty `seen`
 
 #### Scenario: Location received with expired session
 
-- **WHEN** a location message is received but no query vector exists in session for that user
+- **WHEN** a location message is received but no session exists for that user
 - **THEN** the system SHALL respond asking the user to send a photo first
 
+
 <!-- @trace
-source: nearby-recommendation
-updated: 2026-04-10
+source: random-surprise
+updated: 2026-04-13
 code:
-  - app.py
-  - data/store_notes.json
-  - haiku_features_cache_v2.json
+  - photos_sauce_crop/啊興阿滷肉飯（稠）/photo_5.jpg
+  - photos_sauce_crop/北北車魯肉飯（中正區）（稠）/photo_10.jpg
+  - photos_sauce_crop/小王煮瓜（水）/photo_2.jpg
+  - photos_sauce_crop/黃記魯肉飯（中山區）（稠）/photo_3.jpg
+  - photos_sauce_crop/雙胖子（稠）   /photo_7.jpg
+  - photos_sauce_crop/今大魯肉飯（三重區）（稠）/photo_1.jpg
+  - photos_sauce_crop/天天利美食坊（稠）/photo_6.jpg
+  - photos_sauce_crop/曉迪筒仔米糕（中正區）（水）/photo_13.jpg
   - src/nearby_search/__init__.py
-  - eval_dino.py
-  - src/nearby_search/searcher.py
+  - index_dino_crop.npz
+  - photos_sauce_crop/五燈獎豬腳滷肉飯（三重區）（水）/photo_10.jpg
+  - photos_sauce_crop/玉女號滷肉飯（稠）/photo_10.jpg
+  - haiku_features_cache_v2.json
+  - photos_sauce_crop/司機俱樂部（松山區）（水）/photo_1.jpg
+  - photos_sauce_crop/明志派出所對面滷肉飯(泰山區)（水）/photo_10.jpg
+  - photos_sauce_crop/珠記大橋頭油飯(大同區)（水）/photo_10.jpg
+  - photos_sauce_crop/阿英滷肉飯（稠）/photo_3.jpg
+  - photos_sauce_crop/珠記大橋頭油飯(大同區)（水）/photo_11.jpg
+  - photos_sauce_crop/阿英滷肉飯（稠）/photo_5.jpg
+  - photos_sauce_crop/北北車魯肉飯（中正區）（稠）/photo_12.jpg
+  - photos_sauce_crop/啊興阿滷肉飯（稠）/photo_4.jpg
+  - photos_sauce_crop/龍記小吃店（中山區）（水）/photo_1.jpg
+  - photos_sauce_crop/矮仔財滷肉飯（北投區）（稠）/photo_1.jpg
+  - photos_sauce_crop/矮仔財滷肉飯（北投區）（稠）/photo_13.png
+  - photos_sauce_crop/富霸王豬腳（中山區）（水）/photo_1.jpg
+  - photos_sauce_crop/玉女號滷肉飯（稠）/photo_12.jpg
   - src/uncle_persona/persona.py
-  - src/pipeline.py
+  - photos_sauce_crop/今大魯肉飯（三重區）（稠）/photo_10.jpg
+  - photos_sauce_crop/雙胖子（稠）   /photo_8.jpg
+  - photos_sauce_crop/313號鵝肉擔（北投區）（水）/photo_10.jpg
+  - photos_sauce_crop/大稻埕魯肉飯（大同區）（稠）/photo_1.jpg
+  - photos_sauce_crop/大稻埕魯肉飯（大同區）（稠）/photo_2.jpg
+  - photos_sauce_crop/小王煮瓜（水）/photo_15.jpg
+  - photos_sauce_crop/曉迪筒仔米糕（中正區）（水）/photo_1.jpg
+  - photos_sauce_crop/曉迪筒仔米糕（中正區）（水）/photo_5.jpg
+  - photos_sauce_crop/滷三塊五花肉飯（北投區）（稠）/photo_10.jpg
+  - photos_sauce_crop/一甲子餐飲（萬華區）（水）/photo_10.jpg
+  - photos_sauce_crop/阿英滷肉飯（稠）/photo_4.jpg
+  - photos_sauce_crop/雙胖子（稠）   /photo_6.jpg
+  - photos_sauce_crop/司機俱樂部（松山區）（水）/photo_10.jpg
+  - photos_sauce_crop/龍記小吃店（中山區）（水）/photo_11.jpg
+  - photos_sauce_crop/店小二魯肉飯（三重區）（水）/photo_6.jpg
+  - eval_dino.py
+  - photos_sauce_crop/明志派出所對面滷肉飯(泰山區)（水）/photo_2.jpg
+  - photos_sauce_crop/阿興魯肉飯（中和區）（水）/photo_6.jpg
+  - photos_sauce_crop/富霸王豬腳（中山區）（水）/photo_11.jpg
+  - photos_sauce_crop/阿興魯肉飯（中和區）（水）/photo_7.jpg
+  - photos_sauce_crop/天天利美食坊（稠）/photo_3.jpg
+  - photos_sauce_crop/五燈獎豬腳滷肉飯（三重區）（水）/photo_1.jpg
+  - photos_sauce_crop/啊興阿滷肉飯（稠）/photo_6.jpg
+  - photos_sauce_crop/店小二魯肉飯（三重區）（水）/photo_11.jpg
+  - photos_sauce_crop/明志派出所對面滷肉飯(泰山區)（水）/photo_5.jpg
+  - photos_sauce_crop/五燈獎豬腳滷肉飯（三重區）（水）/photo_11.jpg
+  - photos_sauce_crop/北北車魯肉飯（中正區）（稠）/photo_1.jpg
+  - photos_sauce_crop/晴光小吃(林口區)（水）/photo_8.jpg
+  - photos_sauce_crop/黃記魯肉飯（中山區）（稠）/photo_1.jpeg
+  - photos_sauce_crop/黃記魯肉飯（中山區）（稠）/photo_10.jpg
+  - src/nearby_search/searcher.py
+  - photos_sauce_crop/店小二魯肉飯（三重區）（水）/photo_1.jpg
+  - photos_sauce_crop/矮仔財滷肉飯（北投區）（稠）/photo_7.jpg
+  - photos_sauce_crop/滷三塊五花肉飯（北投區）（稠）/photo_9.jpg
+  - photos_sauce_crop/一甲子餐飲（萬華區）（水）/photo_1.jpg
+  - photos_sauce_crop/今大魯肉飯（三重區）（稠）/photo_11.jpg
+  - photos_sauce_crop/龍記小吃店（中山區）（水）/photo_10.jpg
+  - photos_sauce_crop/阿興魯肉飯（中和區）（水）/photo_1.jpg
+  - photos_sauce_crop/313號鵝肉擔（北投區）（水）/photo_11.jpg
+  - photos_sauce_crop/313號鵝肉擔（北投區）（水）/photo_1.jpg
+  - photos_sauce_crop/滷三塊五花肉飯（北投區）（稠）/photo_1.png
   - index_vit_l14.npz
+  - photos_sauce_crop/天天利美食坊（稠）/photo_5.jpg
+  - photos_sauce_crop/大稻埕魯肉飯（大同區）（稠）/photo_3.jpg
+  - photos_sauce_crop/司機俱樂部（松山區）（水）/photo_11.jpg
+  - photos_sauce_crop/小王煮瓜（水）/photo_7.jpg
+  - photos_sauce_crop/晴光小吃(林口區)（水）/photo_1.jpeg
+  - photos_sauce_crop/富霸王豬腳（中山區）（水）/photo_10.jpg
+  - app.py
+  - photos_sauce_crop/晴光小吃(林口區)（水）/photo_11.jpg
+  - photos_sauce_crop/玉女號滷肉飯（稠）/photo_3.jpg
+  - photos_sauce_crop/一甲子餐飲（萬華區）（水）/photo_14.jpg
+  - photos_sauce_crop/珠記大橋頭油飯(大同區)（水）/photo_1.jpg
+-->
+
+---
+### Requirement: Random surprise trigger via text keyword
+
+The system SHALL handle the text keyword「隨機驚喜」in `handle_text`. Upon receiving this keyword, the system SHALL:
+1. Reply with a prompt message asking the user to share their location
+2. Store the special session value `"__random__"` for that user
+
+#### Scenario: User sends 隨機驚喜
+
+- **WHEN** a LINE user sends the text message「隨機驚喜」
+- **THEN** the system SHALL reply with a location-request Quick Reply message and store `"__random__"` in the user's session
+
+<!-- @trace
+source: random-surprise
+updated: 2026-04-13
+code:
+  - photos_sauce_crop/啊興阿滷肉飯（稠）/photo_5.jpg
+  - photos_sauce_crop/北北車魯肉飯（中正區）（稠）/photo_10.jpg
+  - photos_sauce_crop/小王煮瓜（水）/photo_2.jpg
+  - photos_sauce_crop/黃記魯肉飯（中山區）（稠）/photo_3.jpg
+  - photos_sauce_crop/雙胖子（稠）   /photo_7.jpg
+  - photos_sauce_crop/今大魯肉飯（三重區）（稠）/photo_1.jpg
+  - photos_sauce_crop/天天利美食坊（稠）/photo_6.jpg
+  - photos_sauce_crop/曉迪筒仔米糕（中正區）（水）/photo_13.jpg
+  - src/nearby_search/__init__.py
+  - index_dino_crop.npz
+  - photos_sauce_crop/五燈獎豬腳滷肉飯（三重區）（水）/photo_10.jpg
+  - photos_sauce_crop/玉女號滷肉飯（稠）/photo_10.jpg
+  - haiku_features_cache_v2.json
+  - photos_sauce_crop/司機俱樂部（松山區）（水）/photo_1.jpg
+  - photos_sauce_crop/明志派出所對面滷肉飯(泰山區)（水）/photo_10.jpg
+  - photos_sauce_crop/珠記大橋頭油飯(大同區)（水）/photo_10.jpg
+  - photos_sauce_crop/阿英滷肉飯（稠）/photo_3.jpg
+  - photos_sauce_crop/珠記大橋頭油飯(大同區)（水）/photo_11.jpg
+  - photos_sauce_crop/阿英滷肉飯（稠）/photo_5.jpg
+  - photos_sauce_crop/北北車魯肉飯（中正區）（稠）/photo_12.jpg
+  - photos_sauce_crop/啊興阿滷肉飯（稠）/photo_4.jpg
+  - photos_sauce_crop/龍記小吃店（中山區）（水）/photo_1.jpg
+  - photos_sauce_crop/矮仔財滷肉飯（北投區）（稠）/photo_1.jpg
+  - photos_sauce_crop/矮仔財滷肉飯（北投區）（稠）/photo_13.png
+  - photos_sauce_crop/富霸王豬腳（中山區）（水）/photo_1.jpg
+  - photos_sauce_crop/玉女號滷肉飯（稠）/photo_12.jpg
+  - src/uncle_persona/persona.py
+  - photos_sauce_crop/今大魯肉飯（三重區）（稠）/photo_10.jpg
+  - photos_sauce_crop/雙胖子（稠）   /photo_8.jpg
+  - photos_sauce_crop/313號鵝肉擔（北投區）（水）/photo_10.jpg
+  - photos_sauce_crop/大稻埕魯肉飯（大同區）（稠）/photo_1.jpg
+  - photos_sauce_crop/大稻埕魯肉飯（大同區）（稠）/photo_2.jpg
+  - photos_sauce_crop/小王煮瓜（水）/photo_15.jpg
+  - photos_sauce_crop/曉迪筒仔米糕（中正區）（水）/photo_1.jpg
+  - photos_sauce_crop/曉迪筒仔米糕（中正區）（水）/photo_5.jpg
+  - photos_sauce_crop/滷三塊五花肉飯（北投區）（稠）/photo_10.jpg
+  - photos_sauce_crop/一甲子餐飲（萬華區）（水）/photo_10.jpg
+  - photos_sauce_crop/阿英滷肉飯（稠）/photo_4.jpg
+  - photos_sauce_crop/雙胖子（稠）   /photo_6.jpg
+  - photos_sauce_crop/司機俱樂部（松山區）（水）/photo_10.jpg
+  - photos_sauce_crop/龍記小吃店（中山區）（水）/photo_11.jpg
+  - photos_sauce_crop/店小二魯肉飯（三重區）（水）/photo_6.jpg
+  - eval_dino.py
+  - photos_sauce_crop/明志派出所對面滷肉飯(泰山區)（水）/photo_2.jpg
+  - photos_sauce_crop/阿興魯肉飯（中和區）（水）/photo_6.jpg
+  - photos_sauce_crop/富霸王豬腳（中山區）（水）/photo_11.jpg
+  - photos_sauce_crop/阿興魯肉飯（中和區）（水）/photo_7.jpg
+  - photos_sauce_crop/天天利美食坊（稠）/photo_3.jpg
+  - photos_sauce_crop/五燈獎豬腳滷肉飯（三重區）（水）/photo_1.jpg
+  - photos_sauce_crop/啊興阿滷肉飯（稠）/photo_6.jpg
+  - photos_sauce_crop/店小二魯肉飯（三重區）（水）/photo_11.jpg
+  - photos_sauce_crop/明志派出所對面滷肉飯(泰山區)（水）/photo_5.jpg
+  - photos_sauce_crop/五燈獎豬腳滷肉飯（三重區）（水）/photo_11.jpg
+  - photos_sauce_crop/北北車魯肉飯（中正區）（稠）/photo_1.jpg
+  - photos_sauce_crop/晴光小吃(林口區)（水）/photo_8.jpg
+  - photos_sauce_crop/黃記魯肉飯（中山區）（稠）/photo_1.jpeg
+  - photos_sauce_crop/黃記魯肉飯（中山區）（稠）/photo_10.jpg
+  - src/nearby_search/searcher.py
+  - photos_sauce_crop/店小二魯肉飯（三重區）（水）/photo_1.jpg
+  - photos_sauce_crop/矮仔財滷肉飯（北投區）（稠）/photo_7.jpg
+  - photos_sauce_crop/滷三塊五花肉飯（北投區）（稠）/photo_9.jpg
+  - photos_sauce_crop/一甲子餐飲（萬華區）（水）/photo_1.jpg
+  - photos_sauce_crop/今大魯肉飯（三重區）（稠）/photo_11.jpg
+  - photos_sauce_crop/龍記小吃店（中山區）（水）/photo_10.jpg
+  - photos_sauce_crop/阿興魯肉飯（中和區）（水）/photo_1.jpg
+  - photos_sauce_crop/313號鵝肉擔（北投區）（水）/photo_11.jpg
+  - photos_sauce_crop/313號鵝肉擔（北投區）（水）/photo_1.jpg
+  - photos_sauce_crop/滷三塊五花肉飯（北投區）（稠）/photo_1.png
+  - index_vit_l14.npz
+  - photos_sauce_crop/天天利美食坊（稠）/photo_5.jpg
+  - photos_sauce_crop/大稻埕魯肉飯（大同區）（稠）/photo_3.jpg
+  - photos_sauce_crop/司機俱樂部（松山區）（水）/photo_11.jpg
+  - photos_sauce_crop/小王煮瓜（水）/photo_7.jpg
+  - photos_sauce_crop/晴光小吃(林口區)（水）/photo_1.jpeg
+  - photos_sauce_crop/富霸王豬腳（中山區）（水）/photo_10.jpg
+  - app.py
+  - photos_sauce_crop/晴光小吃(林口區)（水）/photo_11.jpg
+  - photos_sauce_crop/玉女號滷肉飯（稠）/photo_3.jpg
+  - photos_sauce_crop/一甲子餐飲（萬華區）（水）/photo_14.jpg
+  - photos_sauce_crop/珠記大橋頭油飯(大同區)（水）/photo_1.jpg
 -->

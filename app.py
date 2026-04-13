@@ -72,7 +72,7 @@ def _is_admin(user_id: str) -> bool:
     return bool(_ADMIN_USER_ID) and user_id == _ADMIN_USER_ID
 
 # Session：暫存用戶查詢的辨識結果，供附近推薦使用
-# 格式：{user_id: (matched_store, timestamp)}
+# 格式：{user_id: {"store": str, "ts": float, "seen": set}}
 _SESSION_TTL = 300  # 5 分鐘
 _RANDOM_SESSION = "__random__"  # 隨機驚喜模式的 session 標記
 _sessions: dict = {}
@@ -82,7 +82,7 @@ _sessions_lock = threading.Lock()
 def _cleanup_sessions() -> None:
     """移除超過 TTL 的 session（在 lock 內呼叫）。"""
     now = time.time()
-    expired = [uid for uid, (_, ts) in _sessions.items() if now - ts > _SESSION_TTL]
+    expired = [uid for uid, v in _sessions.items() if now - v["ts"] > _SESSION_TTL]
     for uid in expired:
         del _sessions[uid]
 
@@ -90,7 +90,7 @@ def _cleanup_sessions() -> None:
 def _save_session(user_id: str, matched_store: str) -> None:
     with _sessions_lock:
         _cleanup_sessions()
-        _sessions[user_id] = (matched_store, time.time())
+        _sessions[user_id] = {"store": matched_store, "ts": time.time(), "seen": set()}
 
 
 def _get_session(user_id: str):
@@ -99,11 +99,35 @@ def _get_session(user_id: str):
         entry = _sessions.get(user_id)
         if entry is None:
             return None
-        matched_store, ts = entry
-        if time.time() - ts > _SESSION_TTL:
+        if time.time() - entry["ts"] > _SESSION_TTL:
             del _sessions[user_id]
             return None
-        return matched_store
+        return entry["store"]
+
+
+def _get_seen(user_id: str) -> set:
+    """回傳隨機驚喜已推薦過的店家集合。"""
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is None:
+            return set()
+        return set(entry["seen"])
+
+
+def _add_to_seen(user_id: str, store_name: str) -> None:
+    """將店家加入已推薦紀錄。"""
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is not None:
+            entry["seen"].add(store_name)
+
+
+def _reset_seen(user_id: str) -> None:
+    """清空已推薦紀錄（全抽完後重置）。"""
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is not None:
+            entry["seen"] = set()
 
 
 _handler = WebhookHandler(_LINE_CHANNEL_SECRET)
@@ -178,15 +202,17 @@ def _build_random_flex(result: dict) -> FlexMessage:
     dist = result["distance_km"]
     maps_url = _persona.maps_url(name)
     far_phrase = _persona.get_random_far_phrase(dist)
+    tagline = _store_notes.get(name, {}).get("random_tagline", "") if not far_phrase else ""
+    phrase = far_phrase or tagline
 
     contents = [
         FlexText(text="大叔今天幫你決定！🎲", weight="bold", size="md"),
     ]
 
-    if far_phrase:
+    if phrase:
         contents += [
             FlexSeparator(margin="lg"),
-            FlexText(text=f"📜  {far_phrase}", weight="bold", size="xl",
+            FlexText(text=f"📜  {phrase}", weight="bold", size="xl",
                      color="#8B4513", align="center", margin="lg"),
             FlexSeparator(margin="lg"),
         ]
@@ -264,8 +290,14 @@ def handle_location(event):
             logging.info("[event] random_surprise_triggered")
         lat = event.message.latitude
         lng = event.message.longitude
-        result = search_random_nearby_store(lat, lng, _store_notes)
+        seen = _get_seen(user_id)
+        result = search_random_nearby_store(lat, lng, _store_notes, seen=seen)
+        if result is None:
+            # 全抽完，重置再抽一次
+            _reset_seen(user_id)
+            result = search_random_nearby_store(lat, lng, _store_notes, seen=set())
         if result:
+            _add_to_seen(user_id, result["store_name"])
             reply_msg = _build_random_flex(result)
         else:
             reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")

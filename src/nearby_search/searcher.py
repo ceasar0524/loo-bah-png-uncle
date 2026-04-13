@@ -81,12 +81,13 @@ def search_random_nearby_store(
     store_notes: dict,
     primary_radius_km: float = 3.0,
     extended_radius_km: float = 5.0,
+    seen: Optional[set] = None,
 ) -> Optional[dict]:
     """
     從附近店家中隨機抽取一家（隨機驚喜功能）。
 
-    優先從 primary_radius_km 內抽取；若無店家，擴大至 extended_radius_km；
-    仍無店家則回傳 None（由呼叫方回覆「開發中」訊息）。
+    優先從 primary_radius_km 內抽取；若該範圍內店家全部出現過，
+    擴大至 extended_radius_km；全抽完回傳 None（呼叫方負責重置 seen）。
 
     Args:
         user_lat:            用戶緯度
@@ -94,11 +95,15 @@ def search_random_nearby_store(
         store_notes:         store_notes.json 內容
         primary_radius_km:   第一層搜尋半徑，預設 3.0 km
         extended_radius_km:  第二層搜尋半徑，預設 5.0 km
+        seen:                已推薦過的店家名稱集合
 
     Returns:
-        dict 含 store_name、distance_km；超出範圍則回傳 None
+        dict 含 store_name、distance_km；全抽完則回傳 None
     """
     import random
+
+    if seen is None:
+        seen = set()
 
     primary = []
     extended = []
@@ -114,8 +119,19 @@ def search_random_nearby_store(
         elif distance <= extended_radius_km:
             extended.append(entry)
 
-    # 至少需要 2 家才留在 primary pool，否則擴大到 extended
-    pool = primary if len(primary) >= 2 else (primary + extended) if (primary + extended) else []
+    primary_names = {e["store_name"] for e in primary}
+    extended_names = {e["store_name"] for e in extended}
+
+    if not primary_names.issubset(seen):
+        # 3km 內還有沒出現過的，從 3km 內隨機抽
+        pool = primary
+    elif extended and not extended_names.issubset(seen):
+        # 3km 全抽完，擴大到 5km
+        pool = extended
+    else:
+        # 全抽完，回傳 None 由呼叫方重置
+        return None
+
     if not pool:
         return None
     return random.choice(pool)

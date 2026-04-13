@@ -91,3 +91,123 @@ code:
   - src/pipeline.py
   - index_vit_l14.npz
 -->
+
+---
+### Requirement: Random nearby store search mode
+
+The system SHALL provide a `search_random_nearby_store(lat, lng, store_notes, seen)` function that selects one store randomly using a seen-based two-tier radius strategy:
+
+1. Pick randomly from stores within 3 km (primary radius), until all primary stores have appeared in `seen`
+2. Once all primary stores are in `seen`, expand to 3–5 km (extended radius)
+3. Once all extended stores are also in `seen`, return None (caller resets `seen` and retries)
+4. If no stores exist within 5 km at all, return None
+
+The function SHALL NOT exclude seen stores from the random pool — it only uses `seen` to decide which tier to draw from. This allows natural repetition within a tier while ensuring eventual exploration of further stores.
+
+This function SHALL operate independently from `search_nearby_stores` and SHALL NOT apply style similarity scoring or threshold filtering.
+
+#### Scenario: Random store selected within primary radius
+
+- **WHEN** `search_random_nearby_store` is called and not all primary stores (3 km) are in `seen`
+- **THEN** the function SHALL return one randomly selected store from within 3 km
+
+#### Scenario: Radius expanded to 5 km when all primary stores seen
+
+- **WHEN** all stores within 3 km are in `seen` and at least one store exists within 3–5 km not yet in `seen`
+- **THEN** the function SHALL return one randomly selected store from within 3–5 km
+
+#### Scenario: All stores seen — reset signal
+
+- **WHEN** all stores within 5 km are in `seen`
+- **THEN** the function SHALL return None (caller resets `seen` and retries)
+
+#### Scenario: No stores within extended radius
+
+- **WHEN** no store exists within 5 km
+- **THEN** the function SHALL return None
+
+<!-- @trace
+source: random-surprise
+updated: 2026-04-13
+code:
+  - photos_sauce_crop/啊興阿滷肉飯（稠）/photo_5.jpg
+  - photos_sauce_crop/北北車魯肉飯（中正區）（稠）/photo_10.jpg
+  - photos_sauce_crop/小王煮瓜（水）/photo_2.jpg
+  - photos_sauce_crop/黃記魯肉飯（中山區）（稠）/photo_3.jpg
+  - photos_sauce_crop/雙胖子（稠）   /photo_7.jpg
+  - photos_sauce_crop/今大魯肉飯（三重區）（稠）/photo_1.jpg
+  - photos_sauce_crop/天天利美食坊（稠）/photo_6.jpg
+  - photos_sauce_crop/曉迪筒仔米糕（中正區）（水）/photo_13.jpg
+  - src/nearby_search/__init__.py
+  - index_dino_crop.npz
+  - photos_sauce_crop/五燈獎豬腳滷肉飯（三重區）（水）/photo_10.jpg
+  - photos_sauce_crop/玉女號滷肉飯（稠）/photo_10.jpg
+  - haiku_features_cache_v2.json
+  - photos_sauce_crop/司機俱樂部（松山區）（水）/photo_1.jpg
+  - photos_sauce_crop/明志派出所對面滷肉飯(泰山區)（水）/photo_10.jpg
+  - photos_sauce_crop/珠記大橋頭油飯(大同區)（水）/photo_10.jpg
+  - photos_sauce_crop/阿英滷肉飯（稠）/photo_3.jpg
+  - photos_sauce_crop/珠記大橋頭油飯(大同區)（水）/photo_11.jpg
+  - photos_sauce_crop/阿英滷肉飯（稠）/photo_5.jpg
+  - photos_sauce_crop/北北車魯肉飯（中正區）（稠）/photo_12.jpg
+  - photos_sauce_crop/啊興阿滷肉飯（稠）/photo_4.jpg
+  - photos_sauce_crop/龍記小吃店（中山區）（水）/photo_1.jpg
+  - photos_sauce_crop/矮仔財滷肉飯（北投區）（稠）/photo_1.jpg
+  - photos_sauce_crop/矮仔財滷肉飯（北投區）（稠）/photo_13.png
+  - photos_sauce_crop/富霸王豬腳（中山區）（水）/photo_1.jpg
+  - photos_sauce_crop/玉女號滷肉飯（稠）/photo_12.jpg
+  - src/uncle_persona/persona.py
+  - photos_sauce_crop/今大魯肉飯（三重區）（稠）/photo_10.jpg
+  - photos_sauce_crop/雙胖子（稠）   /photo_8.jpg
+  - photos_sauce_crop/313號鵝肉擔（北投區）（水）/photo_10.jpg
+  - photos_sauce_crop/大稻埕魯肉飯（大同區）（稠）/photo_1.jpg
+  - photos_sauce_crop/大稻埕魯肉飯（大同區）（稠）/photo_2.jpg
+  - photos_sauce_crop/小王煮瓜（水）/photo_15.jpg
+  - photos_sauce_crop/曉迪筒仔米糕（中正區）（水）/photo_1.jpg
+  - photos_sauce_crop/曉迪筒仔米糕（中正區）（水）/photo_5.jpg
+  - photos_sauce_crop/滷三塊五花肉飯（北投區）（稠）/photo_10.jpg
+  - photos_sauce_crop/一甲子餐飲（萬華區）（水）/photo_10.jpg
+  - photos_sauce_crop/阿英滷肉飯（稠）/photo_4.jpg
+  - photos_sauce_crop/雙胖子（稠）   /photo_6.jpg
+  - photos_sauce_crop/司機俱樂部（松山區）（水）/photo_10.jpg
+  - photos_sauce_crop/龍記小吃店（中山區）（水）/photo_11.jpg
+  - photos_sauce_crop/店小二魯肉飯（三重區）（水）/photo_6.jpg
+  - eval_dino.py
+  - photos_sauce_crop/明志派出所對面滷肉飯(泰山區)（水）/photo_2.jpg
+  - photos_sauce_crop/阿興魯肉飯（中和區）（水）/photo_6.jpg
+  - photos_sauce_crop/富霸王豬腳（中山區）（水）/photo_11.jpg
+  - photos_sauce_crop/阿興魯肉飯（中和區）（水）/photo_7.jpg
+  - photos_sauce_crop/天天利美食坊（稠）/photo_3.jpg
+  - photos_sauce_crop/五燈獎豬腳滷肉飯（三重區）（水）/photo_1.jpg
+  - photos_sauce_crop/啊興阿滷肉飯（稠）/photo_6.jpg
+  - photos_sauce_crop/店小二魯肉飯（三重區）（水）/photo_11.jpg
+  - photos_sauce_crop/明志派出所對面滷肉飯(泰山區)（水）/photo_5.jpg
+  - photos_sauce_crop/五燈獎豬腳滷肉飯（三重區）（水）/photo_11.jpg
+  - photos_sauce_crop/北北車魯肉飯（中正區）（稠）/photo_1.jpg
+  - photos_sauce_crop/晴光小吃(林口區)（水）/photo_8.jpg
+  - photos_sauce_crop/黃記魯肉飯（中山區）（稠）/photo_1.jpeg
+  - photos_sauce_crop/黃記魯肉飯（中山區）（稠）/photo_10.jpg
+  - src/nearby_search/searcher.py
+  - photos_sauce_crop/店小二魯肉飯（三重區）（水）/photo_1.jpg
+  - photos_sauce_crop/矮仔財滷肉飯（北投區）（稠）/photo_7.jpg
+  - photos_sauce_crop/滷三塊五花肉飯（北投區）（稠）/photo_9.jpg
+  - photos_sauce_crop/一甲子餐飲（萬華區）（水）/photo_1.jpg
+  - photos_sauce_crop/今大魯肉飯（三重區）（稠）/photo_11.jpg
+  - photos_sauce_crop/龍記小吃店（中山區）（水）/photo_10.jpg
+  - photos_sauce_crop/阿興魯肉飯（中和區）（水）/photo_1.jpg
+  - photos_sauce_crop/313號鵝肉擔（北投區）（水）/photo_11.jpg
+  - photos_sauce_crop/313號鵝肉擔（北投區）（水）/photo_1.jpg
+  - photos_sauce_crop/滷三塊五花肉飯（北投區）（稠）/photo_1.png
+  - index_vit_l14.npz
+  - photos_sauce_crop/天天利美食坊（稠）/photo_5.jpg
+  - photos_sauce_crop/大稻埕魯肉飯（大同區）（稠）/photo_3.jpg
+  - photos_sauce_crop/司機俱樂部（松山區）（水）/photo_11.jpg
+  - photos_sauce_crop/小王煮瓜（水）/photo_7.jpg
+  - photos_sauce_crop/晴光小吃(林口區)（水）/photo_1.jpeg
+  - photos_sauce_crop/富霸王豬腳（中山區）（水）/photo_10.jpg
+  - app.py
+  - photos_sauce_crop/晴光小吃(林口區)（水）/photo_11.jpg
+  - photos_sauce_crop/玉女號滷肉飯（稠）/photo_3.jpg
+  - photos_sauce_crop/一甲子餐飲（萬華區）（水）/photo_14.jpg
+  - photos_sauce_crop/珠記大橋頭油飯(大同區)（水）/photo_1.jpg
+-->
