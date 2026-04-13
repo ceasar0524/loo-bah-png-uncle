@@ -434,7 +434,9 @@ class UnclePersona:
             name = r["store_name"]
             dist = r["distance_km"]
             maps_url = self._maps_url(name)
-            lines.append(f"・{name}（距你約 {dist} 公里）\n{maps_url}")
+            note = self._store_notes.get(name, {}).get("display_note", "")
+            note_str = f"\n  {note}" if note else ""
+            lines.append(f"・{name}{note_str}（距你約 {dist} 公里）\n{maps_url}")
 
         store_list = "\n".join(lines)
         return f"大叔雷達掃到了！附近走類似風格的：\n\n{store_list}"

@@ -193,8 +193,13 @@ def _build_random_flex(result: dict) -> FlexMessage:
     else:
         contents.append(FlexSeparator(margin="md"))
 
+    display_note = _store_notes.get(name, {}).get("display_note", "")
     contents += [
         FlexText(text=name, weight="bold", size="md", margin="md", wrap=True),
+    ]
+    if display_note:
+        contents.append(FlexText(text=display_note, size="sm", color="#888888"))
+    contents += [
         FlexText(text=f"距你約 {dist} 公里", size="sm", color="#888888"),
         FlexButton(
             action=URIAction(label="📍 地圖", uri=maps_url),
@@ -211,6 +216,36 @@ def _build_random_flex(result: dict) -> FlexMessage:
         body=FlexBox(layout="vertical", contents=contents, padding_all="lg")
     )
     return FlexMessage(alt_text="大叔今天幫你決定！", contents=bubble)
+
+
+def _build_nearby_flex(results: list) -> FlexMessage:
+    """組裝風格相近推薦的 Flex Message（最多 2 家）。"""
+    contents = [
+        FlexText(text="大叔雷達掃到了！附近走類似風格的：", weight="bold", size="md", wrap=True),
+    ]
+
+    for r in results:
+        name = r["store_name"]
+        dist = r["distance_km"]
+        maps_url = _persona.maps_url(name)
+        display_note = _store_notes.get(name, {}).get("display_note", "")
+
+        contents.append(FlexSeparator(margin="lg"))
+        contents.append(FlexText(text=name, weight="bold", size="md", margin="md", wrap=True))
+        if display_note:
+            contents.append(FlexText(text=display_note, size="sm", color="#888888"))
+        contents.append(FlexText(text=f"距你約 {dist} 公里", size="sm", color="#888888"))
+        contents.append(FlexButton(
+            action=URIAction(label="📍 地圖", uri=maps_url),
+            style="primary",
+            margin="md",
+            height="sm",
+        ))
+
+    bubble = FlexBubble(
+        body=FlexBox(layout="vertical", contents=contents, padding_all="lg")
+    )
+    return FlexMessage(alt_text="大叔雷達掃到了！", contents=bubble)
 
 
 @_handler.add(MessageEvent, message=LocationMessageContent)
@@ -241,7 +276,10 @@ def handle_location(event):
         lng = event.message.longitude
         results, any_in_radius = search_nearby_stores(matched_store, lat, lng, _store_notes)
         results_for_persona = sorted(results[:2], key=lambda x: x["distance_km"])
-        reply_msg = TextMessage(text=_persona.generate_nearby(matched_store, results_for_persona, any_in_radius))
+        if results_for_persona:
+            reply_msg = _build_nearby_flex(results_for_persona)
+        else:
+            reply_msg = TextMessage(text=_persona.generate_nearby(matched_store, [], any_in_radius))
 
     try:
         with ApiClient(_config) as api_client:
@@ -313,7 +351,7 @@ def _build_store_list_flex() -> FlexMessage:
                 FlexBox(
                     layout="horizontal",
                     contents=[
-                        FlexText(text=display_name, flex=1, size="sm", wrap=True, gravity="center"),
+                        FlexText(text=display_name, flex=1, size="md", weight="bold", wrap=True, gravity="center"),
                         FlexButton(
                             action=URIAction(label="📍", uri=map_uri),
                             flex=0,
