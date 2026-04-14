@@ -325,6 +325,8 @@ def handle_location(event):
         seen = _get_seen(user_id)
         expanded = _get_expanded(user_id)
         extended_km = 10.0 if expanded else 5.0
+        import random as _random
+        reply_msg = None
         result = search_random_nearby_store(lat, lng, _store_notes, seen=seen, extended_radius_km=extended_km)
         if result is None:
             if not expanded and not seen:
@@ -335,15 +337,18 @@ def handle_location(event):
                 _set_expanded(user_id, True)
                 reply_msg = TextMessage(text="大叔把5公里內的店都抽完了！要繼續擴大的話，再按一次隨機驚喜。")
             else:
-                # 10km 也全抽完，重置再抽一次
+                # 10km 也全抽完，重置
                 _reset_seen(user_id)
-                result = search_random_nearby_store(lat, lng, _store_notes, seen=set())
+                if _random.random() < 0.3:
+                    # 30% 機率：回台語提示，本次不推薦
+                    reply_msg = TextMessage(text="一直抽、一直抽，啊是欲食無？\n你今仔日攏免食飯啦！")
+                else:
+                    # 70%：靜默重置直接再抽
+                    result = search_random_nearby_store(lat, lng, _store_notes, seen=set())
         if result:
             _add_to_seen(user_id, result["store_name"])
             reply_msg = _build_random_flex(result)
-        elif not expanded:
-            pass  # reply_msg 已由上方設定
-        else:
+        elif reply_msg is None:
             reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
     else:
         if not _is_admin(user_id):
