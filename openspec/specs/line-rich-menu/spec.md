@@ -2,13 +2,13 @@
 
 ## Purpose
 
-TBD - created by archiving change 'rich-menu'. Update Purpose after archive.
+定義 LINE 圖文選單的按鈕配置與對應的回應行為。目前為六格版型，已啟用四個按鈕。
 
 ## Requirements
 
 ### Requirement: Rich Menu buttons
 
-The Rich Menu SHALL provide two buttons: 怎麼用 and 店家清單.
+The Rich Menu SHALL use a six-column layout with the following four active buttons: 怎麼用、店家清單、大叔雷達、隨機驚喜.
 
 #### Scenario: User taps 怎麼用
 
@@ -18,7 +18,18 @@ The Rich Menu SHALL provide two buttons: 怎麼用 and 店家清單.
 #### Scenario: User taps 店家清單
 
 - **WHEN** the user sends the text "店家清單"
-- **THEN** the system SHALL reply with a dynamically generated list of all stores currently in `data/store_notes.json`
+- **THEN** the system SHALL reply with a dynamically generated Flex Message listing all stores in `data/store_notes.json`, grouped by district
+
+#### Scenario: User taps 大叔雷達
+
+- **WHEN** the user sends the text "大叔雷達"
+- **THEN** the system SHALL reply with a fixed text message explaining how the radar (nearby store matching) feature works
+
+#### Scenario: User taps 隨機驚喜
+
+- **WHEN** the user sends the text "隨機驚喜"
+- **THEN** the system SHALL enter random mode and prompt the user to share their location
+- **AND** subsequent location shares SHALL trigger the random nearby store recommendation flow
 
 
 <!-- @trace
