@@ -488,50 +488,67 @@ def _hidden_gems_districts() -> set:
 
 
 def _build_hidden_gems_flex(district: str) -> FlexMessage:
-    """列出指定區的巷子口店家 Flex Message，附地圖按鈕與 footer。"""
+    """列出指定區的巷仔口店家 Flex Message，附地圖按鈕與 footer。"""
     import re
     stores = [(name, data) for name, data in _hidden_gems.items()
               if _extract_district(name) == district]
 
-    contents = [
-        FlexText(text=f"巷子口 · {district}", weight="bold", size="md"),
-        FlexSeparator(margin="md"),
-    ]
-    for name, data in stores:
+    rows = []
+    for i, (name, data) in enumerate(stores):
         loc = data.get("location", {})
         lat = loc.get("lat")
         lng = loc.get("lng")
         map_uri = (f"https://maps.google.com/?q={lat},{lng}"
                    if lat and lng else f"https://maps.google.com/?q={name}")
         display_name = re.sub(r'[（(].+?[）)]$', '', name)
-        contents.append(
+        if i > 0:
+            rows.append(FlexSeparator(margin="md", color="#E8D5B7"))
+        rows.append(
             FlexBox(
                 layout="horizontal",
                 contents=[
                     FlexText(text=display_name, flex=1, size="md", weight="bold",
-                             wrap=True, gravity="center"),
+                             wrap=True, gravity="center", color="#333333"),
                     FlexButton(
-                        action=URIAction(label="📍", uri=map_uri),
+                        action=URIAction(label="地圖", uri=map_uri),
                         flex=0,
                         height="sm",
-                        style="link",
+                        style="primary",
+                        color="#A0522D",
                     ),
                 ],
-                spacing="sm",
-                margin="md",
+                spacing="md",
+                margin="md" if i > 0 else "none",
             )
         )
 
     bubble = FlexBubble(
-        body=FlexBox(layout="vertical", contents=contents, padding_all="lg"),
+        header=FlexBox(
+            layout="vertical",
+            background_color="#A0522D",
+            padding_all="lg",
+            contents=[
+                FlexText(text="🛵  巷仔口", color="#FFE4B5", size="sm", weight="bold"),
+                FlexText(text=district, color="#FFFFFF", size="xxl", weight="bold"),
+            ],
+        ),
+        body=FlexBox(
+            layout="vertical",
+            contents=rows,
+            padding_all="lg",
+            background_color="#FFFBF5",
+        ),
         footer=FlexBox(
             layout="vertical",
-            contents=[FlexText(text="名單持續擴充中，歡迎推薦！",
-                               wrap=True, size="xs", color="#888888")],
-            padding_all="lg",
+            background_color="#F5ECD7",
+            padding_all="md",
+            contents=[
+                FlexText(text="名單持續擴充中，歡迎推薦！",
+                         wrap=True, size="xs", color="#8B6914", align="center"),
+            ],
         ),
     )
-    return FlexMessage(alt_text=f"巷子口 · {district}", contents=bubble)
+    return FlexMessage(alt_text=f"巷仔口 · {district}", contents=bubble)
 
 
 def _radar_text() -> str:
@@ -599,14 +616,14 @@ def handle_text(event):
                 reply = _build_store_list_flex()
             elif text == "大叔雷達":
                 reply = TextMessage(text=_radar_text())
-            elif text == "巷子口":
+            elif text == "巷仔口":
                 if _hidden_gems:
                     reply = TextMessage(
-                        text="選個區，大叔帶你逛巷子口 🏘️",
+                        text="選個區，大叔帶你逛巷仔口 🏘️",
                         quick_reply=_build_hidden_gems_quick_reply(),
                     )
                 else:
-                    reply = TextMessage(text="巷子口名單還在整理中，敬請期待！")
+                    reply = TextMessage(text="巷仔口名單還在整理中，敬請期待！")
             elif text in _hidden_gems_districts():
                 reply = _build_hidden_gems_flex(text)
             elif text == "隨機驚喜":
