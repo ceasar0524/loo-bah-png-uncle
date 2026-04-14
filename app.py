@@ -502,7 +502,7 @@ def _build_hidden_gems_flex(district: str) -> FlexMessage:
                    if lat and lng else f"https://maps.google.com/?q={name}")
         display_name = re.sub(r'[（(].+?[）)]$', '', name)
         if i > 0:
-            rows.append(FlexSeparator(margin="md", color="#E8D5B7"))
+            rows.append(FlexSeparator(margin="md", color="#E6D9C8"))
         rows.append(
             FlexBox(
                 layout="horizontal",
@@ -514,7 +514,7 @@ def _build_hidden_gems_flex(district: str) -> FlexMessage:
                         flex=0,
                         height="sm",
                         style="primary",
-                        color="#A0522D",
+                        color="#A94E25",
                     ),
                 ],
                 spacing="md",
@@ -525,7 +525,7 @@ def _build_hidden_gems_flex(district: str) -> FlexMessage:
     bubble = FlexBubble(
         header=FlexBox(
             layout="vertical",
-            background_color="#A0522D",
+            background_color="#B85A2B",
             padding_all="lg",
             contents=[
                 FlexText(text="🛵  巷仔口", color="#FFE4B5", size="sm", weight="bold"),
@@ -536,11 +536,11 @@ def _build_hidden_gems_flex(district: str) -> FlexMessage:
             layout="vertical",
             contents=rows,
             padding_all="lg",
-            background_color="#FFFBF5",
+            background_color="#F4EFE8",
         ),
         footer=FlexBox(
             layout="vertical",
-            background_color="#F5ECD7",
+            background_color="#F4EFE8",
             padding_all="md",
             contents=[
                 FlexText(text="名單持續擴充中，歡迎推薦！",
