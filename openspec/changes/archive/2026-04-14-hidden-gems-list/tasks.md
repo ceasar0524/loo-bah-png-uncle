@@ -16,4 +16,4 @@
 
 ## 4. 圖文選單更新
 
-- [ ] 4.1 在 LINE Official Account Manager 新增「巷子口」按鈕（觸發文字 `巷子口`），更新 rich menu buttons
+- [x] 4.1 在 LINE Official Account Manager 新增「巷子口」按鈕（觸發文字 `巷子口`），更新 rich menu buttons
