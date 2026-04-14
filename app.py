@@ -20,6 +20,7 @@ from linebot.v3.messaging import (
 )
 from linebot.v3.messaging import (
     LocationAction,
+    MessageAction,
     QuickReply,
     QuickReplyItem,
 )
@@ -47,6 +48,14 @@ _store_notes: dict = {}
 try:
     with open(_STORE_NOTES_PATH, encoding="utf-8") as f:
         _store_notes = json.load(f)
+except Exception:
+    pass
+
+_HIDDEN_GEMS_PATH = Path(__file__).parent / "data" / "hidden_gems.json"
+_hidden_gems: dict = {}
+try:
+    with open(_HIDDEN_GEMS_PATH, encoding="utf-8") as f:
+        _hidden_gems = json.load(f)
 except Exception:
     pass
 
@@ -454,6 +463,77 @@ def _build_store_list_flex() -> FlexMessage:
     return FlexMessage(alt_text=f"收錄店家清單（{n} 家）", contents=bubble)
 
 
+def _extract_district(store_name: str) -> str:
+    """從店名括號中擷取區名，例如「路路食堂（林口區）」→「林口區」。"""
+    import re
+    m = re.search(r'[（(](.+?)[）)]', store_name)
+    return m.group(1) if m else "其他"
+
+
+def _build_hidden_gems_quick_reply() -> QuickReply:
+    """依 hidden_gems.json 動態產生 Quick Reply 選區按鈕。"""
+    seen: set = set()
+    items = []
+    for name in _hidden_gems.keys():
+        d = _extract_district(name)
+        if d not in seen:
+            seen.add(d)
+            items.append(QuickReplyItem(action=MessageAction(label=d, text=d)))
+    return QuickReply(items=items)
+
+
+def _hidden_gems_districts() -> set:
+    """回傳 hidden_gems.json 中所有區名集合。"""
+    return {_extract_district(name) for name in _hidden_gems.keys()}
+
+
+def _build_hidden_gems_flex(district: str) -> FlexMessage:
+    """列出指定區的巷子口店家 Flex Message，附地圖按鈕與 footer。"""
+    import re
+    stores = [(name, data) for name, data in _hidden_gems.items()
+              if _extract_district(name) == district]
+
+    contents = [
+        FlexText(text=f"巷子口 · {district}", weight="bold", size="md"),
+        FlexSeparator(margin="md"),
+    ]
+    for name, data in stores:
+        loc = data.get("location", {})
+        lat = loc.get("lat")
+        lng = loc.get("lng")
+        map_uri = (f"https://maps.google.com/?q={lat},{lng}"
+                   if lat and lng else f"https://maps.google.com/?q={name}")
+        display_name = re.sub(r'[（(].+?[）)]$', '', name)
+        contents.append(
+            FlexBox(
+                layout="horizontal",
+                contents=[
+                    FlexText(text=display_name, flex=1, size="md", weight="bold",
+                             wrap=True, gravity="center"),
+                    FlexButton(
+                        action=URIAction(label="📍", uri=map_uri),
+                        flex=0,
+                        height="sm",
+                        style="link",
+                    ),
+                ],
+                spacing="sm",
+                margin="md",
+            )
+        )
+
+    bubble = FlexBubble(
+        body=FlexBox(layout="vertical", contents=contents, padding_all="lg"),
+        footer=FlexBox(
+            layout="vertical",
+            contents=[FlexText(text="名單持續擴充中，歡迎推薦！",
+                               wrap=True, size="xs", color="#888888")],
+            padding_all="lg",
+        ),
+    )
+    return FlexMessage(alt_text=f"巷子口 · {district}", contents=bubble)
+
+
 def _radar_text() -> str:
     n = len(_store_notes)
     return f"""📡 大叔雷達：
@@ -519,6 +599,16 @@ def handle_text(event):
                 reply = _build_store_list_flex()
             elif text == "大叔雷達":
                 reply = TextMessage(text=_radar_text())
+            elif text == "巷子口":
+                if _hidden_gems:
+                    reply = TextMessage(
+                        text="選個區，大叔帶你逛巷子口 🏘️",
+                        quick_reply=_build_hidden_gems_quick_reply(),
+                    )
+                else:
+                    reply = TextMessage(text="巷子口名單還在整理中，敬請期待！")
+            elif text in _hidden_gems_districts():
+                reply = _build_hidden_gems_flex(text)
             elif text == "隨機驚喜":
                 _save_session(event.source.user_id, _RANDOM_SESSION)
                 from datetime import datetime
