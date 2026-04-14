@@ -475,10 +475,10 @@ def _build_store_list_flex() -> FlexMessage:
 
 
 def _extract_district(store_name: str) -> str:
-    """從店名括號中擷取區名，例如「路路食堂（林口區）」→「林口區」。"""
+    """從店名括號中擷取區名，例如「路路食堂（林口區）」→「林口區」。取最後一個括號以避免「福哥（總店）（板橋區）」誤抓。"""
     import re
-    m = re.search(r'[（(](.+?)[）)]', store_name)
-    return m.group(1) if m else "其他"
+    matches = re.findall(r'[（(](.+?)[）)]', store_name)
+    return matches[-1] if matches else "其他"
 
 
 def _build_hidden_gems_quick_reply() -> QuickReply:
