@@ -346,11 +346,11 @@ def handle_location(event):
                 if len(seen) >= 10:
                     reply_msg = TextMessage(text="一直抽、一直抽，啊是欲食無？\n你今仔日攏免食飯啦！")
                 else:
-                    # 店少，靜默重置直接再抽
-                    result = search_random_nearby_store(lat, lng, _store_notes, seen=set(), extended_radius_km=extended_km)
+                    # 店少，靜默重置直接再抽（flat pool）
+                    result = search_random_nearby_store(lat, lng, _store_notes, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
         else:
-            # 未全部看過，從所有店抽（不過濾 seen，允許重複）
-            result = search_random_nearby_store(lat, lng, _store_notes, seen=set(), extended_radius_km=extended_km)
+            # 未全部看過，從 extended_km 內所有店平等抽（flat pool，允許重複）
+            result = search_random_nearby_store(lat, lng, _store_notes, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
         if result:
             _add_to_seen(user_id, result["store_name"])
             reply_msg = _build_random_flex(result)
