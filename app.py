@@ -483,21 +483,28 @@ def _extract_district(store_name: str) -> str:
 
 _TAIPEI_CITY_DISTRICTS = {"大安區", "文山區", "萬華區", "士林區"}
 
+_QUICK_REPLY_ORDER = [
+    "台北市區", "板橋區", "新莊區", "三重區",
+    "永和區", "中和區", "新店區", "林口區", "五股區", "泰山區",
+]
+
 
 def _build_hidden_gems_quick_reply() -> QuickReply:
-    """依 hidden_gems.json 動態產生 Quick Reply 選區按鈕。台北市各區合併為「台北市區」。"""
-    seen: set = set()
-    items = []
-    taipei_added = False
+    """依 hidden_gems.json 動態產生 Quick Reply 選區按鈕，按 _QUICK_REPLY_ORDER 排序。"""
+    available: set = set()
     for name in _hidden_gems.keys():
         d = _extract_district(name)
         if d in _TAIPEI_CITY_DISTRICTS:
-            if not taipei_added:
-                taipei_added = True
-                items.append(QuickReplyItem(action=MessageAction(label="台北市區", text="台北市區")))
-        elif d not in seen:
-            seen.add(d)
-            items.append(QuickReplyItem(action=MessageAction(label=d, text=d)))
+            available.add("台北市區")
+        else:
+            available.add(d)
+
+    ordered = [d for d in _QUICK_REPLY_ORDER if d in available]
+    remaining = sorted(available - set(_QUICK_REPLY_ORDER))
+    items = [
+        QuickReplyItem(action=MessageAction(label=d, text=d))
+        for d in ordered + remaining
+    ]
     return QuickReply(items=items)
 
 
