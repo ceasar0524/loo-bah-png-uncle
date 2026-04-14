@@ -481,21 +481,109 @@ def _extract_district(store_name: str) -> str:
     return matches[-1] if matches else "其他"
 
 
+_TAIPEI_CITY_DISTRICTS = {"大安區", "文山區", "萬華區", "士林區"}
+
+
 def _build_hidden_gems_quick_reply() -> QuickReply:
-    """依 hidden_gems.json 動態產生 Quick Reply 選區按鈕。"""
+    """依 hidden_gems.json 動態產生 Quick Reply 選區按鈕。台北市各區合併為「台北市區」。"""
     seen: set = set()
     items = []
+    taipei_added = False
     for name in _hidden_gems.keys():
         d = _extract_district(name)
-        if d not in seen:
+        if d in _TAIPEI_CITY_DISTRICTS:
+            if not taipei_added:
+                taipei_added = True
+                items.append(QuickReplyItem(action=MessageAction(label="台北市區", text="台北市區")))
+        elif d not in seen:
             seen.add(d)
             items.append(QuickReplyItem(action=MessageAction(label=d, text=d)))
     return QuickReply(items=items)
 
 
 def _hidden_gems_districts() -> set:
-    """回傳 hidden_gems.json 中所有區名集合。"""
-    return {_extract_district(name) for name in _hidden_gems.keys()}
+    """回傳 hidden_gems.json 中所有區名集合（不含台北市各區，以「台北市區」代替）。"""
+    districts = set()
+    has_taipei = False
+    for name in _hidden_gems.keys():
+        d = _extract_district(name)
+        if d in _TAIPEI_CITY_DISTRICTS:
+            has_taipei = True
+        else:
+            districts.add(d)
+    if has_taipei:
+        districts.add("台北市區")
+    return districts
+
+
+def _build_taipei_city_flex() -> FlexMessage:
+    """列出台北市各區（大安、文山、萬華、士林）店家，按區分組。"""
+    import re
+    rows = []
+    for district in sorted(_TAIPEI_CITY_DISTRICTS):
+        stores = [(name, data) for name, data in _hidden_gems.items()
+                  if _extract_district(name) == district]
+        if not stores:
+            continue
+        if rows:
+            rows.append(FlexSeparator(margin="lg", color="#B85A2B"))
+        rows.append(FlexText(text=district, size="sm", weight="bold",
+                             color="#B85A2B", margin="lg"))
+        for i, (name, data) in enumerate(stores):
+            loc = data.get("location", {})
+            lat = loc.get("lat")
+            lng = loc.get("lng")
+            map_uri = (f"https://maps.google.com/?q={lat},{lng}"
+                       if lat and lng else f"https://maps.google.com/?q={name}")
+            display_name = re.sub(r'[（(].+?[）)]$', '', name)
+            if i > 0:
+                rows.append(FlexSeparator(margin="sm", color="#E6D9C8"))
+            rows.append(
+                FlexBox(
+                    layout="horizontal",
+                    contents=[
+                        FlexText(text=display_name, flex=1, size="md", weight="bold",
+                                 wrap=True, gravity="center", color="#333333"),
+                        FlexButton(
+                            action=URIAction(label="📍 地圖", uri=map_uri),
+                            flex=0,
+                            height="sm",
+                            style="primary",
+                            color="#A94E25",
+                        ),
+                    ],
+                    spacing="md",
+                    margin="sm",
+                )
+            )
+
+    bubble = FlexBubble(
+        header=FlexBox(
+            layout="vertical",
+            background_color="#B85A2B",
+            padding_all="lg",
+            contents=[
+                FlexText(text="🛵  巷仔口", color="#FFE4B5", size="sm", weight="bold"),
+                FlexText(text="台北市區", color="#FFFFFF", size="xxl", weight="bold"),
+            ],
+        ),
+        body=FlexBox(
+            layout="vertical",
+            contents=rows,
+            padding_all="lg",
+            background_color="#F4EFE8",
+        ),
+        footer=FlexBox(
+            layout="vertical",
+            background_color="#F4EFE8",
+            padding_all="md",
+            contents=[
+                FlexText(text="名單持續擴充中，歡迎推薦！",
+                         wrap=True, size="xs", color="#8B6914", align="center"),
+            ],
+        ),
+    )
+    return FlexMessage(alt_text="巷仔口 · 台北市區", contents=bubble)
 
 
 def _build_hidden_gems_flex(district: str) -> FlexMessage:
@@ -638,6 +726,8 @@ def handle_text(event):
                     )
                 else:
                     reply = TextMessage(text="巷仔口名單還在整理中，敬請期待！")
+            elif text == "台北市區":
+                reply = _build_taipei_city_flex()
             elif text in _hidden_gems_districts():
                 reply = _build_hidden_gems_flex(text)
             elif text == "隨機驚喜":
