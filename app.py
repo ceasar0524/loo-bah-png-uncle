@@ -329,17 +329,20 @@ def handle_location(event):
         reply_msg = None
         result = search_random_nearby_store(lat, lng, _store_notes, seen=seen, extended_radius_km=extended_km)
         if result is None:
-            if not expanded and not seen:
-                # 5km 內根本沒有任何店
-                reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
-            elif not expanded:
-                # 5km 全抽完，提示用戶可擴大範圍
-                _set_expanded(user_id, True)
-                reply_msg = TextMessage(text="大叔把5公里內的店都抽完了！要繼續擴大的話，再按一次隨機驚喜。")
+            if not expanded:
+                # 確認這個位置 5km 內是否真的有店（不管 seen）
+                has_any = search_random_nearby_store(lat, lng, _store_notes, seen=set()) is not None
+                if not has_any:
+                    # 5km 內根本沒有任何店
+                    reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
+                else:
+                    # 5km 全抽完，提示用戶可擴大範圍
+                    _set_expanded(user_id, True)
+                    reply_msg = TextMessage(text="大叔把5公里內的店都抽完了！要繼續擴大的話，再按一次隨機驚喜。")
             else:
                 # 10km 也全抽完，重置
                 _reset_seen(user_id)
-                if _random.random() < 0.3:
+                if len(seen) >= 10:  # 暫時 100% 測試用，確認後加 30% 機率
                     # 30% 機率：回台語提示，本次不推薦
                     reply_msg = TextMessage(text="一直抽、一直抽，啊是欲食無？\n你今仔日攏免食飯啦！")
                 else:
