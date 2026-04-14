@@ -2,31 +2,47 @@
 
 ## Purpose
 
-TBD - created by archiving change 'random-surprise'. Update Purpose after archive.
+提供隨機驚喜功能：使用者分享位置後，系統從附近店家中隨機推薦一家，避免重複推薦，並在附近店家抽完後逐步擴大搜尋範圍。
 
 ## Requirements
 
 ### Requirement: Random nearby store recommendation
 
-The system SHALL accept a user location (latitude, longitude) and return one randomly selected store from within a configurable radius (default: 3 km).
+The system SHALL accept a user location (latitude, longitude) and return one randomly selected store using a three-tier radius expansion: 3 km → 5 km → 10 km.
 
-If no store exists within the radius, the system SHALL expand to all stores and return one randomly selected store.
+The selected store SHALL include `store_name` and `distance_km`.
 
-The selected store SHALL include `store_name`, `distance_km`, and a brief style description derived from `store_notes`.
+Already-recommended stores (tracked in `seen`) SHALL be excluded from each draw within the same session.
 
-#### Scenario: Stores found within radius
+#### Scenario: Stores found within 3 km
 
-- **WHEN** a user location is provided and at least one store exists within 3 km
-- **THEN** the system SHALL randomly select one store from within the radius and return it with `store_name` and `distance_km`
+- **WHEN** a user location is provided and at least one unseen store exists within 3 km
+- **THEN** the system SHALL randomly select one store from within 3 km
 
-#### Scenario: No stores within radius
+#### Scenario: 3 km exhausted, stores in 5 km
 
-- **WHEN** no store exists within the 3 km radius
-- **THEN** the system SHALL randomly select one store from all collected stores and return it with `store_name` and `distance_km`
+- **WHEN** all stores within 3 km have been seen and at least one unseen store exists within 5 km
+- **THEN** the system SHALL randomly select one store from the 3–5 km range
+
+#### Scenario: 5 km exhausted — prompt user to expand
+
+- **WHEN** all stores within 5 km have been seen
+- **THEN** the system SHALL reply with a prompt message and set `expanded = True` in the session
+- **AND** the system SHALL NOT auto-reset or auto-pick; the user must press the button again to continue
+
+#### Scenario: Expanded mode — stores in 10 km
+
+- **WHEN** `expanded = True` and the user shares location again
+- **THEN** the system SHALL randomly select one store from the 5–10 km range (still excluding seen stores)
+
+#### Scenario: 10 km exhausted — reset and restart
+
+- **WHEN** all stores within 10 km have been seen
+- **THEN** the system SHALL reset `seen` and `expanded`, and randomly select from 3 km again
 
 #### Scenario: Random selection is uniform
 
-- **WHEN** multiple stores are available within the radius
+- **WHEN** multiple unseen stores are available in the current tier
 - **THEN** each store SHALL have an equal probability of being selected
 
 
