@@ -124,10 +124,10 @@ def search_random_nearby_store(
 
     if not primary_names.issubset(seen):
         # 3km 內還有沒出現過的，從 3km 內隨機抽
-        pool = primary
+        pool = [e for e in primary if e["store_name"] not in seen]
     elif extended and not extended_names.issubset(seen):
-        # 3km 全抽完，擴大到 5km
-        pool = extended
+        # 3km 全抽完，擴大到 extended_radius_km
+        pool = [e for e in extended if e["store_name"] not in seen]
     else:
         # 全抽完，回傳 None 由呼叫方重置
         return None

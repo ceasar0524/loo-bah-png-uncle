@@ -72,7 +72,7 @@ def _is_admin(user_id: str) -> bool:
     return bool(_ADMIN_USER_ID) and user_id == _ADMIN_USER_ID
 
 # Session：暫存用戶查詢的辨識結果，供附近推薦使用
-# 格式：{user_id: {"store": str, "ts": float, "seen": set}}
+# 格式：{user_id: {"store": str, "ts": float, "seen": set, "expanded": bool}}
 _SESSION_TTL = 300  # 5 分鐘
 _RANDOM_SESSION = "__random__"  # 隨機驚喜模式的 session 標記
 _sessions: dict = {}
@@ -133,6 +133,24 @@ def _reset_seen(user_id: str) -> None:
         entry = _sessions.get(user_id)
         if entry is not None:
             entry["seen"] = set()
+            entry["expanded"] = False
+
+
+def _get_expanded(user_id: str) -> bool:
+    """回傳是否已進入擴大範圍模式。"""
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is None:
+            return False
+        return entry.get("expanded", False)
+
+
+def _set_expanded(user_id: str, value: bool) -> None:
+    """設定擴大範圍模式旗標。"""
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is not None:
+            entry["expanded"] = value
 
 
 _handler = WebhookHandler(_LINE_CHANNEL_SECRET)
@@ -296,14 +314,23 @@ def handle_location(event):
         lat = event.message.latitude
         lng = event.message.longitude
         seen = _get_seen(user_id)
-        result = search_random_nearby_store(lat, lng, _store_notes, seen=seen)
+        expanded = _get_expanded(user_id)
+        extended_km = 10.0 if expanded else 5.0
+        result = search_random_nearby_store(lat, lng, _store_notes, seen=seen, extended_radius_km=extended_km)
         if result is None:
-            # 全抽完，重置再抽一次
-            _reset_seen(user_id)
-            result = search_random_nearby_store(lat, lng, _store_notes, seen=set())
+            if not expanded:
+                # 5km 全抽完，提示用戶可擴大範圍
+                _set_expanded(user_id, True)
+                reply_msg = TextMessage(text="大叔把5公里內的店都抽完了！要繼續擴大的話，再按一次隨機驚喜。")
+            else:
+                # 10km 也全抽完，重置再抽一次
+                _reset_seen(user_id)
+                result = search_random_nearby_store(lat, lng, _store_notes, seen=set())
         if result:
             _add_to_seen(user_id, result["store_name"])
             reply_msg = _build_random_flex(result)
+        elif not expanded:
+            pass  # reply_msg 已由上方設定
         else:
             reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
     else:
