@@ -318,7 +318,10 @@ def handle_location(event):
         extended_km = 10.0 if expanded else 5.0
         result = search_random_nearby_store(lat, lng, _store_notes, seen=seen, extended_radius_km=extended_km)
         if result is None:
-            if not expanded:
+            if not expanded and not seen:
+                # 5km 內根本沒有任何店
+                reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
+            elif not expanded:
                 # 5km 全抽完，提示用戶可擴大範圍
                 _set_expanded(user_id, True)
                 reply_msg = TextMessage(text="大叔把5公里內的店都抽完了！要繼續擴大的話，再按一次隨機驚喜。")
