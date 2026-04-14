@@ -510,7 +510,7 @@ def _build_hidden_gems_flex(district: str) -> FlexMessage:
                     FlexText(text=display_name, flex=1, size="md", weight="bold",
                              wrap=True, gravity="center", color="#333333"),
                     FlexButton(
-                        action=URIAction(label="地圖", uri=map_uri),
+                        action=URIAction(label="📍 地圖", uri=map_uri),
                         flex=0,
                         height="sm",
                         style="primary",
