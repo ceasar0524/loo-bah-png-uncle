@@ -325,29 +325,32 @@ def handle_location(event):
         seen = _get_seen(user_id)
         expanded = _get_expanded(user_id)
         extended_km = 10.0 if expanded else 5.0
-        import random as _random
         reply_msg = None
-        result = search_random_nearby_store(lat, lng, _store_notes, seen=seen, extended_radius_km=extended_km)
-        if result is None:
+        result = None
+        # 用 seen 判斷是否已看過所有店（不做為實際抽取依據）
+        exhausted = search_random_nearby_store(lat, lng, _store_notes, seen=seen, extended_radius_km=extended_km) is None
+        if exhausted:
             if not expanded:
-                # 確認這個位置 5km 內是否真的有店（不管 seen）
+                # 確認這個位置 5km 內是否真的有店
                 has_any = search_random_nearby_store(lat, lng, _store_notes, seen=set()) is not None
                 if not has_any:
                     # 5km 內根本沒有任何店
                     reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
                 else:
-                    # 5km 全抽完，提示用戶可擴大範圍
+                    # 5km 全部看過，提示用戶可擴大範圍
                     _set_expanded(user_id, True)
                     reply_msg = TextMessage(text="大叔把5公里內的店都抽完了！要繼續擴大的話，再按一次隨機驚喜。")
             else:
-                # 10km 也全抽完，重置
+                # 10km 也全部看過，重置
                 _reset_seen(user_id)
-                if len(seen) >= 10:  # 暫時 100% 測試用，確認後加 30% 機率
-                    # 30% 機率：回台語提示，本次不推薦
+                if len(seen) >= 10:
                     reply_msg = TextMessage(text="一直抽、一直抽，啊是欲食無？\n你今仔日攏免食飯啦！")
                 else:
-                    # 70%：靜默重置直接再抽
-                    result = search_random_nearby_store(lat, lng, _store_notes, seen=set())
+                    # 店少，靜默重置直接再抽
+                    result = search_random_nearby_store(lat, lng, _store_notes, seen=set(), extended_radius_km=extended_km)
+        else:
+            # 未全部看過，從所有店抽（不過濾 seen，允許重複）
+            result = search_random_nearby_store(lat, lng, _store_notes, seen=set(), extended_radius_km=extended_km)
         if result:
             _add_to_seen(user_id, result["store_name"])
             reply_msg = _build_random_flex(result)
