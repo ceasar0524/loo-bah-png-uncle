@@ -481,7 +481,7 @@ def _extract_district(store_name: str) -> str:
     return matches[-1] if matches else "其他"
 
 
-_TAIPEI_CITY_DISTRICTS = {"大安區", "文山區", "萬華區", "士林區", "中正區", "松山區", "信義區", "中山區"}
+_TAIPEI_CITY_DISTRICTS = {"大安區", "文山區", "萬華區", "士林區", "中正區", "松山區", "信義區", "中山區", "內湖區", "南港區"}
 
 _QUICK_REPLY_ORDER = [
     "台北市區", "板橋區", "新莊區", "三重區",
@@ -674,7 +674,7 @@ def _radar_text() -> str:
 5. 📌 大叔的承諾
 大叔重視隱私，用戶分享的位置作為計算距離回傳推薦店家之用，並不做其他用途。
 
-📍 目前收錄大台北 {n} 家店家
+📍 目前收錄大台北 {n} 家店
 （大叔還在努力吃更多店擴充中 😆）"""
 
 
