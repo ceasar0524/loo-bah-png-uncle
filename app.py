@@ -293,6 +293,30 @@ def _build_random_flex(result: dict) -> FlexMessage:
     return FlexMessage(alt_text="大叔今天幫你決定！", contents=bubble)
 
 
+def _build_exhausted_flex() -> FlexMessage:
+    """抽太多次後出現的彩蛋 Flex Message。"""
+    contents = [
+        FlexText(text="大叔今天網路用夠多了 🖥️", weight="bold", size="md"),
+        FlexSeparator(margin="lg"),
+        FlexText(text="📜  一直抽、一直抽，啊是欲食無？\n你今仔日攏免食飯啦！",
+                 weight="bold", size="xl", color="#8B4513", align="center",
+                 margin="lg", wrap=True),
+        FlexSeparator(margin="lg"),
+        FlexText(text="自己家", weight="bold", size="md", margin="md", wrap=True),
+        FlexButton(
+            action=URIAction(label="📍 地圖", uri="https://maps.google.com/"),
+            style="primary",
+            margin="md",
+            height="sm",
+            disabled=True,
+        ),
+    ]
+    bubble = FlexBubble(
+        body=FlexBox(layout="vertical", contents=contents, padding_all="lg")
+    )
+    return FlexMessage(alt_text="大叔今天幫你決定！", contents=bubble)
+
+
 def _build_nearby_flex(results: list) -> FlexMessage:
     """組裝風格相近推薦的 Flex Message（最多 2 家）。"""
     contents = [
@@ -344,29 +368,11 @@ def handle_location(event):
         extended_km = 10.0 if expanded else 5.0
         reply_msg = None
         result = None
-        # 用 seen 判斷是否已看過所有店（不做為實際抽取依據）
-        exhausted = search_random_nearby_store(lat, lng, _random_pool, seen=seen, extended_radius_km=extended_km) is None
-        if exhausted:
-            if not expanded:
-                # 確認這個位置 5km 內是否真的有店
-                has_any = search_random_nearby_store(lat, lng, _random_pool, seen=set()) is not None
-                if not has_any:
-                    # 5km 內根本沒有任何店
-                    reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
-                else:
-                    # 5km 全部看過，提示用戶可擴大範圍
-                    _set_expanded(user_id, True)
-                    reply_msg = TextMessage(text="大叔把5公里內的店都抽完了！要繼續擴大的話，再按一次隨機驚喜。")
-            else:
-                # 10km 也全部看過，重置
-                _reset_seen(user_id)
-                if len(seen) >= 10:
-                    reply_msg = TextMessage(text="一直抽、一直抽，啊是欲食無？\n你今仔日攏免食飯啦！")
-                else:
-                    # 店少，靜默重置直接再抽（flat pool）
-                    result = search_random_nearby_store(lat, lng, _random_pool, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
+        # 【測試用】抽 3 次後直接觸發彩蛋，測完還原正式條件
+        if len(seen) >= 3:
+            _reset_seen(user_id)
+            reply_msg = _build_exhausted_flex()
         else:
-            # 未全部看過，從 extended_km 內所有店平等抽（flat pool，允許重複）
             result = search_random_nearby_store(lat, lng, _random_pool, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
         if result:
             _add_to_seen(user_id, result["store_name"])
