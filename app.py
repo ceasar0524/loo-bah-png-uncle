@@ -248,7 +248,8 @@ def _build_random_flex(result: dict) -> FlexMessage:
     """組裝隨機驚喜的 Flex Message。"""
     name = result["store_name"]
     dist = result["distance_km"]
-    maps_url = _persona.maps_url(name)
+    loc = _random_pool.get(name, {}).get("location", {})
+    maps_url = f"https://maps.google.com/?q={loc['lat']},{loc['lng']}"
     far_phrase = _persona.get_random_far_phrase(dist)
     tagline = _store_notes.get(name, {}).get("random_tagline", "") if not far_phrase else ""
     phrase = far_phrase or tagline
