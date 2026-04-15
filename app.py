@@ -481,7 +481,7 @@ def _extract_district(store_name: str) -> str:
     return matches[-1] if matches else "其他"
 
 
-_TAIPEI_CITY_DISTRICTS = {"大安區", "文山區", "萬華區", "士林區"}
+_TAIPEI_CITY_DISTRICTS = {"大安區", "文山區", "萬華區", "士林區", "中正區", "松山區", "信義區", "中山區"}
 
 _QUICK_REPLY_ORDER = [
     "台北市區", "板橋區", "新莊區", "三重區",
