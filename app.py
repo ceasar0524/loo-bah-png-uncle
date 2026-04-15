@@ -59,6 +59,22 @@ try:
 except Exception:
     pass
 
+# 是否將巷仔口店家納入隨機驚喜 pool（改 False 可快速關掉）
+_HIDDEN_GEMS_IN_RANDOM = True
+# 巷仔口中與 _store_notes 實為同一家但名稱不同的店，排除避免重複推薦
+_HIDDEN_GEMS_RANDOM_EXCLUDE = {"筒仔米糕滷肉飯貢丸湯（泰山區）"}
+
+def _build_random_pool() -> dict:
+    if not _HIDDEN_GEMS_IN_RANDOM:
+        return _store_notes
+    pool = dict(_store_notes)
+    for name, data in _hidden_gems.items():
+        if name not in pool and name not in _HIDDEN_GEMS_RANDOM_EXCLUDE:
+            pool[name] = data
+    return pool
+
+_random_pool = _build_random_pool()
+
 _persona = UnclePersona()
 
 # 啟動時預載 CLIP 模型，避免第一個請求才觸發載入
@@ -328,11 +344,11 @@ def handle_location(event):
         reply_msg = None
         result = None
         # 用 seen 判斷是否已看過所有店（不做為實際抽取依據）
-        exhausted = search_random_nearby_store(lat, lng, _store_notes, seen=seen, extended_radius_km=extended_km) is None
+        exhausted = search_random_nearby_store(lat, lng, _random_pool, seen=seen, extended_radius_km=extended_km) is None
         if exhausted:
             if not expanded:
                 # 確認這個位置 5km 內是否真的有店
-                has_any = search_random_nearby_store(lat, lng, _store_notes, seen=set()) is not None
+                has_any = search_random_nearby_store(lat, lng, _random_pool, seen=set()) is not None
                 if not has_any:
                     # 5km 內根本沒有任何店
                     reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
@@ -347,10 +363,10 @@ def handle_location(event):
                     reply_msg = TextMessage(text="一直抽、一直抽，啊是欲食無？\n你今仔日攏免食飯啦！")
                 else:
                     # 店少，靜默重置直接再抽（flat pool）
-                    result = search_random_nearby_store(lat, lng, _store_notes, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
+                    result = search_random_nearby_store(lat, lng, _random_pool, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
         else:
             # 未全部看過，從 extended_km 內所有店平等抽（flat pool，允許重複）
-            result = search_random_nearby_store(lat, lng, _store_notes, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
+            result = search_random_nearby_store(lat, lng, _random_pool, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
         if result:
             _add_to_seen(user_id, result["store_name"])
             reply_msg = _build_random_flex(result)
@@ -481,7 +497,7 @@ def _extract_district(store_name: str) -> str:
     return matches[-1] if matches else "其他"
 
 
-_TAIPEI_CITY_DISTRICTS = {"大安區", "文山區", "萬華區", "士林區", "中正區", "松山區", "信義區", "中山區", "內湖區", "南港區"}
+_TAIPEI_CITY_DISTRICTS = {"大安區", "文山區", "萬華區", "士林區", "中正區", "松山區", "信義區", "中山區", "內湖區", "南港區", "北投區"}
 
 _QUICK_REPLY_ORDER = [
     "台北市區", "板橋區", "新莊區", "三重區",
@@ -527,7 +543,8 @@ def _build_taipei_city_flex() -> FlexMessage:
     """列出台北市各區（大安、文山、萬華、士林）店家，按區分組。"""
     import re
     rows = []
-    for district in sorted(_TAIPEI_CITY_DISTRICTS):
+    _TAIPEI_CITY_ORDER = ["信義區", "大安區", "松山區", "中山區", "中正區", "萬華區", "士林區", "北投區", "南港區", "文山區", "內湖區"]
+    for district in _TAIPEI_CITY_ORDER:
         stores = [(name, data) for name, data in _hidden_gems.items()
                   if _extract_district(name) == district]
         if not stores:
