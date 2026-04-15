@@ -35,15 +35,31 @@ Already-recommended stores (tracked in `seen`) SHALL be excluded from each draw 
 - **WHEN** `expanded = True` and the user shares location again
 - **THEN** the system SHALL randomly select one store from the 5–10 km range (still excluding seen stores)
 
-#### Scenario: 10 km exhausted — reset and restart
+#### Scenario: 10 km exhausted, session has seen 10+ stores — easter egg
 
-- **WHEN** all stores within 10 km have been seen
-- **THEN** the system SHALL reset `seen` and `expanded`, and randomly select from 3 km again
+- **WHEN** all stores within 10 km have been seen AND `len(seen) >= 10`
+- **THEN** the system SHALL reset `seen` and reply with the exhausted easter egg Flex Message
+- The easter egg SHALL display store name as "自己家", a playful Taiwanese phrase as the tagline, and a disabled map button
 
-#### Scenario: Random selection is uniform
+#### Scenario: 10 km exhausted, session has seen fewer than 10 stores — silent reset
 
-- **WHEN** multiple unseen stores are available in the current tier
-- **THEN** each store SHALL have an equal probability of being selected
+- **WHEN** all stores within 10 km have been seen AND `len(seen) < 10`
+- **THEN** the system SHALL silently reset `seen` and draw again from the flat pool
+
+#### Scenario: Random selection is uniform (flat pool)
+
+- **WHEN** drawing a store for recommendation
+- **THEN** the system SHALL use `primary_radius_km = extended_km` so all stores within range have equal probability regardless of distance tier
+
+### Requirement: Store pool includes hidden gems
+
+The random recommendation pool SHALL include stores from both `store_notes` (24 stores with full metadata) and `hidden_gems` (巷仔口 stores with location only).
+
+Stores present in both sources SHALL be deduplicated, with `store_notes` data taking precedence.
+
+Stores in `hidden_gems` that are the same physical location but have a different name from a `store_notes` entry SHALL be manually excluded via `_HIDDEN_GEMS_RANDOM_EXCLUDE`.
+
+The feature can be toggled via `_HIDDEN_GEMS_IN_RANDOM` flag (default: `True`).
 
 
 <!-- @trace
