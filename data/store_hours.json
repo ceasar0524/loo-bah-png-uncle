@@ -9518,5 +9518,253 @@
         "Sunday: 11:30 AM – 2:00 PM, 5:00 – 10:30 PM"
       ]
     }
+  },
+  "無名魯肉飯.四神湯（三重區）": {
+    "place_id": null,
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 5,
+            "hour": 22,
+            "minute": 40
+          },
+          "close": {
+            "day": 6,
+            "hour": 6,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 22,
+            "minute": 40
+          },
+          "close": {
+            "day": 0,
+            "hour": 6,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 0,
+            "hour": 22,
+            "minute": 40
+          },
+          "close": {
+            "day": 1,
+            "hour": 6,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 22,
+            "minute": 40
+          },
+          "close": {
+            "day": 2,
+            "hour": 6,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 22,
+            "minute": 40
+          },
+          "close": {
+            "day": 3,
+            "hour": 6,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 22,
+            "minute": 40
+          },
+          "close": {
+            "day": 4,
+            "hour": 6,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 12:00 AM – 6:30 AM, 10:40 PM – 12:00 AM",
+        "Tuesday: 12:00 AM – 6:30 AM, 10:40 PM – 12:00 AM",
+        "Wednesday: 12:00 AM – 6:30 AM, 10:40 PM – 12:00 AM",
+        "Thursday: 12:00 AM – 6:30 AM",
+        "Friday: 10:40 PM – 12:00 AM",
+        "Saturday: 12:00 AM – 6:30 AM, 10:40 PM – 12:00 AM",
+        "Sunday: 12:00 AM – 6:30 AM, 10:40 PM – 12:00 AM"
+      ]
+    }
+  },
+  "滷好記豬腳飯（三重區）": {
+    "place_id": null,
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 2:00 PM, 5:00 – 8:30 PM",
+        "Tuesday: 11:00 AM – 2:00 PM, 5:00 – 8:30 PM",
+        "Wednesday: 11:00 AM – 2:00 PM, 5:00 – 8:30 PM",
+        "Thursday: 11:00 AM – 2:00 PM, 5:00 – 8:30 PM",
+        "Friday: 11:00 AM – 2:00 PM, 5:00 – 8:30 PM",
+        "Saturday: 11:00 AM – 2:00 PM, 5:00 – 8:30 PM",
+        "Sunday: Closed"
+      ]
+    }
   }
 }
