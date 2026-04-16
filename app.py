@@ -451,10 +451,20 @@ def handle_location(event):
                 if len(seen) >= 10:
                     reply_msg = _build_exhausted_flex()
                 else:
-                    # 店少，靜默重置直接再抽（flat pool）
-                    result = search_random_nearby_store(lat, lng, open_pool, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
-                    if result is None:
-                        reply_msg = TextMessage(text=_CLOSED_MSG)
+                    # 店少：確認 open_pool 是否有舊 seen 之外的新店
+                    has_new = search_random_nearby_store(lat, lng, open_pool, seen=seen, primary_radius_km=extended_km, extended_radius_km=extended_km) is not None
+                    if has_new:
+                        # 有新店，用 seen=set() 保留允許重複推薦
+                        result = search_random_nearby_store(lat, lng, open_pool, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
+                        if result is None:
+                            reply_msg = TextMessage(text=_CLOSED_MSG)
+                    else:
+                        # open_pool 全在舊 seen 裡，避免無限循環
+                        has_any_open = search_random_nearby_store(lat, lng, open_pool, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km) is not None
+                        if has_any_open:
+                            reply_msg = TextMessage(text="這個時段附近有開的店都抽完了，換個時間再來試試！")
+                        else:
+                            reply_msg = TextMessage(text=_CLOSED_MSG)
         else:
             # 有開著的店且未全部看過，從 open_pool 內抽（flat pool）
             result = search_random_nearby_store(lat, lng, open_pool, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
