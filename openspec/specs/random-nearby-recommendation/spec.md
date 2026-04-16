@@ -51,6 +51,25 @@ Already-recommended stores (tracked in `seen`) SHALL be excluded from each draw 
 - **WHEN** drawing a store for recommendation
 - **THEN** the system SHALL use `primary_radius_km = extended_km` so all stores within range have equal probability regardless of distance tier
 
+### Requirement: Opening hours filtering
+
+The system SHALL filter the store pool to currently open stores before each draw, based on data in `store_hours.json` (fetched from Google Places API).
+
+Stores with no hours data in `store_hours.json` SHALL be included in every draw regardless of time.
+
+The current time SHALL be evaluated in Asia/Taipei timezone.
+
+#### Scenario: All nearby stores are closed
+
+- **WHEN** no stores in the filtered open pool exist within the current search radius
+- **AND** stores do exist within range in the full pool (i.e., it's not a coverage gap)
+- **THEN** the system SHALL reply: "這時間大叔看了一圈，附近店家都已打烊了！"
+
+#### Scenario: Some nearby stores are open
+
+- **WHEN** at least one open store exists within range
+- **THEN** the system SHALL draw only from open stores
+
 ### Requirement: Store pool includes hidden gems
 
 The random recommendation pool SHALL include stores from both `store_notes` (24 stores with full metadata) and `hidden_gems` (巷仔口 stores with location only).
