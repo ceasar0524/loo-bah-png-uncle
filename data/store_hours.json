@@ -1,0 +1,9174 @@
+{
+  "玉女號滷肉飯（林口區）": {
+    "place_id": "ChIJL5cYIiinQjQRNGKAaakV87E",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 0,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:30 AM – 2:00 PM, 5:00 – 8:30 PM",
+        "Tuesday: 11:30 AM – 2:00 PM, 5:00 – 8:30 PM",
+        "Wednesday: 11:30 AM – 2:00 PM, 5:00 – 8:30 PM",
+        "Thursday: Closed",
+        "Friday: 11:30 AM – 2:00 PM, 5:00 – 8:30 PM",
+        "Saturday: 11:30 AM – 2:00 PM, 5:00 – 8:30 PM",
+        "Sunday: 11:30 AM – 2:00 PM, 5:00 – 8:30 PM"
+      ]
+    }
+  },
+  "晴光小吃(林口區)": {
+    "place_id": "ChIJHxg4dfqmQjQRQ3_0Q-0lUgI",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 22,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 10:00 PM",
+        "Tuesday: 11:00 AM – 10:00 PM",
+        "Wednesday: 11:00 AM – 10:00 PM",
+        "Thursday: 11:00 AM – 10:00 PM",
+        "Friday: 11:00 AM – 10:00 PM",
+        "Saturday: 11:00 AM – 10:00 PM",
+        "Sunday: 11:00 AM – 10:00 PM"
+      ]
+    }
+  },
+  "阿興魯肉飯（中和區）": {
+    "place_id": "ChIJa0uWCXECaDQRjKRgTJfNANY",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: Closed",
+        "Wednesday: 11:00 AM – 8:00 PM",
+        "Thursday: 11:00 AM – 8:00 PM",
+        "Friday: 11:00 AM – 8:00 PM",
+        "Saturday: 11:00 AM – 8:00 PM",
+        "Sunday: 11:00 AM – 8:00 PM"
+      ]
+    }
+  },
+  "明志派出所對面滷肉飯(泰山區)": {
+    "place_id": "ChIJJTQ7LsenQjQRm_XLkOumTTY",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 8,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 15,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 8,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 8,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 15,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: Closed",
+        "Wednesday: 8:30 AM – 7:00 PM",
+        "Thursday: Closed",
+        "Friday: Closed",
+        "Saturday: 8:30 AM – 3:00 PM",
+        "Sunday: 8:30 AM – 3:00 PM"
+      ]
+    }
+  },
+  "雙胖子(大同區)": {
+    "place_id": "ChIJZZSxQkepQjQRiQbbNFnuFww",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 8:00 PM",
+        "Tuesday: 11:00 AM – 8:00 PM",
+        "Wednesday: 11:00 AM – 8:00 PM",
+        "Thursday: 11:00 AM – 8:00 PM",
+        "Friday: 11:00 AM – 8:00 PM",
+        "Saturday: Closed",
+        "Sunday: 11:00 AM – 8:00 PM"
+      ]
+    }
+  },
+  "滷三塊五花肉飯（北投區）": {
+    "place_id": "ChIJge7kve2uQjQR-ltaiHBYt4U",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 2,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 2,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 2,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 2,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 2,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 2,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 5:00 PM – 2:00 AM",
+        "Tuesday: 5:00 PM – 2:00 AM",
+        "Wednesday: 5:00 PM – 2:00 AM",
+        "Thursday: 5:00 PM – 2:00 AM",
+        "Friday: 5:00 PM – 2:00 AM",
+        "Saturday: 5:00 PM – 2:00 AM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "313號鵝肉擔（北投區）": {
+    "place_id": "ChIJgUo_u46uQjQRTuXU4tZmReM",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 19,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 10:00 AM – 7:30 PM",
+        "Wednesday: 10:00 AM – 7:30 PM",
+        "Thursday: 10:00 AM – 7:30 PM",
+        "Friday: 10:00 AM – 7:30 PM",
+        "Saturday: 10:00 AM – 7:30 PM",
+        "Sunday: 10:00 AM – 2:30 PM"
+      ]
+    }
+  },
+  "北北車魯肉飯（中正區）": {
+    "place_id": "ChIJv5UsG3OpQjQRM04z2oOxT2U",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:30 AM – 8:30 PM",
+        "Tuesday: 11:30 AM – 8:30 PM",
+        "Wednesday: 11:30 AM – 8:30 PM",
+        "Thursday: 11:30 AM – 8:30 PM",
+        "Friday: 11:30 AM – 8:30 PM",
+        "Saturday: 11:30 AM – 8:30 PM",
+        "Sunday: 11:30 AM – 8:30 PM"
+      ]
+    }
+  },
+  "黃記魯肉飯（中山區）": {
+    "place_id": "ChIJEfV83ESpQjQR3vn1gz8qbKY",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 20
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 20
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 20
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 20
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 20
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 11:30 AM – 8:20 PM",
+        "Wednesday: 11:30 AM – 8:20 PM",
+        "Thursday: Closed",
+        "Friday: 11:30 AM – 8:20 PM",
+        "Saturday: 11:30 AM – 8:20 PM",
+        "Sunday: 11:30 AM – 8:20 PM"
+      ]
+    }
+  },
+  "矮仔財滷肉飯（北投區）": {
+    "place_id": "ChIJIYFCvlCuQjQRuL_Ds7XKFQg",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 13,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 7:00 AM – 1:00 PM",
+        "Wednesday: 7:00 AM – 1:00 PM",
+        "Thursday: Closed",
+        "Friday: 7:00 AM – 1:00 PM",
+        "Saturday: 7:00 AM – 1:00 PM",
+        "Sunday: 7:00 AM – 1:00 PM"
+      ]
+    }
+  },
+  "司機俱樂部（松山區）": {
+    "place_id": "ChIJTS4fNZerQjQR99RJaZXJEIw",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 1,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 1,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 1,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 1,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 1,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 1,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 2:00 PM, 5:30 PM – 1:30 AM",
+        "Tuesday: 11:00 AM – 2:00 PM, 5:30 PM – 1:30 AM",
+        "Wednesday: 11:00 AM – 2:00 PM, 5:30 PM – 1:30 AM",
+        "Thursday: 11:00 AM – 2:00 PM, 5:30 PM – 1:30 AM",
+        "Friday: 11:00 AM – 2:00 PM, 5:30 PM – 1:30 AM",
+        "Saturday: 5:00 PM – 1:30 AM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "一甲子餐飲（萬華區）": {
+    "place_id": "ChIJT81rBaipQjQR6Jc9USFITI8",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 9,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 9,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 9,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 9,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 9,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 9,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 9:00 AM – 7:00 PM",
+        "Tuesday: 9:00 AM – 7:00 PM",
+        "Wednesday: 9:00 AM – 7:00 PM",
+        "Thursday: 9:00 AM – 7:00 PM",
+        "Friday: 9:00 AM – 7:00 PM",
+        "Saturday: 9:00 AM – 2:00 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "天天利美食坊（萬華區）": {
+    "place_id": "ChIJsTvfsg6pQjQRCk_3ZI36rk0",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 22,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 22,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 22,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 22,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 22,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 22,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 11:00 AM – 10:30 PM",
+        "Wednesday: 11:00 AM – 10:30 PM",
+        "Thursday: 11:00 AM – 10:30 PM",
+        "Friday: 11:00 AM – 10:30 PM",
+        "Saturday: 11:00 AM – 10:30 PM",
+        "Sunday: 11:00 AM – 10:30 PM"
+      ]
+    }
+  },
+  "珠記大橋頭油飯(大同區)": {
+    "place_id": "ChIJx2JTmkCpQjQRYzlu8Dc8tWY",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 13,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 7:00 AM – 1:30 PM",
+        "Tuesday: 7:00 AM – 1:30 PM",
+        "Wednesday: 7:00 AM – 1:30 PM",
+        "Thursday: 7:00 AM – 1:30 PM",
+        "Friday: 7:00 AM – 1:30 PM",
+        "Saturday: 7:00 AM – 1:30 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "小王煮瓜（萬華區）": {
+    "place_id": "ChIJGaiHCqmpQjQReQD8Dmqjdvk",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 9:30 AM – 8:00 PM",
+        "Tuesday: Closed",
+        "Wednesday: 9:30 AM – 8:00 PM",
+        "Thursday: 9:30 AM – 8:00 PM",
+        "Friday: 9:30 AM – 8:00 PM",
+        "Saturday: 9:30 AM – 8:00 PM",
+        "Sunday: 9:30 AM – 8:00 PM"
+      ]
+    }
+  },
+  "今大魯肉飯（三重區）": {
+    "place_id": "ChIJyxws_B-pQjQR-OlL3aVgbIo",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 21,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 6:30 AM – 9:00 PM",
+        "Tuesday: 6:30 AM – 9:00 PM",
+        "Wednesday: 6:30 AM – 9:00 PM",
+        "Thursday: Closed",
+        "Friday: 6:30 AM – 9:00 PM",
+        "Saturday: 6:30 AM – 9:00 PM",
+        "Sunday: 6:30 AM – 9:00 PM"
+      ]
+    }
+  },
+  "大稻埕魯肉飯（大同區）": {
+    "place_id": "ChIJK9fPLm2pQjQRidE8hbLFxCE",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:30 AM – 8:00 PM",
+        "Tuesday: 11:30 AM – 8:00 PM",
+        "Wednesday: 11:30 AM – 8:00 PM",
+        "Thursday: 11:30 AM – 8:00 PM",
+        "Friday: 11:30 AM – 8:00 PM",
+        "Saturday: 11:30 AM – 8:00 PM",
+        "Sunday: 11:30 AM – 8:00 PM"
+      ]
+    }
+  },
+  "阿英滷肉飯（大安區）": {
+    "place_id": "ChIJlfr-OYmpQjQRAA53-4MNbaU",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 0,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:30 AM – 1:00 PM, 5:00 – 7:00 PM",
+        "Tuesday: 11:30 AM – 1:00 PM, 5:00 – 7:00 PM",
+        "Wednesday: 11:30 AM – 1:00 PM, 5:00 – 7:00 PM",
+        "Thursday: 11:30 AM – 1:00 PM, 5:00 – 7:00 PM",
+        "Friday: 11:30 AM – 1:00 PM, 5:00 – 7:00 PM",
+        "Saturday: Closed",
+        "Sunday: 11:30 AM – 1:00 PM, 5:00 – 7:00 PM"
+      ]
+    }
+  },
+  "五燈獎豬腳滷肉飯（三重區）": {
+    "place_id": "ChIJ2TFgoCGpQjQRHVTu46HAkGY",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 21,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 9:30 AM – 9:00 PM",
+        "Tuesday: Closed",
+        "Wednesday: 9:30 AM – 9:00 PM",
+        "Thursday: 9:30 AM – 9:00 PM",
+        "Friday: 9:30 AM – 9:00 PM",
+        "Saturday: 9:30 AM – 9:00 PM",
+        "Sunday: 9:30 AM – 9:00 PM"
+      ]
+    }
+  },
+  "店小二魯肉飯（三重區）": {
+    "place_id": "ChIJD2RRah-pQjQR_kGam6Yv3dQ",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 21,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 9:30 PM",
+        "Tuesday: 11:00 AM – 9:30 PM",
+        "Wednesday: Closed",
+        "Thursday: 11:00 AM – 9:30 PM",
+        "Friday: 11:00 AM – 9:30 PM",
+        "Saturday: 11:00 AM – 9:30 PM",
+        "Sunday: 11:00 AM – 9:30 PM"
+      ]
+    }
+  },
+  "富霸王豬腳（中山區）": {
+    "place_id": "ChIJO2QW8mCpQjQRyMjgSoG-j7o",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 19,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 11:00 AM – 7:30 PM",
+        "Wednesday: 11:00 AM – 7:30 PM",
+        "Thursday: 11:00 AM – 7:30 PM",
+        "Friday: 11:00 AM – 7:30 PM",
+        "Saturday: 11:00 AM – 7:30 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "龍記小吃店（中山區）": {
+    "place_id": "ChIJG8Uj9iKtQjQRNvL458JWJCo",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 0,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 2:30 PM, 4:00 – 8:00 PM",
+        "Tuesday: 11:00 AM – 2:30 PM, 4:00 – 8:00 PM",
+        "Wednesday: 11:00 AM – 2:30 PM, 4:00 – 8:00 PM",
+        "Thursday: 11:00 AM – 2:30 PM, 4:00 – 8:00 PM",
+        "Friday: Closed",
+        "Saturday: 11:00 AM – 2:30 PM, 4:00 – 8:00 PM",
+        "Sunday: 11:00 AM – 2:30 PM, 4:00 – 8:00 PM"
+      ]
+    }
+  },
+  "啊興阿滷肉飯（中山區）": {
+    "place_id": "ChIJKeO-YQmpQjQR8eGZArdgwIo",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:30 AM – 8:30 PM",
+        "Tuesday: 11:30 AM – 8:30 PM",
+        "Wednesday: 11:30 AM – 8:30 PM",
+        "Thursday: 11:30 AM – 8:30 PM",
+        "Friday: 11:30 AM – 8:30 PM",
+        "Saturday: 11:30 AM – 8:30 PM",
+        "Sunday: 11:30 AM – 8:30 PM"
+      ]
+    }
+  },
+  "曉迪筒仔米糕（中正區）": {
+    "place_id": "ChIJy5-CzqSpQjQR0m1XOVI8Mjk",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 22,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 10:00 PM",
+        "Tuesday: 11:00 AM – 10:00 PM",
+        "Wednesday: 11:00 AM – 10:00 PM",
+        "Thursday: 11:00 AM – 10:00 PM",
+        "Friday: 11:00 AM – 10:00 PM",
+        "Saturday: Closed",
+        "Sunday: 11:00 AM – 10:00 PM"
+      ]
+    }
+  },
+  "路路食堂（林口區）": {
+    "place_id": "ChIJhWLtogWnQjQRf5_S41ikxhQ",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 5,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 5,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 5,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 5,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 5,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 5,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 5,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 13,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 5:30 AM – 1:00 PM",
+        "Tuesday: 5:30 AM – 1:00 PM",
+        "Wednesday: 5:30 AM – 1:00 PM",
+        "Thursday: 5:30 AM – 1:00 PM",
+        "Friday: 5:30 AM – 1:00 PM",
+        "Saturday: 5:30 AM – 1:00 PM",
+        "Sunday: 5:30 AM – 1:00 PM"
+      ]
+    }
+  },
+  "春菊家小吃店（林口區）": {
+    "place_id": "ChIJyVC_UAanQjQR7vtp329tDSw",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 2:00 PM, 4:30 – 8:30 PM",
+        "Tuesday: 11:00 AM – 2:00 PM, 4:30 – 8:30 PM",
+        "Wednesday: 11:00 AM – 2:00 PM, 4:30 – 8:30 PM",
+        "Thursday: 11:00 AM – 2:00 PM, 4:30 – 8:30 PM",
+        "Friday: 11:00 AM – 2:00 PM, 4:30 – 8:30 PM",
+        "Saturday: Closed",
+        "Sunday: 11:00 AM – 2:00 PM"
+      ]
+    }
+  },
+  "海口蔡（林口區）": {
+    "place_id": "ChIJ3Qy0SyanQjQRx5PdfOHd3Q4",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 15
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 15
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 15
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 15
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 15
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 15
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 10:30 AM – 8:15 PM",
+        "Wednesday: 10:30 AM – 8:15 PM",
+        "Thursday: 10:30 AM – 8:15 PM",
+        "Friday: 10:30 AM – 8:15 PM",
+        "Saturday: 10:30 AM – 8:15 PM",
+        "Sunday: 10:30 AM – 8:15 PM"
+      ]
+    }
+  },
+  "豪記台菜古早味（林口區）": {
+    "place_id": "ChIJE_XCDqKnQjQRPB8oZYEp4u4",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 16,
+            "minute": 45
+          },
+          "close": {
+            "day": 1,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 16,
+            "minute": 45
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 16,
+            "minute": 45
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 16,
+            "minute": 45
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 16,
+            "minute": 45
+          },
+          "close": {
+            "day": 6,
+            "hour": 19,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:30 AM – 2:00 PM, 4:45 – 7:00 PM",
+        "Tuesday: 11:30 AM – 2:00 PM, 4:30 – 7:00 PM",
+        "Wednesday: 11:30 AM – 2:00 PM, 4:45 – 7:00 PM",
+        "Thursday: 11:30 AM – 2:00 PM, 4:45 – 7:00 PM",
+        "Friday: 11:30 AM – 2:00 PM, 4:45 – 7:00 PM",
+        "Saturday: 11:30 AM – 2:00 PM, 4:45 – 7:00 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "無招牌麵店（泰山區）": {
+    "place_id": "ChIJLQgT9LCnQjQRkWyuKAqo4nc",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 6,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 6,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 6,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 6,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 6,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 6,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 6:00 AM – 2:00 PM",
+        "Tuesday: 6:00 AM – 2:00 PM",
+        "Wednesday: 6:00 AM – 2:00 PM",
+        "Thursday: 6:00 AM – 2:00 PM",
+        "Friday: 6:00 AM – 2:00 PM",
+        "Saturday: 6:00 AM – 2:00 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "蓬萊小吃店（五股區）": {
+    "place_id": "ChIJFy1yhhemQjQRYSbuTIf5V-4",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 0,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: Closed",
+        "Wednesday: 10:30 AM – 2:30 PM, 4:30 – 8:00 PM",
+        "Thursday: 10:30 AM – 2:30 PM, 4:30 – 8:00 PM",
+        "Friday: 10:30 AM – 2:30 PM, 4:30 – 8:00 PM",
+        "Saturday: 10:30 AM – 2:30 PM, 4:30 – 8:00 PM",
+        "Sunday: 10:30 AM – 2:30 PM, 4:30 – 8:00 PM"
+      ]
+    }
+  },
+  "洄鄉藥燉排骨（五股區）": {
+    "place_id": "ChIJX9QNJkKnQjQRrtzykNVuisM",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 15,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 22,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 15,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 22,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 15,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 22,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 15,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 22,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 15,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 22,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 15,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 22,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 3:00 – 10:30 PM",
+        "Tuesday: 3:00 – 10:30 PM",
+        "Wednesday: 3:00 – 10:30 PM",
+        "Thursday: 3:00 – 10:30 PM",
+        "Friday: 3:00 – 10:30 PM",
+        "Saturday: Closed",
+        "Sunday: 3:00 – 10:30 PM"
+      ]
+    }
+  },
+  "魯肉飯家鄉口味（泰山區）": {
+    "place_id": "ChIJAS4ZRgCnQjQRDqZlEbvMFXo",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 6:30 AM – 2:00 PM",
+        "Tuesday: 6:30 AM – 2:00 PM",
+        "Wednesday: 6:30 AM – 2:00 PM",
+        "Thursday: 6:30 AM – 2:00 PM",
+        "Friday: 6:30 AM – 2:00 PM",
+        "Saturday: 6:30 AM – 2:00 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "佳典魯肉飯（泰山區）": {
+    "place_id": "ChIJdY01RpCnQjQRkxhwcyxCYuo",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 8:00 PM",
+        "Tuesday: 11:00 AM – 8:00 PM",
+        "Wednesday: 11:00 AM – 8:00 PM",
+        "Thursday: 11:00 AM – 8:00 PM",
+        "Friday: 11:00 AM – 8:00 PM",
+        "Saturday: 11:00 AM – 8:30 PM",
+        "Sunday: 11:00 AM – 8:30 PM"
+      ]
+    }
+  },
+  "阿峯魯肉飯（新莊區）": {
+    "place_id": "ChIJTwxEZdWnQjQRW6TI05-oQrk",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 13,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 10:30 AM – 1:30 PM",
+        "Tuesday: 10:30 AM – 1:30 PM",
+        "Wednesday: 10:30 AM – 1:30 PM",
+        "Thursday: 10:30 AM – 1:30 PM",
+        "Friday: 10:30 AM – 1:30 PM",
+        "Saturday: Closed",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "眼鏡張（新莊區）": {
+    "place_id": "ChIJNf2U3mKoQjQRXQdNrXysxmQ",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 15,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 23,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 15,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 23,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 15,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 23,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 15,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 23,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 15,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 23,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 15,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 23,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 3:30 – 11:00 PM",
+        "Tuesday: 3:30 – 11:00 PM",
+        "Wednesday: 3:30 – 11:00 PM",
+        "Thursday: 3:30 – 11:00 PM",
+        "Friday: 3:30 – 11:00 PM",
+        "Saturday: 3:30 – 11:00 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "家傳魯肉飯（新莊區）": {
+    "place_id": "ChIJg97cFHqoQjQRqc4i-IeIGtI",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 5:00 AM – 8:30 PM",
+        "Tuesday: 5:00 AM – 8:30 PM",
+        "Wednesday: 5:00 AM – 8:30 PM",
+        "Thursday: 5:00 AM – 8:30 PM",
+        "Friday: 5:00 AM – 8:30 PM",
+        "Saturday: Closed",
+        "Sunday: 5:00 AM – 8:30 PM"
+      ]
+    }
+  },
+  "海山魯肉飯（板橋區）": {
+    "place_id": "ChIJw6KX44OpQjQRtWPLqArlFlc",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 21,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 9:00 PM",
+        "Tuesday: 11:00 AM – 9:00 PM",
+        "Wednesday: 11:00 AM – 9:00 PM",
+        "Thursday: 11:00 AM – 9:00 PM",
+        "Friday: 11:00 AM – 9:00 PM",
+        "Saturday: 11:00 AM – 9:00 PM",
+        "Sunday: 11:00 AM – 9:00 PM"
+      ]
+    }
+  },
+  "阿輝滷肉飯（板橋區）": {
+    "place_id": "ChIJO-xHm00daDQR34WwpjXPQ78",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 13,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: Closed",
+        "Wednesday: 6:30 AM – 1:30 PM",
+        "Thursday: 6:30 AM – 1:30 PM",
+        "Friday: 6:30 AM – 1:30 PM",
+        "Saturday: 6:30 AM – 1:30 PM",
+        "Sunday: 6:30 AM – 1:30 PM"
+      ]
+    }
+  },
+  "再見一麵·麵食店（文山區）": {
+    "place_id": "ChIJ31fu4fepQjQR8gjv8DIxkg4",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 0,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 7:00 AM – 2:00 PM, 4:30 – 8:00 PM",
+        "Tuesday: 7:00 AM – 2:00 PM",
+        "Wednesday: Closed",
+        "Thursday: 7:00 AM – 2:00 PM, 4:30 – 8:00 PM",
+        "Friday: 7:00 AM – 2:00 PM, 4:30 – 8:00 PM",
+        "Saturday: 7:00 AM – 2:00 PM, 4:30 – 8:00 PM",
+        "Sunday: 7:00 AM – 2:00 PM, 4:30 – 8:00 PM"
+      ]
+    }
+  },
+  "麗莉滷肉飯（三重區）": {
+    "place_id": "ChIJrevViQOpQjQR_KRia7_dV3w",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 1,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 1,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 1,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 1,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 1,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 1,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 1,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 10:30 AM – 1:00 AM",
+        "Tuesday: 10:30 AM – 1:00 AM",
+        "Wednesday: 10:30 AM – 1:00 AM",
+        "Thursday: 10:30 AM – 1:00 AM",
+        "Friday: 10:30 AM – 1:00 AM",
+        "Saturday: 10:30 AM – 1:00 AM",
+        "Sunday: 10:30 AM – 1:00 AM"
+      ]
+    }
+  },
+  "庄腳滷肉飯（中和區）": {
+    "place_id": "ChIJDTtRjvIDaDQRIKHPSq6Qav4",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:30 AM – 8:00 PM",
+        "Tuesday: 11:30 AM – 8:00 PM",
+        "Wednesday: 11:30 AM – 8:00 PM",
+        "Thursday: 11:30 AM – 8:00 PM",
+        "Friday: Closed",
+        "Saturday: 11:30 AM – 8:00 PM",
+        "Sunday: 11:30 AM – 8:00 PM"
+      ]
+    }
+  },
+  "洲子洋魯肉飯（五股區）": {
+    "place_id": "ChIJ7ZWzNgCpQjQRMD2P5KJ7PDQ",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 8:30 PM",
+        "Tuesday: 11:00 AM – 8:30 PM",
+        "Wednesday: 11:00 AM – 8:30 PM",
+        "Thursday: 11:00 AM – 8:30 PM",
+        "Friday: 11:00 AM – 8:30 PM",
+        "Saturday: Closed",
+        "Sunday: 11:00 AM – 8:30 PM"
+      ]
+    }
+  },
+  "車路頭油飯（三重區）": {
+    "place_id": "ChIJCZSXadyoQjQRN__smbcTKg0",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 12,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 12,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 12,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 12,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 12,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 12,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 7:00 AM – 12:30 PM",
+        "Wednesday: 7:00 AM – 12:30 PM",
+        "Thursday: 7:00 AM – 12:30 PM",
+        "Friday: 7:00 AM – 12:30 PM",
+        "Saturday: 7:00 AM – 12:30 PM",
+        "Sunday: 7:00 AM – 12:30 PM"
+      ]
+    }
+  },
+  "歐家莊（三重區）": {
+    "place_id": "ChIJ2WD6uxipQjQRsuJSk1d2izA",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 12,
+            "minute": 10
+          },
+          "close": {
+            "day": 1,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 12,
+            "minute": 10
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 12,
+            "minute": 10
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 12,
+            "minute": 10
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 12,
+            "minute": 10
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 12,
+            "minute": 10
+          },
+          "close": {
+            "day": 6,
+            "hour": 16,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 12:10 – 7:30 PM",
+        "Tuesday: 12:10 – 7:30 PM",
+        "Wednesday: 12:10 – 7:30 PM",
+        "Thursday: 12:10 – 7:30 PM",
+        "Friday: 12:10 – 7:30 PM",
+        "Saturday: 12:10 – 4:00 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "丫財魯肉飯無刺虱目魚（新莊區）": {
+    "place_id": "ChIJDYoe7VkdaDQRAaZoGrkWPbI",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 10:00 AM – 8:30 PM",
+        "Tuesday: 10:00 AM – 8:30 PM",
+        "Wednesday: 10:00 AM – 8:30 PM",
+        "Thursday: 10:00 AM – 8:30 PM",
+        "Friday: 10:00 AM – 8:30 PM",
+        "Saturday: Closed",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "滷肉范（板橋區）": {
+    "place_id": "ChIJLy6pAKkCaDQR4NqjDpum114",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 13,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 5:00 AM – 1:00 PM",
+        "Wednesday: 5:00 AM – 1:00 PM",
+        "Thursday: 5:00 AM – 1:00 PM",
+        "Friday: 5:00 AM – 1:00 PM",
+        "Saturday: 5:00 AM – 1:00 PM",
+        "Sunday: 5:00 AM – 1:00 PM"
+      ]
+    }
+  },
+  "鐵皮屋麵攤（板橋區）": {
+    "place_id": "ChIJgRF0pEioQjQRorgO69TrzbA",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 7,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 15,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 7,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 15,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 7,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 15,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 7,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 15,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 7,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 15,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 7,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 15,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 7:30 AM – 3:00 PM",
+        "Wednesday: 7:30 AM – 3:00 PM",
+        "Thursday: 7:30 AM – 3:00 PM",
+        "Friday: 7:30 AM – 3:00 PM",
+        "Saturday: 7:30 AM – 3:00 PM",
+        "Sunday: 7:30 AM – 3:00 PM"
+      ]
+    }
+  },
+  "下港排骨酥湯（永和區）": {
+    "place_id": "ChIJUSVax8KpQjQROtkcMOSwUx0",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 13,
+            "minute": 55
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 25
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 13,
+            "minute": 55
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 25
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 13,
+            "minute": 55
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 25
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 13,
+            "minute": 55
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 25
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 13,
+            "minute": 55
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 25
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 13,
+            "minute": 55
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 25
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 1:55 PM, 5:00 – 8:25 PM",
+        "Tuesday: 11:00 AM – 1:55 PM, 5:00 – 8:25 PM",
+        "Wednesday: 11:00 AM – 1:55 PM, 5:00 – 8:25 PM",
+        "Thursday: 11:00 AM – 1:55 PM, 5:00 – 8:25 PM",
+        "Friday: 11:00 AM – 1:55 PM, 5:00 – 8:25 PM",
+        "Saturday: 11:00 AM – 1:55 PM, 5:00 – 8:25 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "阿瑞魯肉飯（永和區）": {
+    "place_id": "ChIJ-QeORVKpQjQRlKy2wR7UFTU",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 21,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 11:00 AM – 9:00 PM",
+        "Wednesday: 11:00 AM – 9:00 PM",
+        "Thursday: Closed",
+        "Friday: 11:00 AM – 9:00 PM",
+        "Saturday: 11:00 AM – 9:00 PM",
+        "Sunday: 11:00 AM – 9:00 PM"
+      ]
+    }
+  },
+  "鑫鴨肉冬粉（永和區）": {
+    "place_id": "ChIJOdIui-epQjQRfmq8X96QMic",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 8:00 PM",
+        "Tuesday: 11:00 AM – 8:00 PM",
+        "Wednesday: Closed",
+        "Thursday: 11:00 AM – 8:00 PM",
+        "Friday: 11:00 AM – 8:00 PM",
+        "Saturday: 11:00 AM – 8:00 PM",
+        "Sunday: 11:00 AM – 8:00 PM"
+      ]
+    }
+  },
+  "小老闆滷味肉羹麵滷肉飯（永和區）": {
+    "place_id": "ChIJB155bJGpQjQRb1HNyQaTb2w",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 0,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 0,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 0,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 0,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 0,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 0,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:30 AM – 12:30 AM",
+        "Tuesday: 11:30 AM – 12:30 AM",
+        "Wednesday: 11:30 AM – 12:30 AM",
+        "Thursday: 11:30 AM – 12:30 AM",
+        "Friday: 11:30 AM – 12:30 AM",
+        "Saturday: Closed",
+        "Sunday: 11:30 AM – 12:30 AM"
+      ]
+    }
+  },
+  "頂好魯肉飯羊肉羹湯（三重區）": {
+    "place_id": "ChIJDbt2ZCqpQjQRnUJYDLeVVg0",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 2,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 19,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 10:30 AM – 7:30 PM",
+        "Wednesday: 10:30 AM – 7:30 PM",
+        "Thursday: 10:30 AM – 7:30 PM",
+        "Friday: 10:30 AM – 7:30 PM",
+        "Saturday: 10:30 AM – 7:30 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "仁和街滷肉飯（三重區）": {
+    "place_id": "ChIJaTzWU4upQjQRWw4IjfLSr6Y",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 6:30 – 11:00 AM",
+        "Wednesday: 6:30 – 11:00 AM",
+        "Thursday: 6:30 – 11:00 AM",
+        "Friday: 6:30 – 11:00 AM",
+        "Saturday: 6:30 – 11:00 AM",
+        "Sunday: 6:30 – 11:00 AM"
+      ]
+    }
+  },
+  "冠味藥燉排骨（三重區）": {
+    "place_id": "ChIJG6z-juOoQjQRuEwyvTj_vkw",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 21,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 10:30 AM – 9:30 PM",
+        "Tuesday: 10:30 AM – 9:30 PM",
+        "Wednesday: 10:30 AM – 9:30 PM",
+        "Thursday: 10:30 AM – 9:30 PM",
+        "Friday: 10:30 AM – 9:30 PM",
+        "Saturday: 10:30 AM – 9:30 PM",
+        "Sunday: 10:30 AM – 9:30 PM"
+      ]
+    }
+  },
+  "中央市場滷肉飯（萬華區）": {
+    "place_id": "ChIJHR52OMipQjQRLGxGenSvHic",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 2,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 2,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 2,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 2,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 2,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 2:30 – 11:00 AM",
+        "Wednesday: 2:30 – 11:00 AM",
+        "Thursday: Closed",
+        "Friday: 2:30 – 11:00 AM",
+        "Saturday: 2:30 – 11:00 AM",
+        "Sunday: 2:30 – 11:00 AM"
+      ]
+    }
+  },
+  "三條路油飯＆排骨酥湯（萬華區）": {
+    "place_id": "ChIJcY9yIE2oQjQRnKb_d4EFohI",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 2,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 8,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 2,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 8,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 2,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 8,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 2,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 8,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 2,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 8,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 2,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 8,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 2:30 – 8:00 AM",
+        "Wednesday: 2:30 – 8:00 AM",
+        "Thursday: 2:30 – 8:00 AM",
+        "Friday: 2:30 – 8:00 AM",
+        "Saturday: 2:30 – 8:00 AM",
+        "Sunday: 2:30 – 8:00 AM"
+      ]
+    }
+  },
+  "福哥滷肉飯（總店）（板橋區）": {
+    "place_id": "ChIJN8hHgD2oQjQRT1kQEFkydps",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 7:00 AM – 2:30 PM",
+        "Wednesday: 7:00 AM – 2:30 PM",
+        "Thursday: 7:00 AM – 2:30 PM",
+        "Friday: 7:00 AM – 2:30 PM",
+        "Saturday: 7:00 AM – 2:30 PM",
+        "Sunday: 7:00 AM – 2:30 PM"
+      ]
+    }
+  },
+  "甲鼎滷肉飯（板橋區）": {
+    "place_id": "ChIJOTUuzzCoQjQRiAtt0dFnnWQ",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 15,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 15,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 15,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 15,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 22,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 11:30 AM – 3:00 PM, 5:30 – 10:00 PM",
+        "Wednesday: 11:30 AM – 3:00 PM, 5:30 – 10:00 PM",
+        "Thursday: 11:30 AM – 3:00 PM, 5:30 – 10:00 PM",
+        "Friday: 11:30 AM – 3:00 PM, 5:30 – 10:00 PM",
+        "Saturday: Closed",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "古早味魯肉飯（新店區）": {
+    "place_id": "ChIJJZDwYYcBaDQRPZ1gHVhyLII",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 7:00 AM – 2:00 PM",
+        "Wednesday: 7:00 AM – 2:00 PM",
+        "Thursday: 7:00 AM – 2:00 PM",
+        "Friday: 7:00 AM – 2:00 PM",
+        "Saturday: 7:00 AM – 2:00 PM",
+        "Sunday: 7:00 AM – 2:00 PM"
+      ]
+    }
+  },
+  "中和米粉湯（中和區）": {
+    "place_id": "ChIJMfkFPN-pQjQRlZAdZR6-GiU",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 3,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 3,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 3,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 3,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 3,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 3,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 3,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 10:30 AM – 3:00 AM",
+        "Tuesday: 10:30 AM – 3:00 AM",
+        "Wednesday: 10:30 AM – 3:00 AM",
+        "Thursday: 10:30 AM – 3:00 AM",
+        "Friday: 10:30 AM – 3:00 AM",
+        "Saturday: 10:30 AM – 3:00 AM",
+        "Sunday: 10:30 AM – 3:00 AM"
+      ]
+    }
+  },
+  "巧緣魯肉飯（大安區）": {
+    "place_id": "ChIJTbouI8urQjQRu3jWvugoOb8",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 23,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 23,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 23,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 23,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 23,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 23,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 23,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 4:00 – 11:00 PM",
+        "Tuesday: 4:00 – 11:00 PM",
+        "Wednesday: 4:00 – 11:00 PM",
+        "Thursday: 4:00 – 11:00 PM",
+        "Friday: 4:00 – 11:00 PM",
+        "Saturday: 4:00 – 11:00 PM",
+        "Sunday: 4:00 – 11:00 PM"
+      ]
+    }
+  },
+  "政大赤肉羹滷肉飯（文山區）": {
+    "place_id": "ChIJB_UCj3uqQjQR3N_yJSrOWtY",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 19,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 7:30 PM",
+        "Tuesday: 11:00 AM – 7:30 PM",
+        "Wednesday: 11:00 AM – 7:30 PM",
+        "Thursday: 11:00 AM – 7:30 PM",
+        "Friday: 11:00 AM – 7:30 PM",
+        "Saturday: 11:00 AM – 7:30 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "感恩麵店（士林區）": {
+    "place_id": "ChIJ577YAt6tQjQRprO8ctwMQ2g",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 23,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 23,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 10:00 AM – 11:30 PM",
+        "Tuesday: 10:00 AM – 11:30 PM",
+        "Wednesday: 10:00 AM – 11:30 PM",
+        "Thursday: 10:00 AM – 11:30 PM",
+        "Friday: 10:00 AM – 11:00 PM",
+        "Saturday: 10:00 AM – 11:30 PM",
+        "Sunday: 10:00 AM – 11:30 PM"
+      ]
+    }
+  },
+  "公孫古早味涼麵林口店（林口區）": {
+    "place_id": "ChIJ-V3S8FKnQjQRMT7w4G0EKIc",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 9,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 19,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 9:30 AM – 7:30 PM",
+        "Tuesday: 9:30 AM – 7:30 PM",
+        "Wednesday: Closed",
+        "Thursday: 9:30 AM – 7:30 PM",
+        "Friday: 9:30 AM – 7:30 PM",
+        "Saturday: 9:30 AM – 7:30 PM",
+        "Sunday: 9:30 AM – 7:30 PM"
+      ]
+    }
+  },
+  "家香味食堂（萬華區）": {
+    "place_id": "ChIJtSe9DLepQjQRJbSu4EWWRRg",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 11:00 AM – 2:00 PM, 5:00 – 8:00 PM",
+        "Wednesday: 11:00 AM – 2:00 PM, 5:00 – 8:00 PM",
+        "Thursday: 11:00 AM – 2:00 PM, 5:00 – 8:00 PM",
+        "Friday: 11:00 AM – 2:00 PM, 5:00 – 8:00 PM",
+        "Saturday: 11:00 AM – 8:00 PM",
+        "Sunday: 11:00 AM – 8:00 PM"
+      ]
+    }
+  },
+  "阿金老圓環魯肉飯（新店區）": {
+    "place_id": "ChIJU8s_SfQBaDQRhjxF-18Kx80",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 6,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 6,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 6,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 6,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 6,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 6,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 6,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 19,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 6:00 AM – 2:00 PM",
+        "Tuesday: 6:00 AM – 7:30 PM",
+        "Wednesday: 6:00 AM – 7:30 PM",
+        "Thursday: 6:00 AM – 7:30 PM",
+        "Friday: 6:00 AM – 7:30 PM",
+        "Saturday: 6:00 AM – 7:30 PM",
+        "Sunday: 6:00 AM – 7:30 PM"
+      ]
+    }
+  },
+  "第一家魯肉飯（中正區）": {
+    "place_id": "ChIJczrI-XqpQjQRzJf5732qUnk",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 6:30 AM – 2:30 PM",
+        "Tuesday: 6:30 AM – 2:30 PM",
+        "Wednesday: 6:30 AM – 2:30 PM",
+        "Thursday: 6:30 AM – 2:30 PM",
+        "Friday: 6:30 AM – 2:30 PM",
+        "Saturday: Closed",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "K哥魯肉飯（士林區）": {
+    "place_id": "ChIJXcHiA4-vQjQRPyTSk-pLXow",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 2:00 PM, 5:00 – 8:00 PM",
+        "Tuesday: 11:00 AM – 2:00 PM, 5:00 – 8:00 PM",
+        "Wednesday: 11:00 AM – 2:00 PM, 5:00 – 8:00 PM",
+        "Thursday: 11:00 AM – 2:00 PM, 5:00 – 8:00 PM",
+        "Friday: 11:00 AM – 2:00 PM, 5:00 – 8:00 PM",
+        "Saturday: 11:00 AM – 2:00 PM, 5:00 – 8:00 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "純發魯肉飯（松山區）": {
+    "place_id": "ChIJi255bOmrQjQRI_ZZTaozvF8",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 23,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 4:00 – 11:30 PM",
+        "Tuesday: 4:00 – 11:30 PM",
+        "Wednesday: 4:00 – 11:30 PM",
+        "Thursday: 4:00 – 11:30 PM",
+        "Friday: 4:00 – 11:30 PM",
+        "Saturday: 4:00 – 11:30 PM",
+        "Sunday: 4:00 – 11:30 PM"
+      ]
+    }
+  },
+  "光輝肉羹（士林區）": {
+    "place_id": "ChIJk62skryuQjQR-QoXi_1LNDc",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 23,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 5:00 – 11:30 PM",
+        "Tuesday: 5:00 – 11:30 PM",
+        "Wednesday: 5:00 – 11:30 PM",
+        "Thursday: 5:00 – 11:30 PM",
+        "Friday: 5:00 – 11:30 PM",
+        "Saturday: 5:00 – 11:30 PM",
+        "Sunday: 5:00 – 11:30 PM"
+      ]
+    }
+  },
+  "味家魯肉飯（信義區）": {
+    "place_id": "ChIJkYqyzL6rQjQRVXBCMpgG9jw",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 8:30 PM",
+        "Tuesday: 11:00 AM – 8:30 PM",
+        "Wednesday: 11:00 AM – 8:30 PM",
+        "Thursday: 11:00 AM – 8:30 PM",
+        "Friday: 11:00 AM – 8:30 PM",
+        "Saturday: 11:00 AM – 8:30 PM",
+        "Sunday: 11:00 AM – 8:30 PM"
+      ]
+    }
+  },
+  "龍泉深海鮮魚湯（大安區）": {
+    "place_id": "ChIJ1VkzD4-pQjQRSOInMZ2r3tE",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 0,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 0,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 0,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 0,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 0,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 0,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 0,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 4:00 PM – 12:00 AM",
+        "Tuesday: 4:00 PM – 12:00 AM",
+        "Wednesday: 4:00 PM – 12:00 AM",
+        "Thursday: 4:00 PM – 12:00 AM",
+        "Friday: 4:00 PM – 12:00 AM",
+        "Saturday: 4:00 PM – 12:00 AM",
+        "Sunday: 4:00 PM – 12:00 AM"
+      ]
+    }
+  },
+  "7號鴨生炒新港鴨肉羹（板橋區）": {
+    "place_id": "ChIJl3s3YIADaDQR5cYIxXEfujw",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 21,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:30 AM – 9:00 PM",
+        "Tuesday: 11:30 AM – 9:00 PM",
+        "Wednesday: 11:30 AM – 9:00 PM",
+        "Thursday: 11:30 AM – 9:00 PM",
+        "Friday: 11:30 AM – 9:30 PM",
+        "Saturday: 11:30 AM – 9:30 PM",
+        "Sunday: 11:30 AM – 9:30 PM"
+      ]
+    }
+  },
+  "央二巷滷肉飯（土城區）": {
+    "place_id": "ChIJ77Y8624daDQRoZpqOMYz08c",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 13,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 13,
+            "minute": 50
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:30 AM – 1:30 PM, 5:30 – 7:30 PM",
+        "Tuesday: 11:30 AM – 1:30 PM, 5:30 – 7:30 PM",
+        "Wednesday: 11:30 AM – 1:30 PM, 5:30 – 7:30 PM",
+        "Thursday: 11:30 AM – 1:30 PM, 5:30 – 7:30 PM",
+        "Friday: 11:30 AM – 1:30 PM, 5:30 – 7:30 PM",
+        "Saturday: 11:00 AM – 1:50 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "台灣古早味-正宗阿偉咖哩飯（萬華區）": {
+    "place_id": "ChIJPfUHpqipQjQR8WKgh-6ugqk",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 5,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 13,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: Closed",
+        "Wednesday: 5:00 AM – 1:00 PM",
+        "Thursday: 5:00 AM – 1:00 PM",
+        "Friday: 5:00 AM – 1:00 PM",
+        "Saturday: 5:00 AM – 1:00 PM",
+        "Sunday: 5:00 AM – 1:00 PM"
+      ]
+    }
+  },
+  "小渝魯肉飯（新店區）": {
+    "place_id": "ChIJqbo1Fy0DaDQRmBSMciWy_c8",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 9,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 0,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 9,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 9,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 9,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 9,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 9,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 19,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 9:00 AM – 2:30 PM, 4:00 – 7:00 PM",
+        "Wednesday: 9:00 AM – 2:30 PM, 4:00 – 7:00 PM",
+        "Thursday: 9:00 AM – 2:30 PM, 4:00 – 7:00 PM",
+        "Friday: 9:00 AM – 2:30 PM, 4:00 – 7:00 PM",
+        "Saturday: 9:00 AM – 2:30 PM, 4:00 – 7:00 PM",
+        "Sunday: 9:00 AM – 2:30 PM, 4:00 – 7:00 PM"
+      ]
+    }
+  },
+  "景美無名米粉湯（文山區）": {
+    "place_id": "ChIJk07EOxCqQjQRtsmT3s5h_VE",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 6,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 13,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 13,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 6:30 AM – 1:00 PM",
+        "Tuesday: 6:30 AM – 1:00 PM",
+        "Wednesday: 6:30 AM – 1:00 PM",
+        "Thursday: 6:30 AM – 1:00 PM",
+        "Friday: 6:30 AM – 1:00 PM",
+        "Saturday: 7:00 AM – 1:00 PM",
+        "Sunday: 7:00 AM – 1:00 PM"
+      ]
+    }
+  },
+  "上園花枝焿（文山區）": {
+    "place_id": "ChIJrwRmowCqQjQRHBpy7hrKv5w",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 8,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 18,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 8,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 18,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 8,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 18,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 8,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 18,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 8,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 18,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 8:00 AM – 6:00 PM",
+        "Tuesday: Closed",
+        "Wednesday: Closed",
+        "Thursday: 8:00 AM – 6:00 PM",
+        "Friday: 8:00 AM – 6:00 PM",
+        "Saturday: 8:00 AM – 6:00 PM",
+        "Sunday: 8:00 AM – 6:00 PM"
+      ]
+    }
+  },
+  "大直老店米粉湯（中山區）": {
+    "place_id": "ChIJ3TxLMQSsQjQREYVNRqBbABM",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 23,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 23,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 11:00 AM – 11:30 PM",
+        "Wednesday: 11:00 AM – 11:30 PM",
+        "Thursday: 11:00 AM – 11:30 PM",
+        "Friday: 11:00 AM – 11:30 PM",
+        "Saturday: 11:00 AM – 11:30 PM",
+        "Sunday: 11:00 AM – 9:00 PM"
+      ]
+    }
+  },
+  "尚紅魯肉飯（內湖區）": {
+    "place_id": "ChIJja4woR6rQjQRdQS1bV8173w",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:30 AM – 2:00 PM, 5:30 – 8:00 PM",
+        "Tuesday: 11:30 AM – 2:00 PM, 5:30 – 8:00 PM",
+        "Wednesday: 11:30 AM – 2:00 PM, 5:30 – 8:00 PM",
+        "Thursday: 11:30 AM – 2:00 PM, 5:30 – 8:00 PM",
+        "Friday: 11:30 AM – 2:00 PM, 5:30 – 8:00 PM",
+        "Saturday: 11:00 AM – 2:00 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "大湖麵館（內湖區）": {
+    "place_id": "ChIJC5n0te6sQjQR1DYo0LGK1OA",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 0,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: Closed",
+        "Wednesday: 11:00 AM – 2:30 PM, 5:00 – 8:30 PM",
+        "Thursday: 11:00 AM – 2:30 PM, 5:00 – 8:30 PM",
+        "Friday: 11:00 AM – 2:30 PM, 5:00 – 8:30 PM",
+        "Saturday: 11:00 AM – 2:30 PM, 5:00 – 8:30 PM",
+        "Sunday: 11:00 AM – 2:30 PM, 5:00 – 8:30 PM"
+      ]
+    }
+  },
+  "虎記魯肉飯（南港區）": {
+    "place_id": "ChIJI0DyPPurQjQRdR9-TgY0y1c",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 2:00 PM, 5:00 – 7:30 PM",
+        "Tuesday: 11:00 AM – 2:00 PM, 5:00 – 7:30 PM",
+        "Wednesday: 11:00 AM – 2:00 PM, 5:00 – 7:30 PM",
+        "Thursday: 11:00 AM – 2:00 PM, 5:00 – 7:30 PM",
+        "Friday: 11:00 AM – 2:00 PM",
+        "Saturday: Closed",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "四季豐米粉湯（內湖區）": {
+    "place_id": "ChIJlU09wm6sQjQRC6ikVT55kIM",
+    "hours": null
+  },
+  "小頭雞魯飯（內湖區）": {
+    "place_id": "ChIJPRT7AQCtQjQR8LWeEbeXmKU",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 0,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 22,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 2:00 PM, 5:00 – 10:00 PM",
+        "Tuesday: 11:00 AM – 2:00 PM, 5:00 – 10:00 PM",
+        "Wednesday: 11:00 AM – 2:00 PM, 5:00 – 10:00 PM",
+        "Thursday: 11:00 AM – 2:00 PM, 5:00 – 10:00 PM",
+        "Friday: 11:00 AM – 2:00 PM, 5:00 – 10:00 PM",
+        "Saturday: Closed",
+        "Sunday: 11:00 AM – 2:00 PM, 5:00 – 10:00 PM"
+      ]
+    }
+  },
+  "老娘米粉湯（文山區）": {
+    "place_id": "ChIJ4U0DxgmqQjQRn0VrBPsuxzM",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 22,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 22,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 5:00 – 10:00 PM",
+        "Tuesday: 5:00 – 10:00 PM",
+        "Wednesday: 5:00 – 10:00 PM",
+        "Thursday: 5:00 – 10:00 PM",
+        "Friday: 5:00 – 10:00 PM",
+        "Saturday: Closed",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "市場轉角麵店（信義區）": {
+    "place_id": "ChIJJ04J8KarQjQRK12RL4f_sqQ",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 7,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 7,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 7,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 7,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 7,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 7,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 7,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 7:30 AM – 2:00 PM",
+        "Tuesday: 7:30 AM – 2:00 PM",
+        "Wednesday: 7:30 AM – 2:00 PM",
+        "Thursday: 7:30 AM – 2:00 PM",
+        "Friday: 7:30 AM – 2:00 PM",
+        "Saturday: 7:30 AM – 2:00 PM",
+        "Sunday: 7:30 AM – 2:00 PM"
+      ]
+    }
+  },
+  "阿梅大餛飩（中山區）": {
+    "place_id": "ChIJsWP2pQ-sQjQRRVeKDMSAXc8",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 19,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 10:30 AM – 2:00 PM, 5:00 – 7:30 PM",
+        "Wednesday: 10:30 AM – 2:00 PM, 5:00 – 7:30 PM",
+        "Thursday: 10:30 AM – 2:00 PM, 5:00 – 7:30 PM",
+        "Friday: 10:30 AM – 2:00 PM, 5:00 – 7:30 PM",
+        "Saturday: 10:30 AM – 2:00 PM, 5:00 – 7:30 PM",
+        "Sunday: 10:30 AM – 2:00 PM"
+      ]
+    }
+  },
+  "肥仔尹魯肉飯（北投區）": {
+    "place_id": "ChIJgRidHgCvQjQRDQ-_iPVzbk0",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 21,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: 4:30 – 9:00 PM",
+        "Wednesday: 4:30 – 9:00 PM",
+        "Thursday: 4:30 – 9:00 PM",
+        "Friday: 4:30 – 9:00 PM",
+        "Saturday: 4:30 – 9:00 PM",
+        "Sunday: 4:00 – 9:00 PM"
+      ]
+    }
+  },
+  "王記咖哩飯（士林區）": {
+    "place_id": "ChIJi3-tacmuQjQRBkcZqxo1gU4",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 8:30 PM",
+        "Tuesday: 11:00 AM – 8:30 PM",
+        "Wednesday: 11:00 AM – 8:30 PM",
+        "Thursday: 11:00 AM – 8:30 PM",
+        "Friday: 11:00 AM – 8:30 PM",
+        "Saturday: 11:00 AM – 8:30 PM",
+        "Sunday: 11:00 AM – 8:30 PM"
+      ]
+    }
+  },
+  "阿卿魯肉飯切仔麵（三重區）": {
+    "place_id": "ChIJF6Y1-iKpQjQRBjK0q7baFJo",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 7:00 AM – 2:00 PM",
+        "Tuesday: 7:00 AM – 2:00 PM",
+        "Wednesday: 7:00 AM – 2:00 PM",
+        "Thursday: 7:00 AM – 2:00 PM",
+        "Friday: 7:00 AM – 2:00 PM",
+        "Saturday: 7:00 AM – 2:00 PM",
+        "Sunday: Closed"
+      ]
+    }
+  },
+  "家食心地（新莊區）": {
+    "place_id": "ChIJpbqUk6epQjQRg34JiDBYcj8",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 0,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 10,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 10:30 AM – 2:00 PM, 4:00 – 8:00 PM",
+        "Tuesday: 10:30 AM – 2:00 PM, 4:00 – 8:00 PM",
+        "Wednesday: 10:30 AM – 2:00 PM, 4:00 – 8:00 PM",
+        "Thursday: 10:30 AM – 2:00 PM, 4:00 – 8:00 PM",
+        "Friday: 10:30 AM – 2:00 PM",
+        "Saturday: Closed",
+        "Sunday: 10:30 AM – 2:00 PM, 4:00 – 8:00 PM"
+      ]
+    }
+  }
+}

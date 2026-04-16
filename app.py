@@ -75,6 +75,62 @@ def _build_random_pool() -> dict:
 
 _random_pool = _build_random_pool()
 
+
+def _is_currently_open(periods: list, current_day: int, current_hour: int, current_minute: int) -> bool:
+    """判斷店家現在是否在營業時間內。current_day 為 Google Places 格式（Sunday=0）。"""
+    for period in periods:
+        open_info = period.get("open", {})
+        close_info = period.get("close")
+        open_day = open_info.get("day", -1)
+        open_total = open_info.get("hour", 0) * 60 + open_info.get("minute", 0)
+        if close_info is None:
+            return True  # 24 小時營業
+        close_day = close_info.get("day", -1)
+        close_total = close_info.get("hour", 23) * 60 + close_info.get("minute", 59)
+        current_total = current_hour * 60 + current_minute
+        if open_day == close_day:
+            if current_day == open_day and open_total <= current_total < close_total:
+                return True
+        else:
+            # 跨天（例如 23:00 ~ 02:00）
+            if current_day == open_day and current_total >= open_total:
+                return True
+            if current_day == close_day and current_total < close_total:
+                return True
+    return False
+
+
+def _get_open_pool() -> dict:
+    """回傳目前營業中的店家 pool，無時間資料的店一律保留。"""
+    from datetime import datetime
+    import zoneinfo
+    now = datetime.now(zoneinfo.ZoneInfo("Asia/Taipei"))
+    google_day = now.isoweekday() % 7  # Mon=1..Sun=7 → Mon=1..Sun=0
+    current_hour = now.hour
+    current_minute = now.minute
+    filtered = {}
+    for name, data in _random_pool.items():
+        hours_entry = _store_hours.get(name)
+        if not hours_entry or not hours_entry.get("hours"):
+            filtered[name] = data
+            continue
+        periods = hours_entry["hours"].get("periods", [])
+        if not periods:
+            filtered[name] = data
+            continue
+        if _is_currently_open(periods, google_day, current_hour, current_minute):
+            filtered[name] = data
+    return filtered
+
+
+_STORE_HOURS_PATH = Path(__file__).parent / "data" / "store_hours.json"
+_store_hours: dict = {}
+try:
+    with open(_STORE_HOURS_PATH, encoding="utf-8") as f:
+        _store_hours = json.load(f)
+except Exception:
+    pass
+
 _persona = UnclePersona()
 
 # 啟動時預載 CLIP 模型，避免第一個請求才觸發載入
@@ -368,6 +424,8 @@ def handle_location(event):
         extended_km = 10.0 if expanded else 5.0
         reply_msg = None
         result = None
+        open_pool = _get_open_pool()
+        _CLOSED_MSG = "這時間大叔看了一圈，附近店家都已打烊了！"
         # 用 seen 判斷是否已看過所有店（不做為實際抽取依據）
         exhausted = search_random_nearby_store(lat, lng, _random_pool, seen=seen, extended_radius_km=extended_km) is None
         if exhausted:
@@ -388,10 +446,15 @@ def handle_location(event):
                     reply_msg = _build_exhausted_flex()
                 else:
                     # 店少，靜默重置直接再抽（flat pool）
-                    result = search_random_nearby_store(lat, lng, _random_pool, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
+                    result = search_random_nearby_store(lat, lng, open_pool, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
+                    if result is None:
+                        reply_msg = TextMessage(text=_CLOSED_MSG)
         else:
-            # 未全部看過，從 extended_km 內所有店平等抽（flat pool，允許重複）
-            result = search_random_nearby_store(lat, lng, _random_pool, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
+            # 未全部看過，從 open_pool 內抽（flat pool，允許重複）
+            result = search_random_nearby_store(lat, lng, open_pool, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
+            if result is None:
+                # 附近有店但都打烊了
+                reply_msg = TextMessage(text=_CLOSED_MSG)
         if result:
             _add_to_seen(user_id, result["store_name"])
             reply_msg = _build_random_flex(result)
