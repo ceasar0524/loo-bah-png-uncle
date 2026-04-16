@@ -10,3 +10,4 @@ git+https://github.com/openai/CLIP.git
 pyyaml==6.0.2
 flask==3.1.0
 line-bot-sdk==3.11.0
+google-cloud-firestore==2.20.1

@@ -75,6 +75,29 @@ def _build_random_pool() -> dict:
 
 _random_pool = _build_random_pool()
 
+# Firestore 統計
+try:
+    from google.cloud import firestore as _firestore
+    _db = _firestore.Client()
+    _stats_ref = _db.collection("stats").document("events")
+except Exception:
+    _db = None
+    _stats_ref = None
+
+def _track(event: str, extra_field: str | None = None) -> None:
+    """非同步記錄事件到 Firestore（失敗不影響主流程）。"""
+    if _stats_ref is None:
+        return
+    def _write():
+        try:
+            updates = {event: _firestore.Increment(1)}
+            if extra_field:
+                updates[extra_field] = _firestore.Increment(1)
+            _stats_ref.set(updates, merge=True)
+        except Exception:
+            pass
+    threading.Thread(target=_write, daemon=True).start()
+
 
 def _is_currently_open(periods: list, current_day: int, current_hour: int, current_minute: int) -> bool:
     """判斷店家現在是否在營業時間內。current_day 為 Google Places 格式（Sunday=0）。"""
@@ -252,6 +275,7 @@ def webhook():
 def _process_image(reply_token, message_id, user_id):
     if not _is_admin(user_id):
         logging.info("[event] image_received")
+        _track("image_received")
 
     with ApiClient(_config) as api_client:
         blob_api = MessagingApiBlob(api_client)
@@ -417,6 +441,7 @@ def handle_location(event):
     elif matched_store == _RANDOM_SESSION:
         if not _is_admin(user_id):
             logging.info("[event] random_surprise_triggered")
+            _track("random_surprise")
         lat = event.message.latitude
         lng = event.message.longitude
         seen = _get_seen(user_id)
@@ -479,6 +504,7 @@ def handle_location(event):
     else:
         if not _is_admin(user_id):
             logging.info("[event] nearby_search_triggered")
+            _track("nearby_search")
         lat = event.message.latitude
         lng = event.message.longitude
         results, any_in_radius = search_nearby_stores(matched_store, lat, lng, _store_notes)
@@ -592,6 +618,34 @@ def _build_store_list_flex() -> FlexMessage:
         ),
     )
     return FlexMessage(alt_text=f"收錄店家清單（{n} 家）", contents=bubble)
+
+
+def _build_stats_message() -> TextMessage:
+    """回傳 Firestore 統計數字（admin only）。"""
+    if _stats_ref is None:
+        return TextMessage(text="Firestore 未連線")
+    try:
+        doc = _stats_ref.get()
+        if not doc.exists:
+            return TextMessage(text="目前還沒有任何統計資料")
+        d = doc.to_dict()
+        image = d.get("image_received", 0)
+        nearby = d.get("nearby_search", 0)
+        random = d.get("random_surprise", 0)
+        districts = {k[len("district_"):]: v for k, v in d.items() if k.startswith("district_")}
+        district_lines = "\n".join(
+            f"  {k}：{v}" for k, v in sorted(districts.items(), key=lambda x: -x[1])
+        )
+        text = (
+            f"📊 使用統計\n"
+            f"丟照片：{image} 次\n"
+            f"附近相似風格：{nearby} 次\n"
+            f"隨機驚喜：{random} 次\n"
+            f"\n巷仔口各區：\n{district_lines or '（尚無資料）'}"
+        )
+        return TextMessage(text=text)
+    except Exception as e:
+        return TextMessage(text=f"查詢失敗：{e}")
 
 
 def _extract_district(store_name: str) -> str:
@@ -840,7 +894,9 @@ def handle_text(event):
     try:
         with ApiClient(_config) as api_client:
             messaging_api = MessagingApi(api_client)
-            if text == "怎麼用":
+            if text == "統計" and _is_admin(event.source.user_id):
+                reply = _build_stats_message()
+            elif text == "怎麼用":
                 reply = TextMessage(text=_HOW_TO_USE_TEXT)
             elif text == "店家清單":
                 reply = _build_store_list_flex()
@@ -858,6 +914,8 @@ def handle_text(event):
                 reply = _build_taipei_city_flex()
             elif text in _hidden_gems_districts():
                 reply = _build_hidden_gems_flex(text)
+                if not _is_admin(event.source.user_id):
+                    _track("district", f"district_{text}")
             elif text == "隨機驚喜":
                 _save_session(event.source.user_id, _RANDOM_SESSION)
                 from datetime import datetime
