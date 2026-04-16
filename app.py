@@ -426,19 +426,25 @@ def handle_location(event):
         result = None
         open_pool = _get_open_pool()
         _CLOSED_MSG = "這時間大叔看了一圈，附近店家都已打烊了！"
-        # 用 seen 判斷是否已看過所有店（不做為實際抽取依據）
-        exhausted = search_random_nearby_store(lat, lng, _random_pool, seen=seen, extended_radius_km=extended_km) is None
+        # exhausted = 目前有開的店在這個範圍內都已看過
+        exhausted = search_random_nearby_store(lat, lng, open_pool, seen=seen, extended_radius_km=extended_km) is None
         if exhausted:
             if not expanded:
-                # 確認這個位置 5km 內是否真的有店
-                has_any = search_random_nearby_store(lat, lng, _random_pool, seen=set()) is not None
-                if not has_any:
-                    # 5km 內根本沒有任何店
+                # 先確認 5km 內有沒有任何店（不管打烊）
+                has_any_total = search_random_nearby_store(lat, lng, _random_pool, seen=set()) is not None
+                if not has_any_total:
+                    # 5km 內根本沒有店
                     reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
                 else:
-                    # 5km 全部看過，提示用戶可擴大範圍
-                    _set_expanded(user_id, True)
-                    reply_msg = TextMessage(text="大叔把5公里內的店都抽完了！要繼續擴大的話，再按一次隨機驚喜。")
+                    # 有店，再確認是打烊還是都看過
+                    has_any_open = search_random_nearby_store(lat, lng, open_pool, seen=set()) is not None
+                    if not has_any_open:
+                        # 有店但全打烊
+                        reply_msg = TextMessage(text=_CLOSED_MSG)
+                    else:
+                        # 有開著的店但都看過了，提示擴大範圍
+                        _set_expanded(user_id, True)
+                        reply_msg = TextMessage(text="大叔把5公里內的店都抽完了！要繼續擴大的話，再按一次隨機驚喜。")
             else:
                 # 10km 也全部看過，重置
                 _reset_seen(user_id)
@@ -450,10 +456,10 @@ def handle_location(event):
                     if result is None:
                         reply_msg = TextMessage(text=_CLOSED_MSG)
         else:
-            # 未全部看過，從 open_pool 內抽（flat pool，允許重複）
+            # 有開著的店且未全部看過，從 open_pool 內抽（flat pool）
             result = search_random_nearby_store(lat, lng, open_pool, seen=set(), primary_radius_km=extended_km, extended_radius_km=extended_km)
             if result is None:
-                # 附近有店但都打烊了
+                # open_pool 有店但抽不到（理論上不應發生）
                 reply_msg = TextMessage(text=_CLOSED_MSG)
         if result:
             _add_to_seen(user_id, result["store_name"])
