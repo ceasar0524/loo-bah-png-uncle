@@ -86,14 +86,20 @@ except Exception:
 
 def _track(event: str, extra_field: str | None = None) -> None:
     """非同步記錄事件到 Firestore（失敗不影響主流程）。"""
-    if _stats_ref is None:
+    if _db is None:
         return
     def _write():
         try:
+            from datetime import datetime
+            import zoneinfo
+            today = datetime.now(zoneinfo.ZoneInfo("Asia/Taipei")).strftime("%Y-%m-%d")
             updates = {event: _firestore.Increment(1)}
             if extra_field:
                 updates[extra_field] = _firestore.Increment(1)
-            _stats_ref.set(updates, merge=True)
+            # 總計
+            _db.collection("stats").document("events").set(updates, merge=True)
+            # 每日
+            _db.collection("stats").document(today).set(updates, merge=True)
         except Exception:
             pass
     threading.Thread(target=_write, daemon=True).start()
@@ -622,26 +628,49 @@ def _build_store_list_flex() -> FlexMessage:
 
 def _build_stats_message() -> TextMessage:
     """回傳 Firestore 統計數字（admin only）。"""
-    if _stats_ref is None:
+    if _db is None:
         return TextMessage(text="Firestore 未連線")
     try:
-        doc = _stats_ref.get()
-        if not doc.exists:
-            return TextMessage(text="目前還沒有任何統計資料")
-        d = doc.to_dict()
-        image = d.get("image_received", 0)
-        nearby = d.get("nearby_search", 0)
-        random = d.get("random_surprise", 0)
-        districts = {k[len("district_"):]: v for k, v in d.items() if k.startswith("district_")}
+        from datetime import datetime, timedelta
+        import zoneinfo
+        tz = zoneinfo.ZoneInfo("Asia/Taipei")
+        today = datetime.now(tz)
+        today_key = today.strftime("%Y-%m-%d")
+        # 本週一到今天
+        week_start = today - timedelta(days=today.weekday())
+        week_keys = [(week_start + timedelta(days=i)).strftime("%Y-%m-%d") for i in range((today - week_start).days + 1)]
+
+        def _sum_docs(keys):
+            totals = {}
+            for key in keys:
+                doc = _db.collection("stats").document(key).get()
+                if doc.exists:
+                    for k, v in doc.to_dict().items():
+                        totals[k] = totals.get(k, 0) + (v if isinstance(v, int) else 0)
+            return totals
+
+        total_doc = _db.collection("stats").document("events").get()
+        total = total_doc.to_dict() if total_doc.exists else {}
+        today_data = _sum_docs([today_key])
+        week_data = _sum_docs(week_keys)
+
+        def _fmt(d):
+            img = d.get("image_received", 0)
+            near = d.get("nearby_search", 0)
+            rand = d.get("random_surprise", 0)
+            return f"  丟照片：{img} 次\n  附近相似風格：{near} 次\n  隨機驚喜：{rand} 次"
+
+        districts = {k[len("district_"):]: v for k, v in total.items() if k.startswith("district_")}
         district_lines = "\n".join(
             f"  {k}：{v}" for k, v in sorted(districts.items(), key=lambda x: -x[1])
-        )
+        ) or "（尚無資料）"
+
         text = (
-            f"📊 使用統計\n"
-            f"丟照片：{image} 次\n"
-            f"附近相似風格：{nearby} 次\n"
-            f"隨機驚喜：{random} 次\n"
-            f"\n巷仔口各區：\n{district_lines or '（尚無資料）'}"
+            f"📊 使用統計\n\n"
+            f"今天（{today_key}）\n{_fmt(today_data)}\n\n"
+            f"本週（{week_keys[0]}–{today_key}）\n{_fmt(week_data)}\n\n"
+            f"總計\n{_fmt(total)}\n\n"
+            f"巷仔口各區（總計）\n{district_lines}"
         )
         return TextMessage(text=text)
     except Exception as e:
