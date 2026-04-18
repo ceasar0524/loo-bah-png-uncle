@@ -1233,7 +1233,10 @@ def _build_nearby_hidden_gems_flex(gems: list) -> FlexMessage:
         FlexText(text="附近的巷仔口店家：", weight="bold", size="md", wrap=True),
     ]
     for name, dist, is_open in gems:
-        maps_url = _persona.maps_url(name)
+        loc = _hidden_gems.get(name, {}).get("location", {})
+        lat = loc.get("lat")
+        lng = loc.get("lng")
+        maps_url = f"https://maps.google.com/?q={lat},{lng}" if lat and lng else "https://maps.google.com/"
         contents.append(FlexSeparator(margin="lg"))
         display_name = name if is_open else f"{name}（目前打烊）"
         contents.append(FlexText(text=display_name, weight="bold", size="md", margin="md", wrap=True, color="#333333" if is_open else "#AAAAAA"))
