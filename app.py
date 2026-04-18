@@ -380,15 +380,27 @@ def _build_random_flex(result: dict) -> FlexMessage:
 
 
 def _build_exhausted_flex() -> FlexMessage:
-    """抽太多次後出現的彩蛋 Flex Message。"""
+    """抽太多次後出現的彩蛋 Flex Message，隨機二選一。"""
+    import random
+    eggs = [
+        {
+            "tagline": "📜  一直抽、一直抽，啊是欲食無？\n你今仔日攏免食飯啦！",
+            "store": "自己家",
+        },
+        {
+            "tagline": "📜  一直抽、一直抽，我懷疑你今天是來遛皮克敏，不是來吃魯肉飯的",
+            "store": "花圃",
+        },
+    ]
+    egg = random.choice(eggs)
     contents = [
         FlexText(text="大叔今天網路用夠多了 🖥️", weight="bold", size="md"),
         FlexSeparator(margin="lg"),
-        FlexText(text="📜  一直抽、一直抽，啊是欲食無？\n你今仔日攏免食飯啦！",
+        FlexText(text=egg["tagline"],
                  weight="bold", size="xl", color="#8B4513", align="center",
                  margin="lg", wrap=True),
         FlexSeparator(margin="lg"),
-        FlexText(text="自己家", weight="bold", size="md", margin="md", wrap=True),
+        FlexText(text=egg["store"], weight="bold", size="md", margin="md", wrap=True),
         FlexButton(
             action=URIAction(label="📍 地圖", uri="https://maps.google.com/"),
             style="primary",
