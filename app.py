@@ -331,11 +331,12 @@ def _clear_taste_quiz(user_id: str) -> None:
 
 
 def _save_last_location(user_id: str, lat: float, lng: float) -> None:
-    """將用戶最後一次分享的位置存入 session，供後續「巷仔口」直接查附近店用。"""
+    """將用戶最後一次分享的位置存入 session，供後續「附近巷仔口店家」直接查附近店用。"""
     with _sessions_lock:
         if user_id not in _sessions:
             _sessions[user_id] = {"store": None, "ts": time.time(), "seen": set()}
         _sessions[user_id]["last_location"] = {"lat": lat, "lng": lng}
+        _sessions[user_id]["ts"] = time.time()
 
 
 def _get_last_location(user_id: str) -> dict | None:
@@ -649,7 +650,7 @@ def _build_taste_flex(stores: list, intros: dict) -> FlexMessage:
         body=FlexBox(layout="vertical", contents=contents, padding_all="lg")
     )
     qr = QuickReply(items=[
-        QuickReplyItem(action=MessageAction(label="附近巷仔口 🏘️", text="巷仔口"))
+        QuickReplyItem(action=MessageAction(label="附近巷仔口 🏘️", text="附近巷仔口店家"))
     ])
     return FlexMessage(alt_text="大叔幫你找到了！", contents=bubble, quick_reply=qr)
 
@@ -672,7 +673,7 @@ def handle_location(event):
             entry = _sessions.get(user_id, {})
             answers = entry.get("taste_answers", {})
         candidates = _match_taste_stores(lat, lng, answers)
-        matched = [c for c in candidates if c["score"] > 0]
+        matched = [c for c in candidates if c["score"] == len(_TASTE_QUIZ_QUESTIONS)]
         if not candidates:
             reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
         elif not matched:
@@ -1260,6 +1261,14 @@ def handle_text(event):
             elif text == "大叔雷達":
                 reply = TextMessage(text=_radar_text())
             elif text == "巷仔口":
+                if _hidden_gems:
+                    reply = TextMessage(
+                        text="選個區，大叔帶你逛巷仔口 🏘️",
+                        quick_reply=_build_hidden_gems_quick_reply(),
+                    )
+                else:
+                    reply = TextMessage(text="巷仔口名單還在整理中，敬請期待！")
+            elif text == "附近巷仔口店家":
                 last_loc = _get_last_location(user_id)
                 if last_loc and _hidden_gems:
                     nearby = _nearby_hidden_gems(last_loc["lat"], last_loc["lng"], radius_km=3.0)
@@ -1268,13 +1277,8 @@ def handle_text(event):
                         reply = _build_nearby_hidden_gems_flex(nearby[:3])
                     else:
                         reply = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
-                elif _hidden_gems:
-                    reply = TextMessage(
-                        text="選個區，大叔帶你逛巷仔口 🏘️",
-                        quick_reply=_build_hidden_gems_quick_reply(),
-                    )
                 else:
-                    reply = TextMessage(text="巷仔口名單還在整理中，敬請期待！")
+                    reply = None
             elif text == "台北市區":
                 reply = _build_taipei_city_flex()
             elif text in _hidden_gems_districts():
