@@ -27,6 +27,8 @@ from linebot.v3.messaging import (
 from linebot.v3.messaging import (
     FlexMessage,
     FlexBubble,
+    FlexBubbleStyles,
+    FlexBlockStyle,
     FlexBox,
     FlexButton,
     FlexText,
@@ -738,7 +740,7 @@ def _build_taste_loaded_flex(answers: dict) -> FlexMessage:
     ]
     header = FlexBox(
         layout="vertical",
-        background_color="#5C3D2E",
+        background_color="#6A3F2D",
         padding_all="lg",
         contents=[
             FlexText(text="🍚 大叔記得你的口味", weight="bold", size="md", color="#FFFFFF"),
@@ -752,10 +754,14 @@ def _build_taste_loaded_flex(answers: dict) -> FlexMessage:
             weight="bold",
             align="center",
             margin="lg",
+            color="#4B2F24",
         ))
     bubble = FlexBubble(
         header=header,
         body=FlexBox(layout="vertical", contents=body_contents, padding_all="lg"),
+        styles=FlexBubbleStyles(
+            body=FlexBlockStyle(background_color="#E9E1D8"),
+        ),
     )
     qr = QuickReply(items=[
         QuickReplyItem(action=MessageAction(label="直接用 ✅", text="直接用 ✅")),
