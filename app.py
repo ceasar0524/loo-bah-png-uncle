@@ -731,28 +731,27 @@ def _build_taste_loaded_flex(answers: dict) -> FlexMessage:
         "sauce_taste":       {"偏甜": "偏甜",        "偏鹹":        "偏鹹", None: "都可以"},
     }
     rows = [
-        ("🥩", labels["fat_ratio"].get(answers.get("fat_ratio"), "都可以")),
-        ("🫧", labels["skin"].get(answers.get("skin"), "都可以")),
-        ("🍲", labels["sauce_consistency"].get(answers.get("sauce_consistency"), "都可以")),
-        ("🍬", labels["sauce_taste"].get(answers.get("sauce_taste"), "都可以")),
+        ("🍖", labels["fat_ratio"].get(answers.get("fat_ratio"), "都可以")),
+        ("💋", labels["skin"].get(answers.get("skin"), "都可以")),
+        ("🍯", labels["sauce_consistency"].get(answers.get("sauce_consistency"), "都可以")),
+        ("🧂", labels["sauce_taste"].get(answers.get("sauce_taste"), "都可以")),
     ]
     header = FlexBox(
         layout="vertical",
         background_color="#5C3D2E",
         padding_all="lg",
         contents=[
-            FlexText(text="🧂 大叔記得你的口味", weight="bold", size="md", color="#FFFFFF"),
+            FlexText(text="🍚 大叔記得你的口味", weight="bold", size="md", color="#FFFFFF"),
         ],
     )
     body_contents = []
     for emoji, value in rows:
-        body_contents.append(FlexBox(
-            layout="horizontal",
-            margin="md",
-            contents=[
-                FlexText(text=emoji, size="lg", flex=1),
-                FlexText(text=value, size="md", flex=3, weight="bold"),
-            ],
+        body_contents.append(FlexText(
+            text=f"{emoji}  {value}",
+            size="xl",
+            weight="bold",
+            align="center",
+            margin="lg",
         ))
     bubble = FlexBubble(
         header=header,

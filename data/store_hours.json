@@ -9766,5 +9766,57 @@
         "Sunday: Closed"
       ]
     }
+  },
+  "筒仔米糕滷肉飯貢丸湯（泰山區）": {
+    "place_id": "",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 8,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 15,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 8,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 8,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 15,
+            "minute": 0
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: Closed",
+        "Tuesday: Closed",
+        "Wednesday: 8:30 AM – 7:00 PM",
+        "Thursday: Closed",
+        "Friday: Closed",
+        "Saturday: 8:30 AM – 3:00 PM",
+        "Sunday: 8:30 AM – 3:00 PM"
+      ]
+    }
   }
 }
