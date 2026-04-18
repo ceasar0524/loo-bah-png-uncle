@@ -748,13 +748,15 @@ def _build_taste_loaded_flex(answers: dict) -> FlexMessage:
     )
     body_contents = []
     for emoji, value in rows:
-        body_contents.append(FlexText(
-            text=f"{emoji}  {value}",
-            size="xl",
-            weight="bold",
-            align="center",
+        body_contents.append(FlexBox(
+            layout="horizontal",
+            justify_content="center",
+            align_items="center",
             margin="lg",
-            color="#4B2F24",
+            contents=[
+                FlexText(text=emoji, size="xl", flex=0),
+                FlexText(text=f"  {value}", size="xl", weight="bold", color="#4B2F24", flex=0),
+            ],
         ))
     bubble = FlexBubble(
         header=header,
@@ -1049,7 +1051,8 @@ def _build_stats_message() -> TextMessage:
             img = d.get("image_received", 0)
             near = d.get("nearby_search", 0)
             rand = d.get("random_surprise", 0)
-            return f"  丟照片：{img} 次\n  附近相似風格：{near} 次\n  隨機驚喜：{rand} 次"
+            personal = d.get("personal_recommendation", 0)
+            return f"  丟照片：{img} 次\n  附近相似風格：{near} 次\n  隨機驚喜：{rand} 次\n  個人化：{personal} 次"
 
         districts = {k[len("district_"):]: v for k, v in total.items() if k.startswith("district_")}
         district_lines = "\n".join(
@@ -1473,6 +1476,8 @@ def handle_text(event):
                 if not _is_admin(event.source.user_id):
                     _track("district", f"district_{text}")
             elif text == "個人化":
+                if not _is_admin(user_id):
+                    _track("personal_recommendation")
                 saved = _load_taste_preference(user_id)
                 if saved:
                     _save_taste_loaded(user_id, saved)
