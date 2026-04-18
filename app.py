@@ -358,6 +358,104 @@ def _clear_last_location(user_id: str) -> None:
             entry.pop("last_location", None)
 
 
+# ── Firestore 口味偏好持久化 ──────────────────────────────────────────────────
+
+def _save_taste_preference(user_id: str, answers: dict) -> None:
+    """非同步將口味偏好存入 Firestore user_preferences collection。"""
+    if _db is None:
+        return
+    def _write():
+        from datetime import datetime, timezone
+        try:
+            _db.collection("user_preferences").document(user_id).set({
+                "taste": answers,
+                "updated_at": datetime.now(timezone.utc),
+            })
+        except Exception:
+            pass
+    threading.Thread(target=_write, daemon=True).start()
+
+
+def _load_taste_preference(user_id: str) -> dict | None:
+    """從 Firestore 讀取用戶口味偏好，回傳 answers dict 或 None。"""
+    if _db is None:
+        return None
+    try:
+        doc = _db.collection("user_preferences").document(user_id).get()
+        if doc.exists:
+            return doc.to_dict().get("taste")
+        return None
+    except Exception:
+        return None
+
+
+def _taste_preference_summary(answers: dict) -> str:
+    """將口味偏好 answers 轉為可讀摘要，例如「偏瘦・不黏・不稠・偏鹹」。"""
+    labels = {
+        "fat_ratio":         {"fat_heavy": "偏肥", "lean_heavy": "偏瘦", None: "肉質都可以"},
+        "skin":              {"with_skin": "黏黏",  "no_skin":    "不黏", None: "黏度都可以"},
+        "sauce_consistency": {"稠": "稠",            "水":          "不稠", None: "濃稠都可以"},
+        "sauce_taste":       {"偏甜": "偏甜",        "偏鹹":        "偏鹹", None: "口味都可以"},
+    }
+    parts = []
+    for field in ["fat_ratio", "skin", "sauce_consistency", "sauce_taste"]:
+        val = answers.get(field)
+        parts.append(labels[field].get(val, str(val) if val else "都可以"))
+    return "・".join(parts)
+
+
+# ── taste_save_pending session helpers ───────────────────────────────────────
+
+def _save_taste_save_pending(user_id: str, answers: dict) -> None:
+    """儲存待確認儲存的口味答案。"""
+    with _sessions_lock:
+        if user_id not in _sessions:
+            _sessions[user_id] = {"store": None, "ts": time.time(), "seen": set()}
+        _sessions[user_id]["taste_save_pending"] = answers
+        _sessions[user_id]["ts"] = time.time()
+
+
+def _get_taste_save_pending(user_id: str) -> dict | None:
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is None:
+            return None
+        return entry.get("taste_save_pending")
+
+
+def _clear_taste_save_pending(user_id: str) -> None:
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is not None:
+            entry.pop("taste_save_pending", None)
+
+
+# ── taste_loaded session helpers ─────────────────────────────────────────────
+
+def _save_taste_loaded(user_id: str, answers: dict) -> None:
+    """儲存從 Firestore 讀取的偏好，供「直接用」流程使用。"""
+    with _sessions_lock:
+        if user_id not in _sessions:
+            _sessions[user_id] = {"store": None, "ts": time.time(), "seen": set()}
+        _sessions[user_id]["taste_loaded"] = answers
+        _sessions[user_id]["ts"] = time.time()
+
+
+def _get_taste_loaded(user_id: str) -> dict | None:
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is None:
+            return None
+        return entry.get("taste_loaded")
+
+
+def _clear_taste_loaded(user_id: str) -> None:
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is not None:
+            entry.pop("taste_loaded", None)
+
+
 _handler = WebhookHandler(_LINE_CHANNEL_SECRET)
 _config = Configuration(access_token=_LINE_CHANNEL_ACCESS_TOKEN)
 
@@ -672,6 +770,8 @@ def handle_location(event):
         with _sessions_lock:
             entry = _sessions.get(user_id, {})
             answers = entry.get("taste_answers", {})
+        _save_last_location(user_id, lat, lng)
+        _clear_taste_quiz(user_id)
         candidates = _match_taste_stores(lat, lng, answers)
         matched = [c for c in candidates if c["score"] == len(_TASTE_QUIZ_QUESTIONS)]
         if not candidates:
@@ -682,8 +782,6 @@ def handle_location(event):
             top = matched[:3]
             intros = _generate_taste_intros(top)
             reply_msg = _build_taste_flex(top, intros)
-        _save_last_location(user_id, lat, lng)
-        _clear_taste_quiz(user_id)
     elif matched_store == _RANDOM_SESSION:
         if not _is_admin(user_id):
             logging.info("[event] random_surprise_triggered")
@@ -1239,18 +1337,51 @@ def handle_text(event):
                         quick_reply=_taste_quiz_quick_reply(next_step),
                     )
                 else:
-                    # 四題答完，進入等待位置狀態
+                    # 四題答完，詢問是否儲存偏好
                     _clear_taste_quiz(user_id)
+                    _save_taste_save_pending(user_id, answers)
+                    reply = TextMessage(
+                        text="要儲存你的偏好嗎？下次可以直接用 🙌",
+                        quick_reply=QuickReply(items=[
+                            QuickReplyItem(action=MessageAction(label="儲存 ✅", text="儲存 ✅")),
+                            QuickReplyItem(action=MessageAction(label="不用 ❌", text="不用 ❌")),
+                        ]),
+                    )
+            elif _get_taste_save_pending(user_id) is not None and text in ("儲存 ✅", "不用 ❌"):
+                pending = _get_taste_save_pending(user_id)
+                if text == "儲存 ✅":
+                    _save_taste_preference(user_id, pending)
+                _clear_taste_save_pending(user_id)
+                _save_session(user_id, _TASTE_SESSION)
+                with _sessions_lock:
+                    if user_id in _sessions:
+                        _sessions[user_id]["taste_answers"] = pending
+                reply = TextMessage(
+                    text="好！大叔幫你在附近找，分享一下你在哪 📍",
+                    quick_reply=QuickReply(items=[
+                        QuickReplyItem(action=LocationAction(label="分享位置 📍"))
+                    ]),
+                )
+            elif _get_taste_loaded(user_id) is not None and text in ("直接用 ✅", "重新填 🔄"):
+                if text == "直接用 ✅":
+                    loaded = _get_taste_loaded(user_id)
+                    _clear_taste_loaded(user_id)
                     _save_session(user_id, _TASTE_SESSION)
-                    # 把答案存到 session 裡供 handle_location 使用
                     with _sessions_lock:
                         if user_id in _sessions:
-                            _sessions[user_id]["taste_answers"] = answers
+                            _sessions[user_id]["taste_answers"] = loaded
                     reply = TextMessage(
                         text="好！大叔幫你在附近找，分享一下你在哪 📍",
                         quick_reply=QuickReply(items=[
                             QuickReplyItem(action=LocationAction(label="分享位置 📍"))
                         ]),
+                    )
+                else:
+                    _clear_taste_loaded(user_id)
+                    _save_taste_quiz(user_id, 0, {})
+                    reply = TextMessage(
+                        text=_TASTE_QUIZ_QUESTIONS[0]["question"],
+                        quick_reply=_taste_quiz_quick_reply(0),
                     )
             elif text == "統計" and _is_admin(event.source.user_id):
                 reply = _build_stats_message()
@@ -1286,11 +1417,23 @@ def handle_text(event):
                 if not _is_admin(event.source.user_id):
                     _track("district", f"district_{text}")
             elif text == "個人化":
-                _save_taste_quiz(user_id, 0, {})
-                reply = TextMessage(
-                    text=_TASTE_QUIZ_QUESTIONS[0]["question"],
-                    quick_reply=_taste_quiz_quick_reply(0),
-                )
+                saved = _load_taste_preference(user_id)
+                if saved:
+                    _save_taste_loaded(user_id, saved)
+                    summary = _taste_preference_summary(saved)
+                    reply = TextMessage(
+                        text=f"上次偏好：{summary}\n要直接用還是重新填？",
+                        quick_reply=QuickReply(items=[
+                            QuickReplyItem(action=MessageAction(label="直接用 ✅", text="直接用 ✅")),
+                            QuickReplyItem(action=MessageAction(label="重新填 🔄", text="重新填 🔄")),
+                        ]),
+                    )
+                else:
+                    _save_taste_quiz(user_id, 0, {})
+                    reply = TextMessage(
+                        text=_TASTE_QUIZ_QUESTIONS[0]["question"],
+                        quick_reply=_taste_quiz_quick_reply(0),
+                    )
             elif text == "隨機驚喜":
                 _save_session(event.source.user_id, _RANDOM_SESSION)
                 from datetime import datetime
@@ -1314,12 +1457,13 @@ def handle_text(event):
                 )
             else:
                 reply = TextMessage(text=_text_reply_greeting())
-            messaging_api.reply_message(
-                ReplyMessageRequest(
-                    reply_token=event.reply_token,
-                    messages=[reply],
+            if reply is not None:
+                messaging_api.reply_message(
+                    ReplyMessageRequest(
+                        reply_token=event.reply_token,
+                        messages=[reply],
+                    )
                 )
-            )
     except Exception:
         import traceback
         traceback.print_exc()
