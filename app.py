@@ -263,6 +263,73 @@ def _set_expanded(user_id: str, value: bool) -> None:
             entry["expanded"] = value
 
 
+_TASTE_SESSION = "__taste__"  # 個人化推薦模式的 session 標記
+
+# 個人化問卷題目定義
+_TASTE_QUIZ_QUESTIONS = [
+    {
+        "question": "肉質偏好？",
+        "options": ["偏肥", "偏瘦", "都可以"],
+        "field": "fat_ratio",
+        "source": "visual_profile",
+        "mapping": {"偏肥": "fat_heavy", "偏瘦": "lean_heavy", "都可以": None},
+    },
+    {
+        "question": "喜歡黏一點？",
+        "options": ["黏黏", "不黏", "都可以"],
+        "field": "skin",
+        "source": "visual_profile",
+        "mapping": {"黏黏": "with_skin", "不黏": "no_skin", "都可以": None},
+    },
+    {
+        "question": "滷汁濃稠？",
+        "options": ["稠", "不稠", "都可以"],
+        "field": "sauce_consistency",
+        "source": "top_level",
+        "mapping": {"稠": "稠", "不稠": "水", "都可以": None},
+    },
+    {
+        "question": "口味偏好？",
+        "options": ["偏甜（南部）", "偏鹹（北部）", "都可以"],
+        "field": "sauce_taste",
+        "source": "visual_profile",
+        "mapping": {"偏甜（南部）": "偏甜", "偏鹹（北部）": "偏鹹", "都可以": None},
+    },
+]
+_TASTE_QUIZ_ALL_OPTIONS = {
+    opt for q in _TASTE_QUIZ_QUESTIONS for opt in q["options"]
+}
+
+
+def _save_taste_quiz(user_id: str, step: int, answers: dict) -> None:
+    """儲存個人化問卷進度到 session 的獨立 key，不影響現有 store/seen/expanded。"""
+    with _sessions_lock:
+        if user_id not in _sessions:
+            _sessions[user_id] = {"store": None, "ts": time.time(), "seen": set()}
+        _sessions[user_id]["taste_quiz"] = {"step": step, "answers": answers}
+        _sessions[user_id]["ts"] = time.time()
+
+
+def _get_taste_quiz(user_id: str) -> dict | None:
+    """回傳個人化問卷進度，若無則回傳 None。"""
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is None:
+            return None
+        if time.time() - entry["ts"] > _SESSION_TTL:
+            del _sessions[user_id]
+            return None
+        return entry.get("taste_quiz")
+
+
+def _clear_taste_quiz(user_id: str) -> None:
+    """清除個人化問卷 session state。"""
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is not None:
+            entry.pop("taste_quiz", None)
+
+
 _handler = WebhookHandler(_LINE_CHANNEL_SECRET)
 _config = Configuration(access_token=_LINE_CHANNEL_ACCESS_TOKEN)
 
@@ -445,6 +512,117 @@ def _build_nearby_flex(results: list) -> FlexMessage:
     return FlexMessage(alt_text="大叔雷達掃到了！", contents=bubble)
 
 
+def _score_store_taste(store_info: dict, answers: dict) -> int:
+    """計算店家與用戶口味偏好的符合分數（0–4）。"""
+    score = 0
+    vp = store_info.get("visual_profile", {})
+    for q in _TASTE_QUIZ_QUESTIONS:
+        field = q["field"]
+        source = q["source"]
+        user_val = answers.get(field)  # None 表示「都可以」
+        if user_val is None:
+            score += 1
+            continue
+        if source == "top_level":
+            store_val = store_info.get(field)
+        else:
+            store_val = vp.get(field)
+        if store_val == user_val:
+            score += 1
+    return score
+
+
+def _match_taste_stores(lat: float, lng: float, answers: dict, radius_km: float = 10.0) -> list:
+    """依口味偏好比對 store_notes 店家，回傳分數最高、距離最近的 2–3 家。"""
+    from src.nearby_search.searcher import haversine_km
+    candidates = []
+    for name, info in _store_notes.items():
+        loc = info.get("location")
+        if not loc:
+            continue
+        dist = haversine_km(lat, lng, loc["lat"], loc["lng"])
+        if dist > radius_km:
+            continue
+        score = _score_store_taste(info, answers)
+        candidates.append({"store_name": name, "distance_km": round(dist, 1), "score": score, "info": info})
+
+    # 依分數降冪、距離升冪排序
+    candidates.sort(key=lambda x: (-x["score"], x["distance_km"]))
+    return candidates
+
+
+def _generate_taste_intros(stores: list) -> dict:
+    """呼叫 Claude Haiku 為每家推薦店生成大叔風格介紹（30 字以內）。回傳 {store_name: intro}。"""
+    import anthropic as _anthropic
+    import os as _os
+    client = _anthropic.Anthropic(api_key=_os.environ.get("ANTHROPIC_API_KEY"))
+
+    store_inputs = []
+    for s in stores:
+        name = s["store_name"]
+        info = s["info"]
+        notes = info.get("notes", "")
+        toppings = info.get("available_toppings", [])
+        topping_str = f"，可加點：{'、'.join(toppings)}" if toppings else ""
+        store_inputs.append(f"【{name}】{notes[:150]}{topping_str}")
+
+    combined = "\n\n".join(store_inputs)
+    prompt = (
+        f"你是一個台灣大叔，熱愛魯肉飯，說話直接有個性。\n"
+        f"以下是幾家店的資料，請為每家店各寫一句30字以內的介紹，用大叔口吻，格式如下：\n"
+        f"【店名】：介紹文\n\n"
+        f"{combined}"
+    )
+    try:
+        msg = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=300,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        raw = msg.content[0].text.strip()
+        intros = {}
+        for line in raw.split("\n"):
+            line = line.strip()
+            if line.startswith("【") and "】：" in line:
+                parts = line.split("】：", 1)
+                key = parts[0][1:]
+                intros[key] = parts[1].strip()
+        return intros
+    except Exception:
+        return {}
+
+
+def _build_taste_flex(stores: list, intros: dict, fallback: bool = False) -> FlexMessage:
+    """組裝個人化推薦的 Flex Message。"""
+    header = "大叔依你的口味找到了：" if not fallback else "附近符合的店不多，大叔盡力了："
+    contents = [
+        FlexText(text=header, weight="bold", size="md", wrap=True),
+    ]
+    for s in stores:
+        name = s["store_name"]
+        dist = s["distance_km"]
+        maps_url = _persona.maps_url(name)
+        intro = intros.get(name, "")
+        contents.append(FlexSeparator(margin="lg"))
+        contents.append(FlexText(text=name, weight="bold", size="md", margin="md", wrap=True))
+        if intro:
+            contents.append(FlexText(text=intro, size="sm", color="#888888", wrap=True))
+        contents.append(FlexText(text=f"距你約 {dist} 公里", size="sm", color="#888888"))
+        contents.append(FlexButton(
+            action=URIAction(label="📍 地圖", uri=maps_url),
+            style="primary",
+            margin="md",
+            height="sm",
+        ))
+    bubble = FlexBubble(
+        body=FlexBox(layout="vertical", contents=contents, padding_all="lg")
+    )
+    qr = QuickReply(items=[
+        QuickReplyItem(action=MessageAction(label="附近巷仔口 🏘️", text="巷仔口"))
+    ])
+    return FlexMessage(alt_text="大叔幫你找到了！", contents=bubble, quick_reply=qr)
+
+
 @_handler.add(MessageEvent, message=LocationMessageContent)
 def handle_location(event):
     if not NEARBY_SEARCH_ENABLED:
@@ -456,6 +634,26 @@ def handle_location(event):
     if not matched_store:
         reply_text = "傳張照片給大叔看，大叔才知道你在找什麼路線！"
         reply_msg = TextMessage(text=reply_text)
+    elif matched_store == _TASTE_SESSION:
+        lat = event.message.latitude
+        lng = event.message.longitude
+        with _sessions_lock:
+            entry = _sessions.get(user_id, {})
+            answers = entry.get("taste_answers", {})
+        candidates = _match_taste_stores(lat, lng, answers)
+        if not candidates:
+            reply_msg = TextMessage(text="這附近大叔找不到有資料的店，換個地方試試！")
+        else:
+            has_good = [c for c in candidates if c["score"] > 0]
+            if len(has_good) >= 2:
+                top = has_good[:3]
+                fallback = False
+            else:
+                top = candidates[:3]
+                fallback = True
+            intros = _generate_taste_intros(top)
+            reply_msg = _build_taste_flex(top, intros, fallback=fallback)
+        _clear_taste_quiz(user_id)
     elif matched_store == _RANDOM_SESSION:
         if not _is_admin(user_id):
             logging.info("[event] random_surprise_triggered")
@@ -929,13 +1127,51 @@ def _text_reply_greeting() -> str:
     return f"{greeting}大叔只吃圖，不吃文字，請投餵一張魯肉飯照片 🍚"
 
 
+def _taste_quiz_quick_reply(step: int) -> QuickReply:
+    """回傳指定題次的 Quick Reply 按鈕。"""
+    q = _TASTE_QUIZ_QUESTIONS[step]
+    return QuickReply(items=[
+        QuickReplyItem(action=MessageAction(label=opt, text=opt))
+        for opt in q["options"]
+    ])
+
+
 @_handler.add(MessageEvent, message=TextMessageContent)
 def handle_text(event):
     text = event.message.text.strip() if event.message.text else ""
+    user_id = event.source.user_id
     try:
         with ApiClient(_config) as api_client:
             messaging_api = MessagingApi(api_client)
-            if text == "統計" and _is_admin(event.source.user_id):
+            # 個人化問卷答案攔截（優先於其他關鍵字）
+            quiz = _get_taste_quiz(user_id)
+            if quiz is not None and text in _TASTE_QUIZ_ALL_OPTIONS:
+                step = quiz["step"]
+                answers = dict(quiz["answers"])
+                q = _TASTE_QUIZ_QUESTIONS[step]
+                answers[q["field"]] = q["mapping"][text]
+                next_step = step + 1
+                if next_step < len(_TASTE_QUIZ_QUESTIONS):
+                    _save_taste_quiz(user_id, next_step, answers)
+                    reply = TextMessage(
+                        text=_TASTE_QUIZ_QUESTIONS[next_step]["question"],
+                        quick_reply=_taste_quiz_quick_reply(next_step),
+                    )
+                else:
+                    # 四題答完，進入等待位置狀態
+                    _clear_taste_quiz(user_id)
+                    _save_session(user_id, _TASTE_SESSION)
+                    # 把答案存到 session 裡供 handle_location 使用
+                    with _sessions_lock:
+                        if user_id in _sessions:
+                            _sessions[user_id]["taste_answers"] = answers
+                    reply = TextMessage(
+                        text="好！大叔幫你在附近找，分享一下你在哪 📍",
+                        quick_reply=QuickReply(items=[
+                            QuickReplyItem(action=LocationAction(label="分享位置 📍"))
+                        ]),
+                    )
+            elif text == "統計" and _is_admin(event.source.user_id):
                 reply = _build_stats_message()
             elif text == "怎麼用":
                 reply = TextMessage(text=_HOW_TO_USE_TEXT)
@@ -957,6 +1193,12 @@ def handle_text(event):
                 reply = _build_hidden_gems_flex(text)
                 if not _is_admin(event.source.user_id):
                     _track("district", f"district_{text}")
+            elif text == "個人化":
+                _save_taste_quiz(user_id, 0, {})
+                reply = TextMessage(
+                    text=_TASTE_QUIZ_QUESTIONS[0]["question"],
+                    quick_reply=_taste_quiz_quick_reply(0),
+                )
             elif text == "隨機驚喜":
                 _save_session(event.source.user_id, _RANDOM_SESSION)
                 from datetime import datetime
