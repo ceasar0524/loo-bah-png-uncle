@@ -722,6 +722,49 @@ def _generate_taste_intros(stores: list) -> dict:
         return {}
 
 
+def _build_taste_loaded_flex(answers: dict) -> FlexMessage:
+    """顯示已儲存的口味偏好摘要，供用戶確認直接用或重新填。"""
+    labels = {
+        "fat_ratio":         {"fat_heavy": "偏肥", "lean_heavy": "偏瘦", None: "都可以"},
+        "skin":              {"with_skin": "黏黏",  "no_skin":    "不黏", None: "都可以"},
+        "sauce_consistency": {"稠": "稠",            "水":          "不稠", None: "都可以"},
+        "sauce_taste":       {"偏甜": "偏甜",        "偏鹹":        "偏鹹", None: "都可以"},
+    }
+    rows = [
+        ("🥩", labels["fat_ratio"].get(answers.get("fat_ratio"), "都可以")),
+        ("🫧", labels["skin"].get(answers.get("skin"), "都可以")),
+        ("🍲", labels["sauce_consistency"].get(answers.get("sauce_consistency"), "都可以")),
+        ("🍬", labels["sauce_taste"].get(answers.get("sauce_taste"), "都可以")),
+    ]
+    header = FlexBox(
+        layout="vertical",
+        background_color="#5C3D2E",
+        padding_all="lg",
+        contents=[
+            FlexText(text="🧂 大叔記得你的口味", weight="bold", size="md", color="#FFFFFF"),
+        ],
+    )
+    body_contents = []
+    for emoji, value in rows:
+        body_contents.append(FlexBox(
+            layout="horizontal",
+            margin="md",
+            contents=[
+                FlexText(text=emoji, size="lg", flex=1),
+                FlexText(text=value, size="md", flex=3, weight="bold"),
+            ],
+        ))
+    bubble = FlexBubble(
+        header=header,
+        body=FlexBox(layout="vertical", contents=body_contents, padding_all="lg"),
+    )
+    qr = QuickReply(items=[
+        QuickReplyItem(action=MessageAction(label="直接用 ✅", text="直接用 ✅")),
+        QuickReplyItem(action=MessageAction(label="重新填 🔄", text="重新填 🔄")),
+    ])
+    return FlexMessage(alt_text="大叔記得你的口味", contents=bubble, quick_reply=qr)
+
+
 def _build_taste_flex(stores: list, intros: dict) -> FlexMessage:
     """組裝個人化推薦的 Flex Message。"""
     header = "大叔依你的口味找到了："
@@ -777,7 +820,12 @@ def handle_location(event):
         if not candidates:
             reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
         elif not matched:
-            reply_msg = TextMessage(text="殘念！附近剛好沒有符合的店，請換個地方試試")
+            reply_msg = TextMessage(
+                text="殘念！附近剛好沒有符合的店，換個地方再試試看？",
+                quick_reply=QuickReply(items=[
+                    QuickReplyItem(action=LocationAction(label="換個地方 📍"))
+                ])
+            )
         else:
             top = matched[:3]
             intros = _generate_taste_intros(top)
@@ -1423,14 +1471,7 @@ def handle_text(event):
                 saved = _load_taste_preference(user_id)
                 if saved:
                     _save_taste_loaded(user_id, saved)
-                    summary = _taste_preference_summary(saved)
-                    reply = TextMessage(
-                        text=f"上次偏好：{summary}\n要直接用還是重新填？",
-                        quick_reply=QuickReply(items=[
-                            QuickReplyItem(action=MessageAction(label="直接用 ✅", text="直接用 ✅")),
-                            QuickReplyItem(action=MessageAction(label="重新填 🔄", text="重新填 🔄")),
-                        ]),
-                    )
+                    reply = _build_taste_loaded_flex(saved)
                 else:
                     _save_taste_quiz(user_id, 0, {})
                     reply = TextMessage(
