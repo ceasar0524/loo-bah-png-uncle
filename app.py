@@ -330,6 +330,33 @@ def _clear_taste_quiz(user_id: str) -> None:
             entry.pop("taste_quiz", None)
 
 
+def _save_last_location(user_id: str, lat: float, lng: float) -> None:
+    """將用戶最後一次分享的位置存入 session，供後續「巷仔口」直接查附近店用。"""
+    with _sessions_lock:
+        if user_id not in _sessions:
+            _sessions[user_id] = {"store": None, "ts": time.time(), "seen": set()}
+        _sessions[user_id]["last_location"] = {"lat": lat, "lng": lng}
+
+
+def _get_last_location(user_id: str) -> dict | None:
+    """回傳上次存的位置，若無或已過期則回傳 None。"""
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is None:
+            return None
+        if time.time() - entry.get("ts", 0) > _SESSION_TTL:
+            return None
+        return entry.get("last_location")
+
+
+def _clear_last_location(user_id: str) -> None:
+    """清除存的位置。"""
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is not None:
+            entry.pop("last_location", None)
+
+
 _handler = WebhookHandler(_LINE_CHANNEL_SECRET)
 _config = Configuration(access_token=_LINE_CHANNEL_ACCESS_TOKEN)
 
@@ -583,18 +610,22 @@ def _generate_taste_intros(stores: list) -> dict:
         intros = {}
         for line in raw.split("\n"):
             line = line.strip()
-            if line.startswith("【") and "】：" in line:
-                parts = line.split("】：", 1)
-                key = parts[0][1:]
-                intros[key] = parts[1].strip()
+            if line.startswith("【") and "】" in line:
+                # 支援全形冒號「：」或半形冒號「:」
+                for sep in ["】：", "】:"]:
+                    if sep in line:
+                        parts = line.split(sep, 1)
+                        key = parts[0][1:]
+                        intros[key] = parts[1].strip()
+                        break
         return intros
     except Exception:
         return {}
 
 
-def _build_taste_flex(stores: list, intros: dict, fallback: bool = False) -> FlexMessage:
+def _build_taste_flex(stores: list, intros: dict) -> FlexMessage:
     """組裝個人化推薦的 Flex Message。"""
-    header = "大叔依你的口味找到了：" if not fallback else "附近符合的店不多，大叔盡力了："
+    header = "大叔依你的口味找到了："
     contents = [
         FlexText(text=header, weight="bold", size="md", wrap=True),
     ]
@@ -641,18 +672,16 @@ def handle_location(event):
             entry = _sessions.get(user_id, {})
             answers = entry.get("taste_answers", {})
         candidates = _match_taste_stores(lat, lng, answers)
+        matched = [c for c in candidates if c["score"] > 0]
         if not candidates:
-            reply_msg = TextMessage(text="這附近大叔找不到有資料的店，換個地方試試！")
+            reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
+        elif not matched:
+            reply_msg = TextMessage(text="殘念！附近剛好沒有符合的店，請換個地方試試")
         else:
-            has_good = [c for c in candidates if c["score"] > 0]
-            if len(has_good) >= 2:
-                top = has_good[:3]
-                fallback = False
-            else:
-                top = candidates[:3]
-                fallback = True
+            top = matched[:3]
             intros = _generate_taste_intros(top)
-            reply_msg = _build_taste_flex(top, intros, fallback=fallback)
+            reply_msg = _build_taste_flex(top, intros)
+        _save_last_location(user_id, lat, lng)
         _clear_taste_quiz(user_id)
     elif matched_store == _RANDOM_SESSION:
         if not _is_admin(user_id):
@@ -1071,6 +1100,57 @@ def _build_hidden_gems_flex(district: str) -> FlexMessage:
     return FlexMessage(alt_text=f"巷仔口 · {district}", contents=bubble)
 
 
+def _nearby_hidden_gems(lat: float, lng: float, radius_km: float = 10.0) -> list:
+    """回傳 radius_km 內的巷仔口店家，依距離排序。每筆為 (name, dist_km, is_open)。"""
+    from src.nearby_search.searcher import haversine_km
+    from datetime import datetime
+    import zoneinfo
+    now = datetime.now(zoneinfo.ZoneInfo("Asia/Taipei"))
+    google_day = now.isoweekday() % 7
+    current_hour = now.hour
+    current_minute = now.minute
+    result = []
+    for name, data in _hidden_gems.items():
+        loc = data.get("location")
+        if not loc:
+            continue
+        dist = haversine_km(lat, lng, loc["lat"], loc["lng"])
+        if dist > radius_km:
+            continue
+        hours_entry = _store_hours.get(name)
+        if hours_entry and hours_entry.get("hours"):
+            periods = hours_entry["hours"].get("periods", [])
+            is_open = _is_currently_open(periods, google_day, current_hour, current_minute) if periods else True
+        else:
+            is_open = True  # 無資料一律視為營業中
+        result.append((name, round(dist, 1), is_open))
+    result.sort(key=lambda x: x[1])
+    return result
+
+
+def _build_nearby_hidden_gems_flex(gems: list) -> FlexMessage:
+    """列出附近巷仔口店家的 Flex Message。每筆為 (name, dist_km, is_open)。"""
+    contents = [
+        FlexText(text="附近的巷仔口店家：", weight="bold", size="md", wrap=True),
+    ]
+    for name, dist, is_open in gems:
+        maps_url = _persona.maps_url(name)
+        contents.append(FlexSeparator(margin="lg"))
+        display_name = name if is_open else f"{name}（目前打烊）"
+        contents.append(FlexText(text=display_name, weight="bold", size="md", margin="md", wrap=True, color="#333333" if is_open else "#AAAAAA"))
+        contents.append(FlexText(text=f"距你約 {dist} 公里", size="sm", color="#888888"))
+        contents.append(FlexButton(
+            action=URIAction(label="📍 地圖", uri=maps_url),
+            style="primary" if is_open else "secondary",
+            margin="md",
+            height="sm",
+        ))
+    bubble = FlexBubble(
+        body=FlexBox(layout="vertical", contents=contents, padding_all="lg")
+    )
+    return FlexMessage(alt_text="附近巷仔口店家", contents=bubble)
+
+
 def _radar_text() -> str:
     n = len(_store_notes)
     return f"""📡 大叔雷達：
@@ -1180,7 +1260,15 @@ def handle_text(event):
             elif text == "大叔雷達":
                 reply = TextMessage(text=_radar_text())
             elif text == "巷仔口":
-                if _hidden_gems:
+                last_loc = _get_last_location(user_id)
+                if last_loc and _hidden_gems:
+                    nearby = _nearby_hidden_gems(last_loc["lat"], last_loc["lng"], radius_km=3.0)
+                    _clear_last_location(user_id)
+                    if nearby:
+                        reply = _build_nearby_hidden_gems_flex(nearby[:3])
+                    else:
+                        reply = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
+                elif _hidden_gems:
                     reply = TextMessage(
                         text="選個區，大叔帶你逛巷仔口 🏘️",
                         quick_reply=_build_hidden_gems_quick_reply(),
