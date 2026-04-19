@@ -681,10 +681,7 @@ def _match_taste_stores(lat: float, lng: float, answers: dict, radius_km: float 
 
 def _generate_taste_intros(stores: list) -> dict:
     """呼叫 Claude Haiku 為每家推薦店生成大叔風格介紹（30 字以內）。回傳 {store_name: intro}。"""
-    import anthropic as _anthropic
-    import os as _os
-    client = _anthropic.Anthropic(api_key=_os.environ.get("ANTHROPIC_API_KEY"))
-
+    import random as _random
     store_inputs = []
     for s in stores:
         name = s["store_name"]
@@ -695,17 +692,20 @@ def _generate_taste_intros(stores: list) -> dict:
         store_inputs.append(f"【{name}】{notes[:150]}{topping_str}")
 
     combined = "\n\n".join(store_inputs)
-    prompt = (
-        f"你是一個台灣大叔，熱愛魯肉飯，說話直接有個性。\n"
-        f"以下是幾家店的資料，請為每家店各寫一句30字以內的介紹，用大叔口吻，格式如下：\n"
+    opening_phrase = _random.choice(["哎唷", "齁", "不錯哦", "夭壽喔", "哇賽", "嘖嘖嘖"])
+    system_prompt = _persona._build_system_prompt(opening_phrase)
+    user_msg = (
+        f"以下是幾家推薦給用戶的店家資料，請為每家店各寫一句30字以內的介紹，"
+        f"只聚焦在魯肉飯的特色和好吃的地方，格式如下：\n"
         f"【店名】：介紹文\n\n"
         f"{combined}"
     )
     try:
-        msg = client.messages.create(
+        msg = _persona._client.messages.create(
             model="claude-haiku-4-5-20251001",
             max_tokens=300,
-            messages=[{"role": "user", "content": prompt}],
+            system=system_prompt,
+            messages=[{"role": "user", "content": user_msg}],
         )
         raw = msg.content[0].text.strip()
         raw_intros = {}
