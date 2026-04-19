@@ -697,8 +697,7 @@ def _generate_taste_intros(stores: list) -> dict:
     combined = "\n\n".join(store_inputs)
     prompt = (
         f"你是一個台灣大叔，熱愛魯肉飯，說話直接有個性。\n"
-        f"以下是幾家店的資料，請為每家店各寫一句30字以內的介紹，用大叔口吻。\n"
-        f"格式如下（店名必須完整照抄，不可縮短）：\n"
+        f"以下是幾家店的資料，請為每家店各寫一句30字以內的介紹，用大叔口吻，格式如下：\n"
         f"【店名】：介紹文\n\n"
         f"{combined}"
     )
@@ -709,17 +708,29 @@ def _generate_taste_intros(stores: list) -> dict:
             messages=[{"role": "user", "content": prompt}],
         )
         raw = msg.content[0].text.strip()
-        intros = {}
+        raw_intros = {}
         for line in raw.split("\n"):
             line = line.strip()
             if line.startswith("【") and "】" in line:
-                # 支援全形冒號「：」或半形冒號「:」
                 for sep in ["】：", "】:"]:
                     if sep in line:
                         parts = line.split(sep, 1)
                         key = parts[0][1:]
-                        intros[key] = parts[1].strip()
+                        raw_intros[key] = parts[1].strip()
                         break
+        # 精確比對，對不上再模糊比對（處理 Haiku 省略區名的情況）
+        store_names = [s["store_name"] for s in stores]
+        intros = {}
+        for raw_key, intro in raw_intros.items():
+            if raw_key in store_names:
+                intros[raw_key] = intro
+            else:
+                matched = next(
+                    (n for n in store_names if raw_key in n or n in raw_key),
+                    None
+                )
+                if matched:
+                    intros[matched] = intro
         return intros
     except Exception:
         return {}
