@@ -708,7 +708,6 @@ def _generate_taste_intros(stores: list) -> dict:
             messages=[{"role": "user", "content": prompt}],
         )
         raw = msg.content[0].text.strip()
-        logging.info(f"[taste_intros] raw: {raw}")
         raw_intros = {}
         for line in raw.split("\n"):
             line = line.strip()
