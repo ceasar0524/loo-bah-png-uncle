@@ -719,19 +719,17 @@ def _generate_taste_intros(stores: list) -> dict:
                         key = parts[0][1:]
                         raw_intros[key] = parts[1].strip()
                         break
-        # 精確比對，對不上再模糊比對（處理 Haiku 省略區名的情況）
+        # 精確比對，對不上再用相似度比對
+        from difflib import get_close_matches
         store_names = [s["store_name"] for s in stores]
         intros = {}
         for raw_key, intro in raw_intros.items():
             if raw_key in store_names:
                 intros[raw_key] = intro
             else:
-                matched = next(
-                    (n for n in store_names if raw_key in n or n in raw_key),
-                    None
-                )
-                if matched:
-                    intros[matched] = intro
+                matched_list = get_close_matches(raw_key, store_names, n=1, cutoff=0.8)
+                if matched_list:
+                    intros[matched_list[0]] = intro
         return intros
     except Exception:
         return {}
