@@ -772,19 +772,22 @@ def _build_taste_loaded_flex(answers: dict) -> FlexMessage:
     return FlexMessage(alt_text="大叔記得你的口味", contents=bubble, quick_reply=qr)
 
 
-def _build_taste_flex(stores: list, intros: dict) -> FlexMessage:
-    """組裝個人化推薦的 Flex Message。"""
+def _build_taste_flex(full: list, partial: list, intros: dict) -> FlexMessage:
+    """組裝個人化推薦的 Flex Message。full 為全符合，partial 為部分符合（score==3）。"""
     header = "大叔依你的口味找到了："
     contents = [
         FlexText(text=header, weight="bold", size="md", wrap=True),
     ]
-    for s in stores:
+    for s in full + partial:
         name = s["store_name"]
         dist = s["distance_km"]
+        is_partial = s in partial
         maps_url = _persona.maps_url(name)
         intro = intros.get(name, "")
         contents.append(FlexSeparator(margin="lg"))
         contents.append(FlexText(text=name, weight="bold", size="md", margin="md", wrap=True))
+        if is_partial:
+            contents.append(FlexText(text="差一點點，可以考慮", size="sm", color="#B07050", wrap=True))
         if intro:
             contents.append(FlexText(text=intro, size="sm", color="#888888", wrap=True))
         contents.append(FlexText(text=f"距你約 {dist} 公里", size="sm", color="#888888"))
@@ -823,20 +826,25 @@ def handle_location(event):
         _save_last_location(user_id, lat, lng)
         _clear_taste_quiz(user_id)
         candidates = _match_taste_stores(lat, lng, answers)
-        matched = [c for c in candidates if c["score"] == len(_TASTE_QUIZ_QUESTIONS)]
+        full = [c for c in candidates if c["score"] == len(_TASTE_QUIZ_QUESTIONS)]
+        partial = [c for c in candidates if c["score"] == len(_TASTE_QUIZ_QUESTIONS) - 1]
         if not candidates:
             reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
-        elif not matched:
+        elif full:
+            top_full = full[:3]
+            intros = _generate_taste_intros(top_full)
+            reply_msg = _build_taste_flex(top_full, [], intros)
+        elif partial:
+            top_partial = partial[:2]
+            intros = _generate_taste_intros(top_partial)
+            reply_msg = _build_taste_flex([], top_partial, intros)
+        else:
             reply_msg = TextMessage(
                 text="殘念！附近剛好沒有符合的店，換個地方再試試看？",
                 quick_reply=QuickReply(items=[
                     QuickReplyItem(action=LocationAction(label="換個地方 📍"))
                 ])
             )
-        else:
-            top = matched[:3]
-            intros = _generate_taste_intros(top)
-            reply_msg = _build_taste_flex(top, intros)
     elif matched_store == _RANDOM_SESSION:
         if not _is_admin(user_id):
             logging.info("[event] random_surprise_triggered")
