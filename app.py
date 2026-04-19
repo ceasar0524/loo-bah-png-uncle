@@ -697,7 +697,8 @@ def _generate_taste_intros(stores: list) -> dict:
     combined = "\n\n".join(store_inputs)
     prompt = (
         f"你是一個台灣大叔，熱愛魯肉飯，說話直接有個性。\n"
-        f"以下是幾家店的資料，請為每家店各寫一句30字以內的介紹，用大叔口吻，格式如下：\n"
+        f"以下是幾家店的資料，請為每家店各寫一句30字以內的介紹，用大叔口吻。\n"
+        f"格式如下（店名必須完整照抄，不可縮短）：\n"
         f"【店名】：介紹文\n\n"
         f"{combined}"
     )
