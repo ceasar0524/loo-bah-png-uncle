@@ -787,7 +787,7 @@ def _build_taste_flex(full: list, partial: list, intros: dict) -> FlexMessage:
         contents.append(FlexSeparator(margin="lg"))
         contents.append(FlexText(text=name, weight="bold", size="md", margin="md", wrap=True))
         if is_partial:
-            contents.append(FlexText(text="差一點點，可以考慮", size="sm", color="#B07050", wrap=True))
+            contents.append(FlexText(text="很接近，可以考慮", size="sm", color="#B07050", wrap=True))
         if intro:
             contents.append(FlexText(text=intro, size="sm", color="#888888", wrap=True))
         contents.append(FlexText(text=f"距你約 {dist} 公里", size="sm", color="#888888"))
