@@ -445,6 +445,67 @@ _UPGRADE_MESSAGES = {
 }
 
 
+_TITLE_CERTIFICATIONS = {
+    "無職轉生者": "初踏江湖，年輕人終究是年輕人！",
+    "肉汁騎士":   "年紀輕輕就有坐騎，前途無量！",
+    "滷鍋守護者": "魯肉飯是你的摯愛，你甘願為它赴湯蹈火",
+    "魯肉飯勇者": "身經百戰，一碗魯肉飯的好壞騙不了你",
+    "魯肉飯大神": "這世界居然有人自稱為大神，大叔甘拜下風🙇",
+}
+
+
+def _build_title_flex(display: str, current_title: str, unique_count: int) -> FlexMessage:
+    """組裝稱號查詢 Flex Message。"""
+    certification = _TITLE_CERTIFICATIONS.get(current_title, "")
+
+    next_info = ""
+    for next_title, threshold in _TITLE_NEXT:
+        if unique_count < threshold:
+            next_info = f"再吃 {threshold - unique_count} 家升級{next_title}！"
+            break
+
+    header = FlexBox(
+        layout="vertical",
+        background_color="#4B2F24",
+        padding_all="lg",
+        contents=[
+            FlexText(text="🏅 " + current_title, weight="bold", size="xl", color="#FFD700"),
+            FlexText(text=display, size="sm", color="#FFD700", margin="xs"),
+        ],
+    )
+
+    body_contents = [
+        FlexText(text="🍚", size="5xl", align="center", margin="lg"),
+        FlexSeparator(margin="lg"),
+        FlexText(
+            text=f"你已解鎖 {unique_count} / 94 家",
+            weight="bold", size="md", align="center", margin="lg", color="#4B2F24",
+        ),
+        FlexText(
+            text=f"大叔認證：{certification}",
+            size="sm", color="#888888", wrap=True, align="center", margin="sm",
+        ),
+    ]
+    if next_info:
+        body_contents.append(FlexText(
+            text=next_info,
+            size="sm", color="#B85A2B", wrap=True, align="center", margin="md", weight="bold",
+        ))
+
+    bubble = FlexBubble(
+        header=header,
+        body=FlexBox(
+            layout="vertical",
+            contents=body_contents,
+            padding_all="lg",
+        ),
+        styles=FlexBubbleStyles(
+            body=FlexBlockStyle(background_color="#F9F5F0"),
+        ),
+    )
+    return FlexMessage(alt_text=f"稱號：{display}", contents=bubble)
+
+
 def _get_title(unique_count: int) -> str:
     """依唯一打卡店家數回傳對應稱號。"""
     for title, threshold in _TITLE_THRESHOLDS:
@@ -1054,6 +1115,9 @@ def handle_location(event):
                 ))
                 for name, _ in nearby[:5]
             ]
+            qr_items.append(
+                QuickReplyItem(action=MessageAction(label="找不到我吃的店 🤷", text="找不到我吃的店 🤷"))
+            )
             rescue_msg = TextMessage(
                 text="大叔幫你找到附近這幾家，選一家打卡！",
                 quick_reply=QuickReply(items=qr_items),
@@ -1838,6 +1902,9 @@ def handle_text(event):
                     reply = _process_checkin_with_title(user_id, pending["store"], pending["db"])
                 else:
                     reply = TextMessage(text=_text_reply_greeting())
+            elif CHECKIN_ENABLED and text == "找不到我吃的店 🤷":
+                _clear_rescue_stores(user_id)
+                reply = TextMessage(text="拍謝！這家大叔還不認識，下次再來！")
             elif CHECKIN_ENABLED and text == "打卡這碗 📍":
                 _set_checkin_rescue(user_id)
                 reply = TextMessage(
@@ -1846,9 +1913,9 @@ def handle_text(event):
                         QuickReplyItem(action=LocationAction(label="分享位置 📍"))
                     ]),
                 )
-            elif CHECKIN_ENABLED and text == "我的代號":
+            elif CHECKIN_ENABLED and text == "我的稱號":
                 if _db is None:
-                    reply = TextMessage(text="目前無法讀取代號，請稍後再試。")
+                    reply = TextMessage(text="目前無法讀取稱號，請稍後再試。")
                 else:
                     try:
                         user_doc = _db.collection("user_footprint").document(user_id).get()
@@ -1856,9 +1923,8 @@ def handle_text(event):
                         docs = list(records_ref.stream())
                         if not docs:
                             title_num = user_id[-4:]
-                            reply = TextMessage(
-                                text=f"你目前是「無職轉生者#{title_num}」\n還沒有打卡記錄！傳張照片給大叔，開始累積魯肉飯足跡 🍚"
-                            )
+                            display = f"無職轉生者#{title_num}"
+                            reply = _build_title_flex(display, "無職轉生者", 0)
                         else:
                             unique_stores = {d.to_dict().get("store_name") for d in docs}
                             unique_count = len(unique_stores)
@@ -1866,16 +1932,9 @@ def handle_text(event):
                             current_title = user_data.get("current_title") or _get_title(unique_count)
                             title_number = user_data.get("title_number") or user_id[-4:]
                             display = f"{current_title}#{title_number}"
-                            next_info = ""
-                            for next_title, threshold in _TITLE_NEXT:
-                                if unique_count < threshold:
-                                    next_info = f"\n距「{next_title}」還差 {threshold - unique_count} 家"
-                                    break
-                            reply = TextMessage(
-                                text=f"你的代號是「{display}」\n已踩點 {unique_count} / 94 家{next_info}"
-                            )
+                            reply = _build_title_flex(display, current_title, unique_count)
                     except Exception:
-                        reply = TextMessage(text="目前無法讀取代號，請稍後再試。")
+                        reply = TextMessage(text="目前無法讀取稱號，請稍後再試。")
             elif CHECKIN_ENABLED and text == "足跡":
                 flex = _build_footprint_flex(user_id)
                 if flex is None:
