@@ -445,6 +445,54 @@ _UPGRADE_MESSAGES = {
 }
 
 
+_TITLE_EMOJIS = {
+    "肉汁騎士":   "🗡️",
+    "滷鍋守護者": "🛡️",
+    "魯肉飯勇者": "⚔️",
+    "魯肉飯大神": "👑",
+}
+
+
+def _build_upgrade_flex(old_title: str, new_title: str, display: str, message: str) -> FlexMessage:
+    """組裝 RPG 風格升級 Flex Message。"""
+    emoji = _TITLE_EMOJIS.get(new_title, "🎉")
+    old_label = old_title or "無職轉生者"
+
+    header = FlexBox(
+        layout="vertical",
+        background_color="#1A1A2E",
+        padding_all="lg",
+        contents=[
+            FlexText(text="✦ 稱號解鎖 ✦", weight="bold", size="sm", color="#FFD700", align="center"),
+            FlexText(
+                text=f"{old_label}  →  {new_title}",
+                size="xs", color="#AAAAAA", align="center", margin="sm",
+            ),
+        ],
+    )
+
+    body = FlexBox(
+        layout="vertical",
+        padding_all="xl",
+        contents=[
+            FlexText(text=emoji, size="5xl", align="center"),
+            FlexText(text=new_title, weight="bold", size="xxl", color="#FFD700", align="center", margin="md"),
+            FlexText(text=f"#{display.split('#')[-1]}", size="sm", color="#AAAAAA", align="center", margin="xs"),
+            FlexSeparator(margin="lg"),
+            FlexText(text=message, size="sm", color="#CCCCCC", wrap=True, align="center", margin="lg"),
+        ],
+    )
+
+    bubble = FlexBubble(
+        header=header,
+        body=body,
+        styles=FlexBubbleStyles(
+            body=FlexBlockStyle(background_color="#16213E"),
+        ),
+    )
+    return FlexMessage(alt_text=f"稱號解鎖：{new_title}", contents=bubble)
+
+
 _TITLE_CERTIFICATIONS = {
     "無職轉生者": "初踏江湖，年輕人終究是年輕人！",
     "肉汁騎士":   "年紀輕輕就有坐騎，前途無量！",
@@ -580,9 +628,10 @@ def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -
 
         if is_ceremony:
             display = f"{new_title}#{title_number}"
-            templates = _UPGRADE_MESSAGES.get(new_title, ["🎉 恭喜晉升【{display}】！"])
+            templates = _UPGRADE_MESSAGES.get(new_title, ["🎉 恭喜晉升！"])
             text = _random.choice(templates).format(display=display)
-            return [confirm_msg, TextMessage(text=text)]
+            upgrade_flex = _build_upgrade_flex(current_title, new_title, display, text)
+            return [confirm_msg, upgrade_flex]
 
     except Exception:
         import traceback
@@ -762,12 +811,13 @@ def _process_image(reply_token, message_id, user_id):
         tmp_path = tmp.name
 
     try:
-        reply_text, matched_store = pipeline_run(tmp_path, index_path="index.npz")
+        reply_text, matched_store, is_lu_rou_fan = pipeline_run(tmp_path, index_path="index.npz")
     except Exception:
         import traceback
         traceback.print_exc()
         reply_text = "大叔出去買魯肉飯，等一下！再試一次啦！"
         matched_store = None
+        is_lu_rou_fan = False
     finally:
         os.unlink(tmp_path)
 
@@ -787,7 +837,7 @@ def _process_image(reply_token, message_id, user_id):
                     qr_items.append(QuickReplyItem(action=MessageAction(label="就是這家 ✅", text="就是這家 ✅")))
                 if NEARBY_SEARCH_ENABLED:
                     qr_items.append(QuickReplyItem(action=LocationAction(label="找附近類似的 📍")))
-            elif CHECKIN_ENABLED:
+            elif CHECKIN_ENABLED and is_lu_rou_fan:
                 qr_items.append(QuickReplyItem(action=MessageAction(label="打卡這碗 📍", text="打卡這碗 📍")))
             if qr_items:
                 msg = TextMessage(text=reply_text, quick_reply=QuickReply(items=qr_items))
