@@ -176,6 +176,9 @@ _LINE_CHANNEL_ACCESS_TOKEN = os.environ["LINE_CHANNEL_ACCESS_TOKEN"]
 # 附近推薦功能開關（設為 "false" 可快速關閉，不影響辨識流程）
 NEARBY_SEARCH_ENABLED = os.getenv("NEARBY_SEARCH_ENABLED", "true").lower() == "true"
 
+# 打卡足跡功能開關（設為 "false" 可快速關閉，不影響辨識流程）
+CHECKIN_ENABLED = os.getenv("CHECKIN_ENABLED", "true").lower() == "true"
+
 # Admin user ID，過濾測試流量不計入統計
 _ADMIN_USER_ID = os.getenv("ADMIN_USER_ID", "")
 
@@ -391,6 +394,143 @@ def _load_taste_preference(user_id: str) -> dict | None:
         return None
 
 
+def _save_checkin_record(user_id: str, store_name: str, db_source: str) -> None:
+    """非同步將打卡記錄寫入 Firestore user_footprint/<user_id>/records/。"""
+    if _db is None:
+        return
+    def _write():
+        from datetime import datetime, timezone
+        try:
+            _db.collection("user_footprint").document(user_id).collection("records").add({
+                "store_name": store_name,
+                "db": db_source,
+                "checked_in_at": datetime.now(timezone.utc),
+            })
+        except Exception:
+            pass
+    threading.Thread(target=_write, daemon=True).start()
+
+
+# ── 稱號系統 ──────────────────────────────────────────────────────────────────
+
+_TITLE_THRESHOLDS = [
+    ("魯肉飯大神", 60),
+    ("魯肉飯勇者", 30),
+    ("滷鍋守護者", 15),
+    ("肉汁騎士",   5),
+]
+_TITLE_NEXT = [
+    ("肉汁騎士",   5),
+    ("滷鍋守護者", 15),
+    ("魯肉飯勇者", 30),
+    ("魯肉飯大神", 60),
+]
+_UPGRADE_MESSAGES = {
+    "肉汁騎士":   [
+        "🗡️ 晉升【{display}】！你已經不是普通人了，繼續衝！",
+        "🗡️ 哎唷，【{display}】出現了！魯肉飯之路才剛開始！",
+    ],
+    "滷鍋守護者": [
+        "🛡️ 晉升【{display}】！你守護的不只是滷鍋，是台灣魂！",
+        "🛡️ 夭壽喔，【{display}】！你已經半個魯肉飯專家了！",
+    ],
+    "魯肉飯勇者": [
+        "⚔️ 晉升【{display}】！勇者就位，魯肉飯江湖震動！",
+        "⚔️ 哇賽，【{display}】！大叔要向你鞠躬了！",
+    ],
+    "魯肉飯大神": [
+        "👑 晉升【{display}】！神蹟降臨，台北魯肉飯江湖從此有你的傳說！",
+        "👑 嘖嘖嘖，【{display}】！大叔活到這個歲數，終於等到你了！",
+    ],
+}
+
+
+def _get_title(unique_count: int) -> str:
+    """依唯一打卡店家數回傳對應稱號。"""
+    for title, threshold in _TITLE_THRESHOLDS:
+        if unique_count >= threshold:
+            return title
+    return "無職轉生者"
+
+
+def _get_title_number(user_id: str, title: str):
+    """產生稱號代號數字。無職轉生者用 user_id 後4碼，其餘用 Firestore transaction 遞增。"""
+    if title == "無職轉生者":
+        return user_id[-4:]
+    if _db is None:
+        return 1
+    try:
+        counter_ref = _db.collection("title_counter").document(title)
+        transaction = _db.transaction()
+
+        @_firestore.transactional
+        def _increment(txn, ref):
+            snap = ref.get(transaction=txn)
+            count = ((snap.to_dict() or {}).get("count") or 0) + 1
+            txn.set(ref, {"count": count})
+            return count
+
+        return _increment(transaction, counter_ref)
+    except Exception:
+        return 1
+
+
+def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -> list:
+    """處理打卡並偵測稱號升級。回傳訊息列表（打卡確認 + 可能的升級儀式）。"""
+    import random as _random
+    confirm_msg = TextMessage(text=f"「{store_name}」打卡成功！大叔幫你記下來了 🍚")
+
+    if _db is None:
+        _save_checkin_record(user_id, store_name, db_source)
+        return [confirm_msg]
+
+    try:
+        records_ref = _db.collection("user_footprint").document(user_id).collection("records")
+        existing_docs = list(records_ref.stream())
+        existing_stores = {d.to_dict().get("store_name") for d in existing_docs}
+        existing_stores.add(store_name)
+        unique_count = len(existing_stores)
+
+        user_doc = _db.collection("user_footprint").document(user_id).get()
+        user_data = user_doc.to_dict() if user_doc.exists else {}
+        current_title = user_data.get("current_title")
+
+        new_title = _get_title(unique_count)
+        needs_update = current_title != new_title
+        is_ceremony = needs_update and new_title != "無職轉生者"
+
+        _save_checkin_record(user_id, store_name, db_source)
+
+        if needs_update:
+            title_number = _get_title_number(user_id, new_title)
+
+            def _update():
+                try:
+                    _db.collection("user_footprint").document(user_id).set(
+                        {"current_title": new_title, "title_number": title_number},
+                        merge=True,
+                    )
+                except Exception:
+                    pass
+
+            threading.Thread(target=_update, daemon=True).start()
+        else:
+            title_number = user_data.get("title_number") or user_id[-4:]
+
+        if is_ceremony:
+            display = f"{new_title}#{title_number}"
+            templates = _UPGRADE_MESSAGES.get(new_title, ["🎉 恭喜晉升【{display}】！"])
+            text = _random.choice(templates).format(display=display)
+            return [confirm_msg, TextMessage(text=text)]
+
+    except Exception:
+        import traceback
+        traceback.print_exc()
+        _save_checkin_record(user_id, store_name, db_source)
+
+    return [confirm_msg]
+
+
 def _taste_preference_summary(answers: dict) -> str:
     """將口味偏好 answers 轉為可讀摘要，例如「偏瘦・不黏・不稠・偏鹹」。"""
     labels = {
@@ -458,6 +598,80 @@ def _clear_taste_loaded(user_id: str) -> None:
             entry.pop("taste_loaded", None)
 
 
+# ── pending_checkin session helpers ──────────────────────────────────────────
+
+def _save_pending_checkin(user_id: str, store_name: str, db_source: str) -> None:
+    with _sessions_lock:
+        if user_id not in _sessions:
+            _sessions[user_id] = {"store": None, "ts": time.time(), "seen": set()}
+        _sessions[user_id]["pending_checkin"] = {"store": store_name, "db": db_source}
+        _sessions[user_id]["ts"] = time.time()
+
+
+def _get_pending_checkin(user_id: str) -> dict | None:
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is None:
+            return None
+        return entry.get("pending_checkin")
+
+
+def _clear_pending_checkin(user_id: str) -> None:
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is not None:
+            entry.pop("pending_checkin", None)
+
+
+# ── checkin_rescue session helpers ───────────────────────────────────────────
+
+def _set_checkin_rescue(user_id: str) -> None:
+    with _sessions_lock:
+        if user_id not in _sessions:
+            _sessions[user_id] = {"store": None, "ts": time.time(), "seen": set()}
+        _sessions[user_id]["checkin_rescue"] = True
+        _sessions[user_id]["ts"] = time.time()
+
+
+def _get_checkin_rescue(user_id: str) -> bool:
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is None:
+            return False
+        return bool(entry.get("checkin_rescue"))
+
+
+def _clear_checkin_rescue(user_id: str) -> None:
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is not None:
+            entry.pop("checkin_rescue", None)
+            entry.pop("rescue_stores", None)
+
+
+def _save_rescue_stores(user_id: str, stores: dict) -> None:
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is not None:
+            entry["rescue_stores"] = stores
+            entry["ts"] = time.time()
+
+
+def _get_rescue_stores(user_id: str) -> dict | None:
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is None:
+            return None
+        return entry.get("rescue_stores")
+
+
+def _clear_rescue_stores(user_id: str) -> None:
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is not None:
+            entry.pop("rescue_stores", None)
+
+
 _handler = WebhookHandler(_LINE_CHANNEL_SECRET)
 _config = Configuration(access_token=_LINE_CHANNEL_ACCESS_TOKEN)
 
@@ -505,13 +719,17 @@ def _process_image(reply_token, message_id, user_id):
     try:
         with ApiClient(_config) as api_client:
             messaging_api = MessagingApi(api_client)
-            if NEARBY_SEARCH_ENABLED and matched_store:
-                msg = TextMessage(
-                    text=reply_text,
-                    quick_reply=QuickReply(items=[
-                        QuickReplyItem(action=LocationAction(label="找附近類似的 📍"))
-                    ]),
-                )
+            qr_items = []
+            if matched_store:
+                if CHECKIN_ENABLED:
+                    _save_pending_checkin(user_id, matched_store, "store_notes")
+                    qr_items.append(QuickReplyItem(action=MessageAction(label="就是這家 ✅", text="就是這家 ✅")))
+                if NEARBY_SEARCH_ENABLED:
+                    qr_items.append(QuickReplyItem(action=LocationAction(label="找附近類似的 📍")))
+            elif CHECKIN_ENABLED:
+                qr_items.append(QuickReplyItem(action=MessageAction(label="打卡這碗 📍", text="打卡這碗 📍")))
+            if qr_items:
+                msg = TextMessage(text=reply_text, quick_reply=QuickReply(items=qr_items))
             else:
                 msg = TextMessage(text=reply_text)
             messaging_api.reply_message(
@@ -818,10 +1036,47 @@ def _build_taste_flex(full: list, partial: list, intros: dict) -> FlexMessage:
 
 @_handler.add(MessageEvent, message=LocationMessageContent)
 def handle_location(event):
+    user_id = event.source.user_id
+
+    # 打卡救援流程（優先於 NEARBY_SEARCH_ENABLED 限制）
+    if CHECKIN_ENABLED and _get_checkin_rescue(user_id):
+        lat = event.message.latitude
+        lng = event.message.longitude
+        _clear_checkin_rescue(user_id)
+        nearby = _find_nearby_checkin_stores(lat, lng, radius_km=0.5)
+        if nearby:
+            rescue_dict = {name: db for name, db in nearby[:5]}
+            _save_rescue_stores(user_id, rescue_dict)
+            qr_items = [
+                QuickReplyItem(action=MessageAction(
+                    label=name if len(name) <= 20 else name[:19] + "…",
+                    text=name,
+                ))
+                for name, _ in nearby[:5]
+            ]
+            rescue_msg = TextMessage(
+                text="大叔幫你找到附近這幾家，選一家打卡！",
+                quick_reply=QuickReply(items=qr_items),
+            )
+        else:
+            rescue_msg = TextMessage(text="附近找不到店，這次打卡先略過")
+        try:
+            with ApiClient(_config) as api_client:
+                messaging_api = MessagingApi(api_client)
+                messaging_api.reply_message(
+                    ReplyMessageRequest(
+                        reply_token=event.reply_token,
+                        messages=[rescue_msg],
+                    )
+                )
+        except Exception:
+            import traceback
+            traceback.print_exc()
+        return
+
     if not NEARBY_SEARCH_ENABLED:
         return
 
-    user_id = event.source.user_id
     matched_store = _get_session(user_id)
 
     if not matched_store:
@@ -1327,6 +1582,122 @@ def _build_nearby_hidden_gems_flex(gems: list) -> FlexMessage:
     return FlexMessage(alt_text="附近巷仔口店家", contents=bubble)
 
 
+def _find_nearby_checkin_stores(lat: float, lng: float, radius_km: float = 0.5) -> list:
+    """搜尋兩個資料庫 radius_km 內的店家，回傳 [(store_name, db_source), ...]，依距離排序。"""
+    from src.nearby_search.searcher import haversine_km
+    result = []
+    for name, data in _store_notes.items():
+        loc = data.get("location")
+        if not loc:
+            continue
+        dist = haversine_km(lat, lng, loc["lat"], loc["lng"])
+        if dist <= radius_km:
+            result.append((name, "store_notes", dist))
+    for name, data in _hidden_gems.items():
+        loc = data.get("location")
+        if not loc:
+            continue
+        dist = haversine_km(lat, lng, loc["lat"], loc["lng"])
+        if dist <= radius_km:
+            result.append((name, "hidden_gems", dist))
+    result.sort(key=lambda x: x[2])
+    return [(name, db) for name, db, _ in result]
+
+
+def _build_footprint_flex(user_id: str):
+    """讀取用戶打卡記錄，組裝足跡 Flex Message。若無記錄回傳 None；Firestore 無法連線回傳 TextMessage。"""
+    if _db is None:
+        return TextMessage(text="目前無法讀取足跡，請稍後再試。")
+    try:
+        import zoneinfo
+        user_doc = _db.collection("user_footprint").document(user_id).get()
+        records_ref = (
+            _db.collection("user_footprint")
+            .document(user_id)
+            .collection("records")
+        )
+        docs = list(records_ref.order_by("checked_in_at", direction="DESCENDING").stream())
+    except Exception:
+        return TextMessage(text="目前無法讀取足跡，請稍後再試。")
+
+    if not docs:
+        return None
+
+    visits = [doc.to_dict() for doc in docs]
+
+    # 去重，依最新造訪順序排列
+    seen_set: set = set()
+    unique_stores: list = []
+    for v in visits:
+        name = v.get("store_name", "")
+        if name and name not in seen_set:
+            seen_set.add(name)
+            unique_stores.append(name)
+
+    unique_count = len(unique_stores)
+    total_stores = 94
+
+    # 稱號資料
+    user_data = user_doc.to_dict() if user_doc.exists else {}
+    current_title = user_data.get("current_title") or _get_title(unique_count)
+    title_number = user_data.get("title_number") or user_id[-4:]
+    title_display = f"{current_title}#{title_number}"
+
+    # 最近一次打卡
+    recent_name = visits[0].get("store_name", "")
+    recent_ts = visits[0].get("checked_in_at")
+    if recent_ts and hasattr(recent_ts, "astimezone"):
+        recent_date = recent_ts.astimezone(zoneinfo.ZoneInfo("Asia/Taipei")).strftime("%m/%d")
+    else:
+        recent_date = ""
+
+    display_stores = unique_stores[:10]
+
+    header = FlexBox(
+        layout="vertical",
+        background_color="#4B2F24",
+        padding_all="lg",
+        contents=[
+            FlexText(text="🍚 魯肉飯足跡", weight="bold", size="md", color="#FFFFFF"),
+            FlexText(
+                text=f"踩點 {unique_count} / {total_stores} 家",
+                size="xxl", weight="bold", color="#FFD700", margin="sm",
+            ),
+            FlexText(text=title_display, size="sm", color="#FFD700", margin="xs"),
+        ],
+    )
+
+    body_contents = []
+    if recent_name:
+        body_contents.append(FlexText(
+            text=f"最近：{recent_name}" + (f"（{recent_date}）" if recent_date else ""),
+            size="sm", color="#888888", wrap=True,
+        ))
+        body_contents.append(FlexSeparator(margin="md"))
+
+    for i, name in enumerate(display_stores):
+        body_contents.append(FlexText(
+            text=f"✅  {name}",
+            size="sm", weight="bold", color="#4B2F24", wrap=True,
+            margin="sm" if i > 0 else "md",
+        ))
+
+    if len(unique_stores) > 10:
+        body_contents.append(FlexText(
+            text=f"…還有 {len(unique_stores) - 10} 家",
+            size="xs", color="#AAAAAA", margin="sm",
+        ))
+
+    bubble = FlexBubble(
+        header=header,
+        body=FlexBox(layout="vertical", contents=body_contents, padding_all="lg"),
+        styles=FlexBubbleStyles(
+            body=FlexBlockStyle(background_color="#F9F5F0"),
+        ),
+    )
+    return FlexMessage(alt_text=f"魯肉飯足跡 {unique_count}/{total_stores} 家", contents=bubble)
+
+
 def _radar_text() -> str:
     n = len(_store_notes)
     return f"""📡 大叔雷達：
@@ -1460,6 +1831,59 @@ def handle_text(event):
                         text=_TASTE_QUIZ_QUESTIONS[0]["question"],
                         quick_reply=_taste_quiz_quick_reply(0),
                     )
+            elif CHECKIN_ENABLED and text == "就是這家 ✅":
+                pending = _get_pending_checkin(user_id)
+                if pending:
+                    _clear_pending_checkin(user_id)
+                    reply = _process_checkin_with_title(user_id, pending["store"], pending["db"])
+                else:
+                    reply = TextMessage(text=_text_reply_greeting())
+            elif CHECKIN_ENABLED and text == "打卡這碗 📍":
+                _set_checkin_rescue(user_id)
+                reply = TextMessage(
+                    text="好！分享一下你在哪，大叔幫你找附近的店 📍",
+                    quick_reply=QuickReply(items=[
+                        QuickReplyItem(action=LocationAction(label="分享位置 📍"))
+                    ]),
+                )
+            elif CHECKIN_ENABLED and text == "我的代號":
+                if _db is None:
+                    reply = TextMessage(text="目前無法讀取代號，請稍後再試。")
+                else:
+                    try:
+                        user_doc = _db.collection("user_footprint").document(user_id).get()
+                        records_ref = _db.collection("user_footprint").document(user_id).collection("records")
+                        docs = list(records_ref.stream())
+                        if not docs:
+                            title_num = user_id[-4:]
+                            reply = TextMessage(
+                                text=f"你目前是「無職轉生者#{title_num}」\n還沒有打卡記錄！傳張照片給大叔，開始累積魯肉飯足跡 🍚"
+                            )
+                        else:
+                            unique_stores = {d.to_dict().get("store_name") for d in docs}
+                            unique_count = len(unique_stores)
+                            user_data = user_doc.to_dict() if user_doc.exists else {}
+                            current_title = user_data.get("current_title") or _get_title(unique_count)
+                            title_number = user_data.get("title_number") or user_id[-4:]
+                            display = f"{current_title}#{title_number}"
+                            next_info = ""
+                            for next_title, threshold in _TITLE_NEXT:
+                                if unique_count < threshold:
+                                    next_info = f"\n距「{next_title}」還差 {threshold - unique_count} 家"
+                                    break
+                            reply = TextMessage(
+                                text=f"你的代號是「{display}」\n已踩點 {unique_count} / 94 家{next_info}"
+                            )
+                    except Exception:
+                        reply = TextMessage(text="目前無法讀取代號，請稍後再試。")
+            elif CHECKIN_ENABLED and text == "足跡":
+                flex = _build_footprint_flex(user_id)
+                if flex is None:
+                    reply = TextMessage(
+                        text="還沒有打卡記錄！下次吃魯肉飯，傳張照片給大叔，就能開始累積足跡 🍚",
+                    )
+                else:
+                    reply = flex
             elif text == "統計" and _is_admin(event.source.user_id):
                 reply = _build_stats_message()
             elif text == "怎麼用":
@@ -1528,12 +1952,19 @@ def handle_text(event):
                     ]),
                 )
             else:
-                reply = TextMessage(text=_text_reply_greeting())
+                rescue_stores = _get_rescue_stores(user_id) if CHECKIN_ENABLED else None
+                if rescue_stores and text in rescue_stores:
+                    db_source = rescue_stores[text]
+                    _clear_rescue_stores(user_id)
+                    reply = _process_checkin_with_title(user_id, text, db_source)
+                else:
+                    reply = TextMessage(text=_text_reply_greeting())
             if reply is not None:
+                send_msgs = reply if isinstance(reply, list) else [reply]
                 messaging_api.reply_message(
                     ReplyMessageRequest(
                         reply_token=event.reply_token,
-                        messages=[reply],
+                        messages=send_msgs,
                     )
                 )
     except Exception:
