@@ -834,8 +834,9 @@ def _process_image(reply_token, message_id, user_id):
             if matched_store:
                 if CHECKIN_ENABLED:
                     _save_pending_checkin(user_id, matched_store, "store_notes")
-                    qr_items.append(QuickReplyItem(action=MessageAction(label="就是這家 ✅", text="就是這家 ✅")))
-                if NEARBY_SEARCH_ENABLED:
+                    qr_items.append(QuickReplyItem(action=MessageAction(label=f"✅ {matched_store}", text="就是這家 ✅")))
+                    qr_items.append(QuickReplyItem(action=MessageAction(label="打卡這碗 📍", text="打卡這碗 📍")))
+                elif NEARBY_SEARCH_ENABLED:
                     qr_items.append(QuickReplyItem(action=LocationAction(label="找附近類似的 📍")))
             elif CHECKIN_ENABLED and is_lu_rou_fan:
                 qr_items.append(QuickReplyItem(action=MessageAction(label="打卡這碗 📍", text="打卡這碗 📍")))
