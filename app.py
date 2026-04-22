@@ -947,13 +947,17 @@ h2 {{ font-size: 1.1rem; margin-bottom: 1rem; color: #FFD700; }}
 <div class="danmaku-container" id="danmaku"></div>
 <div class="empty" id="emptyMsg" style="display:none">還沒有人評價，你來當第一個！</div>
 <script>
+function getParam(url, key) {{
+  const re = new RegExp("[?&]" + key.replace(".", "\\.") + "=([^&]+)");
+  const m = url.match(re);
+  return m ? decodeURIComponent(m[1]) : "";
+}}
 liff.init({{ liffId: "{liff_id}" }}).then(() => {{
-  const params = new URLSearchParams(window.location.search);
-  let store = params.get("store") || "";
+  const href = window.location.href;
+  let store = getParam(href, "store");
   if (!store) {{
-    const liffState = decodeURIComponent(params.get("liff.state") || "");
-    const stateParams = new URLSearchParams(liffState.startsWith("?") ? liffState.slice(1) : liffState);
-    store = stateParams.get("store") || "";
+    const rawState = getParam(href, "liff.state");
+    if (rawState) store = getParam(decodeURIComponent(rawState), "store");
   }}
   document.getElementById("storeName").textContent = store;
   if (!store) {{
