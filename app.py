@@ -179,6 +179,10 @@ NEARBY_SEARCH_ENABLED = os.getenv("NEARBY_SEARCH_ENABLED", "true").lower() == "t
 # 打卡足跡功能開關（設為 "false" 可快速關閉，不影響辨識流程）
 CHECKIN_ENABLED = os.getenv("CHECKIN_ENABLED", "true").lower() == "true"
 
+# LIFF URL（在 LINE Developers Console 建立後填入）
+RATINGS_LIFF_URL = os.getenv("RATINGS_LIFF_URL", "")
+SHARE_LIFF_URL = os.getenv("SHARE_LIFF_URL", "")
+
 # Admin user ID，過濾測試流量不計入統計
 _ADMIN_USER_ID = os.getenv("ADMIN_USER_ID", "")
 
@@ -586,18 +590,28 @@ def _get_title_number(user_id: str, title: str) -> str:
         return f"1-{suffix}"
 
 
-def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -> list:
-    """處理打卡並偵測稱號升級。回傳訊息列表（打卡確認 + 可能的升級儀式）。"""
-    import random as _random
-    nearby_qr = QuickReply(items=[QuickReplyItem(action=LocationAction(label="找附近類似的 📍"))]) if NEARBY_SEARCH_ENABLED else None
-    confirm_msg = TextMessage(
-        text=f"「{store_name}」打卡成功！大叔幫你記下來了 🍚",
-        quick_reply=nearby_qr,
+def _build_rating_prompt(store_name: str) -> TextMessage:
+    """組裝打卡後的評價邀請訊息。"""
+    return TextMessage(
+        text="這家怎麼樣？",
+        quick_reply=QuickReply(items=[
+            QuickReplyItem(action=MessageAction(label="必吃 👍", text="必吃 👍")),
+            QuickReplyItem(action=MessageAction(label="普通 😐", text="普通 😐")),
+            QuickReplyItem(action=MessageAction(label="不能只有我吃到 🤫", text="不能只有我吃到 🤫")),
+        ]),
     )
+
+
+def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -> list:
+    """處理打卡並偵測稱號升級。回傳訊息列表（打卡確認 + 可能的升級儀式 + 評價邀請）。"""
+    import random as _random
+    confirm_msg = TextMessage(text=f"「{store_name}」打卡成功！大叔幫你記下來了 🍚")
+    _save_pending_rating(user_id, store_name)
+    rating_msg = _build_rating_prompt(store_name)
 
     if _db is None:
         _save_checkin_record(user_id, store_name, db_source)
-        return [confirm_msg]
+        return [confirm_msg, rating_msg]
 
     try:
         records_ref = _db.collection("user_footprint").document(user_id).collection("records")
@@ -637,14 +651,14 @@ def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -
             templates = _UPGRADE_MESSAGES.get(new_title, ["🎉 恭喜晉升！"])
             text = _random.choice(templates).format(display=display)
             upgrade_flex = _build_upgrade_flex(current_title, new_title, display, text)
-            return [confirm_msg, upgrade_flex]
+            return [confirm_msg, upgrade_flex, rating_msg]
 
     except Exception:
         import traceback
         traceback.print_exc()
         _save_checkin_record(user_id, store_name, db_source)
 
-    return [confirm_msg]
+    return [confirm_msg, rating_msg]
 
 
 def _taste_preference_summary(answers: dict) -> str:
@@ -788,6 +802,55 @@ def _clear_rescue_stores(user_id: str) -> None:
             entry.pop("rescue_stores", None)
 
 
+# ── pending_rating session helpers ───────────────────────────────────────────
+
+def _save_pending_rating(user_id: str, store_name: str) -> None:
+    with _sessions_lock:
+        if user_id not in _sessions:
+            _sessions[user_id] = {"store": None, "ts": time.time(), "seen": set()}
+        _sessions[user_id]["pending_rating"] = store_name
+        _sessions[user_id]["ts"] = time.time()
+
+
+def _get_pending_rating(user_id: str) -> str | None:
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is None:
+            return None
+        return entry.get("pending_rating")
+
+
+def _clear_pending_rating(user_id: str) -> None:
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is not None:
+            entry.pop("pending_rating", None)
+
+
+def _save_rating_record(user_id: str, store_name: str, rating: str) -> None:
+    """非同步寫入評價記錄至 store_ratings/<store_name>/votes/<user_id>。"""
+    if _db is None:
+        return
+
+    def _write():
+        try:
+            from datetime import datetime, timezone
+            user_doc = _db.collection("user_footprint").document(user_id).get()
+            user_data = user_doc.to_dict() if user_doc.exists else {}
+            title = user_data.get("current_title") or "無職轉生者"
+            title_number = user_data.get("title_number") or user_id[-4:]
+            _db.collection("store_ratings").document(store_name).collection("votes").document(user_id).set({
+                "rating": rating,
+                "rated_at": datetime.now(timezone.utc),
+                "title": title,
+                "title_number": title_number,
+            })
+        except Exception:
+            pass
+
+    threading.Thread(target=_write, daemon=True).start()
+
+
 _handler = WebhookHandler(_LINE_CHANNEL_SECRET)
 _config = Configuration(access_token=_LINE_CHANNEL_ACCESS_TOKEN)
 
@@ -801,6 +864,178 @@ def webhook():
     except InvalidSignatureError:
         abort(400)
     return "OK"
+
+
+@app.route("/api/ratings/<path:store_name>", methods=["GET"])
+def api_ratings(store_name):
+    """回傳指定店家的 must_eat 評價代號清單，依稱號等級排序。"""
+    if _db is None:
+        return {"votes": []}, 200
+    try:
+        _TITLE_RANK = {"魯肉飯大神": 4, "魯肉飯勇者": 3, "滷鍋守護者": 2, "肉汁騎士": 1, "無職轉生者": 0}
+        votes_ref = _db.collection("store_ratings").document(store_name).collection("votes")
+        docs = votes_ref.where("rating", "==", "must_eat").stream()
+        results = []
+        for doc in docs:
+            d = doc.to_dict()
+            title = d.get("title", "無職轉生者")
+            title_number = d.get("title_number", "")
+            results.append({"display": f"{title}#{title_number}", "rank": _TITLE_RANK.get(title, 0)})
+        results.sort(key=lambda x: x["rank"], reverse=True)
+        return {"votes": [r["display"] for r in results]}, 200
+    except Exception:
+        return {"votes": []}, 200
+
+
+@app.route("/api/user-title", methods=["GET"])
+def api_user_title():
+    """用 LIFF access token 查詢用戶稱號。"""
+    import urllib.request as _urllib_req
+    import json as _json
+    auth = request.headers.get("Authorization", "")
+    if not auth.startswith("Bearer "):
+        return {"error": "unauthorized"}, 401
+    access_token = auth[7:]
+    try:
+        req = _urllib_req.Request(
+            "https://api.line.me/v2/profile",
+            headers={"Authorization": f"Bearer {access_token}"},
+        )
+        with _urllib_req.urlopen(req, timeout=5) as resp:
+            profile = _json.loads(resp.read().decode())
+        user_id = profile.get("userId", "")
+        if not user_id:
+            return {"error": "invalid token"}, 401
+        if _db is None:
+            suffix = user_id[-4:]
+            return {"title": "無職轉生者", "title_number": suffix, "display": f"無職轉生者#{suffix}"}, 200
+        user_doc = _db.collection("user_footprint").document(user_id).get()
+        user_data = user_doc.to_dict() if user_doc.exists else {}
+        title = user_data.get("current_title") or "無職轉生者"
+        title_number = user_data.get("title_number") or user_id[-4:]
+        return {"title": title, "title_number": title_number, "display": f"{title}#{title_number}"}, 200
+    except Exception:
+        return {"error": "server error"}, 500
+
+
+@app.route("/liff/ratings", methods=["GET"])
+def liff_ratings():
+    """LIFF 評價展示頁：彈幕式展示 must_eat 評價代號。"""
+    store = request.args.get("store", "")
+    liff_id = os.getenv("RATINGS_LIFF_ID", "")
+    html = f"""<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>同好評價</title>
+<script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+<style>
+* {{ box-sizing: border-box; margin: 0; padding: 0; }}
+body {{ background: #1A1A2E; color: #FFD700; font-family: sans-serif; overflow: hidden; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }}
+h2 {{ font-size: 1.1rem; margin-bottom: 1rem; color: #FFD700; }}
+.store-name {{ font-size: 1.4rem; font-weight: bold; margin-bottom: 1.5rem; color: #fff; }}
+.danmaku-container {{ width: 100%; height: 60vh; position: relative; overflow: hidden; }}
+.danmaku-item {{ position: absolute; white-space: nowrap; font-size: 1rem; font-weight: bold; color: #FFD700; animation: scroll linear forwards; opacity: 0.9; }}
+@keyframes scroll {{ from {{ right: -300px; }} to {{ right: 110%; }} }}
+.empty {{ font-size: 1rem; color: #AAAAAA; text-align: center; padding: 2rem; }}
+</style>
+</head>
+<body>
+<h2>🔥 同好推薦</h2>
+<div class="store-name" id="storeName"></div>
+<div class="danmaku-container" id="danmaku"></div>
+<div class="empty" id="emptyMsg" style="display:none">還沒有人評價，你來當第一個！</div>
+<script>
+const store = decodeURIComponent("{store}");
+document.getElementById("storeName").textContent = store;
+liff.init({{ liffId: "{liff_id}" }}).catch(() => {{}});
+
+fetch("/api/ratings/" + encodeURIComponent(store))
+  .then(r => r.json())
+  .then(data => {{
+    const votes = data.votes || [];
+    if (votes.length === 0) {{
+      document.getElementById("emptyMsg").style.display = "block";
+      return;
+    }}
+    const container = document.getElementById("danmaku");
+    let delay = 0;
+    const shoot = () => {{
+      const idx = Math.floor(Math.random() * votes.length);
+      const el = document.createElement("div");
+      el.className = "danmaku-item";
+      el.textContent = votes[idx] + " 說必吃！";
+      el.style.top = Math.random() * 80 + "%";
+      const dur = 4 + Math.random() * 4;
+      el.style.animation = `scroll ${{dur}}s linear forwards`;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), dur * 1000);
+    }};
+    shoot();
+    setInterval(shoot, 1200);
+  }});
+</script>
+</body>
+</html>"""
+    return html, 200, {"Content-Type": "text/html; charset=utf-8"}
+
+
+@app.route("/liff/share", methods=["GET"])
+def liff_share():
+    """LIFF 分享頁：立即呼叫 shareTargetPicker 發送店家 Flex Message。"""
+    store = request.args.get("store", "")
+    lat = request.args.get("lat", "")
+    lng = request.args.get("lng", "")
+    liff_id = os.getenv("SHARE_LIFF_ID", "")
+    maps_url = f"https://maps.google.com/?q={lat},{lng}" if lat and lng else "https://maps.google.com/"
+    html = f"""<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>分享店家</title>
+<script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+<style>
+body {{ background: #1A1A2E; color: #FFD700; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; }}
+p {{ color: #AAAAAA; font-size: 0.9rem; }}
+</style>
+</head>
+<body>
+<p>準備分享中⋯</p>
+<script>
+const store = decodeURIComponent("{store}");
+const mapsUrl = "{maps_url}";
+liff.init({{ liffId: "{liff_id}" }}).then(() => {{
+  return fetch("/api/user-title", {{
+    headers: {{ "Authorization": "Bearer " + liff.getAccessToken() }}
+  }});
+}}).then(r => r.json()).then(data => {{
+  const display = data.display || "魯肉飯同好";
+  return liff.shareTargetPicker([{{
+    type: "flex",
+    altText: display + " 推薦：" + store,
+    contents: {{
+      type: "bubble",
+      header: {{
+        type: "box", layout: "vertical", backgroundColor: "#4B2F24", paddingAll: "lg",
+        contents: [{{ type: "text", text: "🍚 同好推薦", weight: "bold", color: "#FFFFFF", size: "md" }}]
+      }},
+      body: {{
+        type: "box", layout: "vertical", paddingAll: "lg",
+        contents: [
+          {{ type: "text", text: store, weight: "bold", size: "xl", wrap: true, color: "#4B2F24" }},
+          {{ type: "text", text: display + " 推薦這家！", size: "sm", color: "#B85A2B", margin: "sm" }},
+          {{ type: "button", action: {{ type: "uri", label: "📍 地圖", uri: mapsUrl }}, style: "primary", margin: "md", height: "sm" }}
+        ]
+      }}
+    }}
+  }}]);
+}}).then(() => liff.closeWindow()).catch(() => liff.closeWindow());
+</script>
+</body>
+</html>"""
+    return html, 200, {"Content-Type": "text/html; charset=utf-8"}
 
 
 def _process_image(reply_token, message_id, user_id):
@@ -861,6 +1096,17 @@ def _process_image(reply_token, message_id, user_id):
         traceback.print_exc()
 
 
+def _get_must_eat_count(store_name: str) -> int:
+    """讀取 store_ratings/<store_name>/votes 中 must_eat 票數。"""
+    if _db is None:
+        return 0
+    try:
+        votes = _db.collection("store_ratings").document(store_name).collection("votes").where("rating", "==", "must_eat").stream()
+        return sum(1 for _ in votes)
+    except Exception:
+        return 0
+
+
 def _build_random_flex(result: dict) -> FlexMessage:
     """組裝隨機驚喜的 Flex Message。"""
     name = result["store_name"]
@@ -885,10 +1131,13 @@ def _build_random_flex(result: dict) -> FlexMessage:
     else:
         contents.append(FlexSeparator(margin="md"))
 
+    must_eat_count = _get_must_eat_count(name)
     display_note = _store_notes.get(name, {}).get("display_note", "")
     contents += [
         FlexText(text=name, weight="bold", size="md", margin="md", wrap=True),
     ]
+    if must_eat_count > 0:
+        contents.append(FlexText(text=f"{must_eat_count} 位同好推薦 🔥", size="sm", color="#B85A2B", weight="bold"))
     if display_note:
         contents.append(FlexText(text=display_note, size="sm", color="#888888"))
     contents += [
@@ -899,6 +1148,26 @@ def _build_random_flex(result: dict) -> FlexMessage:
             margin="md",
             height="sm",
         ),
+    ]
+    if RATINGS_LIFF_URL:
+        from urllib.parse import quote
+        ratings_url = f"{RATINGS_LIFF_URL}?store={quote(name)}"
+        contents.append(FlexButton(
+            action=URIAction(label="查看評價 💬", uri=ratings_url),
+            style="secondary",
+            margin="sm",
+            height="sm",
+        ))
+    if SHARE_LIFF_URL:
+        from urllib.parse import quote
+        share_url = f"{SHARE_LIFF_URL}?store={quote(name)}&lat={loc.get('lat', '')}&lng={loc.get('lng', '')}"
+        contents.append(FlexButton(
+            action=URIAction(label="分享這家店 📤", uri=share_url),
+            style="secondary",
+            margin="sm",
+            height="sm",
+        ))
+    contents += [
         FlexSeparator(margin="md"),
         FlexText(text="⏰ 出發前請參考各家營業時間",
                  size="xs", color="#888888", wrap=True, margin="md"),
@@ -1130,8 +1399,11 @@ def _build_taste_flex(full: list, partial: list, intros: dict) -> FlexMessage:
         is_partial = s in partial
         maps_url = _persona.maps_url(name)
         intro = intros.get(name, "")
+        must_eat_count = _get_must_eat_count(name)
         contents.append(FlexSeparator(margin="lg"))
         contents.append(FlexText(text=name, weight="bold", size="md", margin="md", wrap=True))
+        if must_eat_count > 0:
+            contents.append(FlexText(text=f"{must_eat_count} 位同好推薦 🔥", size="sm", color="#B85A2B", weight="bold"))
         if is_partial:
             contents.append(FlexText(text="很接近，可以考慮", size="sm", color="#B07050", wrap=True))
         if intro:
@@ -1143,6 +1415,25 @@ def _build_taste_flex(full: list, partial: list, intros: dict) -> FlexMessage:
             margin="md",
             height="sm",
         ))
+        if RATINGS_LIFF_URL:
+            from urllib.parse import quote
+            ratings_url = f"{RATINGS_LIFF_URL}?store={quote(name)}"
+            contents.append(FlexButton(
+                action=URIAction(label="查看評價 💬", uri=ratings_url),
+                style="secondary",
+                margin="sm",
+                height="sm",
+            ))
+        if SHARE_LIFF_URL:
+            from urllib.parse import quote
+            loc = _store_notes.get(name, {}).get("location") or _hidden_gems.get(name, {}).get("location") or {}
+            share_url = f"{SHARE_LIFF_URL}?store={quote(name)}&lat={loc.get('lat', '')}&lng={loc.get('lng', '')}"
+            contents.append(FlexButton(
+                action=URIAction(label="分享這家店 📤", uri=share_url),
+                style="secondary",
+                margin="sm",
+                height="sm",
+            ))
     bubble = FlexBubble(
         body=FlexBox(layout="vertical", contents=contents, padding_all="lg")
     )
@@ -1991,6 +2282,19 @@ def handle_text(event):
                         QuickReplyItem(action=LocationAction(label="分享位置 📍"))
                     ]),
                 )
+            elif CHECKIN_ENABLED and text in ("必吃 👍", "普通 😐", "不能只有我吃到 🤫"):
+                pending_store = _get_pending_rating(user_id)
+                if pending_store:
+                    _clear_pending_rating(user_id)
+                    rating_map = {"必吃 👍": "must_eat", "普通 😐": "neutral", "不能只有我吃到 🤫": "bad"}
+                    _save_rating_record(user_id, pending_store, rating_map[text])
+                    nearby_qr_items = [QuickReplyItem(action=LocationAction(label="找附近類似的 📍"))] if NEARBY_SEARCH_ENABLED else []
+                    if nearby_qr_items:
+                        reply = TextMessage(text="感謝評價！", quick_reply=QuickReply(items=nearby_qr_items))
+                    else:
+                        reply = TextMessage(text="感謝評價！")
+                else:
+                    reply = TextMessage(text=_text_reply_greeting())
             elif CHECKIN_ENABLED and text == "我的稱號":
                 if _db is None:
                     reply = TextMessage(text="目前無法讀取稱號，請稍後再試。")
