@@ -2333,6 +2333,8 @@ def handle_text(event):
                 pending = _get_pending_checkin(user_id)
                 if pending:
                     _clear_pending_checkin(user_id)
+                    if not _is_admin(user_id):
+                        _track("checkin_confirmed")
                     reply = _process_checkin_with_title(user_id, pending["store"], pending["db"])
                 else:
                     reply = TextMessage(text=_text_reply_greeting())
@@ -2352,6 +2354,8 @@ def handle_text(event):
                 if pending_store:
                     _clear_pending_rating(user_id)
                     rating_map = {"必吃 👍": "must_eat", "普通 😐": "neutral", "不能只有我吃到 🤫": "bad"}
+                    if not _is_admin(user_id):
+                        _track("rating_submitted", f"rating_{rating_map[text]}")
                     _save_rating_record(user_id, pending_store, rating_map[text])
                     nearby_qr_items = [QuickReplyItem(action=LocationAction(label="找附近類似的 📍"))] if NEARBY_SEARCH_ENABLED else []
                     if nearby_qr_items:
