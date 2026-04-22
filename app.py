@@ -1775,7 +1775,13 @@ def _build_stats_message() -> TextMessage:
             near = d.get("nearby_search", 0)
             rand = d.get("random_surprise", 0)
             personal = d.get("personal_recommendation", 0)
-            return f"  丟照片：{img} 次\n  附近相似風格：{near} 次\n  隨機驚喜：{rand} 次\n  個人化：{personal} 次"
+            checkin = d.get("checkin_confirmed", 0)
+            rating = d.get("rating_submitted", 0)
+            return (
+                f"  丟照片：{img} 次\n  附近相似風格：{near} 次\n"
+                f"  隨機驚喜：{rand} 次\n  個人化：{personal} 次\n"
+                f"  就是這家：{checkin} 次\n  回答評價：{rating} 次"
+            )
 
         districts = {k[len("district_"):]: v for k, v in total.items() if k.startswith("district_")}
         district_lines = "\n".join(
