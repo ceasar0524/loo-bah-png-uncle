@@ -589,7 +589,11 @@ def _get_title_number(user_id: str, title: str) -> str:
 def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -> list:
     """處理打卡並偵測稱號升級。回傳訊息列表（打卡確認 + 可能的升級儀式）。"""
     import random as _random
-    confirm_msg = TextMessage(text=f"「{store_name}」打卡成功！大叔幫你記下來了 🍚")
+    nearby_qr = QuickReply(items=[QuickReplyItem(action=LocationAction(label="找附近類似的 📍"))]) if NEARBY_SEARCH_ENABLED else None
+    confirm_msg = TextMessage(
+        text=f"「{store_name}」打卡成功！大叔幫你記下來了 🍚",
+        quick_reply=nearby_qr,
+    )
 
     if _db is None:
         _save_checkin_record(user_id, store_name, db_source)
@@ -2089,6 +2093,8 @@ def handle_text(event):
                 if rescue_stores and text in rescue_stores:
                     db_source = rescue_stores[text]
                     _clear_rescue_stores(user_id)
+                    if NEARBY_SEARCH_ENABLED:
+                        _save_session(user_id, text)
                     reply = _process_checkin_with_title(user_id, text, db_source)
                 else:
                     reply = TextMessage(text=_text_reply_greeting())
