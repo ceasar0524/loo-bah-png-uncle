@@ -947,41 +947,33 @@ h2 {{ font-size: 1.1rem; margin-bottom: 1rem; color: #FFD700; }}
 <div class="danmaku-container" id="danmaku"></div>
 <div class="empty" id="emptyMsg" style="display:none">還沒有人評價，你來當第一個！</div>
 <script>
-liff.init({{ liffId: "{liff_id}" }}).then(() => {{
-  const params = new URLSearchParams(window.location.search);
-  const store = params.get("store") || "";
-  document.getElementById("storeName").textContent = store;
-  if (!store) {{
-    document.getElementById("emptyMsg").style.display = "block";
-    return;
-  }}
-  fetch("/api/ratings/" + encodeURIComponent(store))
-    .then(r => r.json())
-    .then(data => {{
-      const votes = data.votes || [];
-      if (votes.length === 0) {{
-        document.getElementById("emptyMsg").style.display = "block";
-        return;
-      }}
-      const container = document.getElementById("danmaku");
-      const shoot = () => {{
-        const idx = Math.floor(Math.random() * votes.length);
-        const el = document.createElement("div");
-        el.className = "danmaku-item";
-        el.textContent = votes[idx] + " 說必吃！";
-        el.style.top = Math.random() * 80 + "%";
-        const dur = 4 + Math.random() * 4;
-        el.style.animation = `scroll ${{dur}}s linear forwards`;
-        container.appendChild(el);
-        setTimeout(() => el.remove(), dur * 1000);
-      }};
-      shoot();
-      setInterval(shoot, 1200);
-    }});
-}}).catch(err => {{
-  document.getElementById("emptyMsg").style.display = "block";
-  document.getElementById("emptyMsg").textContent = "載入失敗，請稍後再試";
-}});
+const store = decodeURIComponent("{store}");
+document.getElementById("storeName").textContent = store;
+liff.init({{ liffId: "{liff_id}" }}).catch(() => {{}});
+
+fetch("/api/ratings/" + encodeURIComponent(store))
+  .then(r => r.json())
+  .then(data => {{
+    const votes = data.votes || [];
+    if (votes.length === 0) {{
+      document.getElementById("emptyMsg").style.display = "block";
+      return;
+    }}
+    const container = document.getElementById("danmaku");
+    const shoot = () => {{
+      const idx = Math.floor(Math.random() * votes.length);
+      const el = document.createElement("div");
+      el.className = "danmaku-item";
+      el.textContent = votes[idx] + " 說必吃！";
+      el.style.top = Math.random() * 80 + "%";
+      const dur = 4 + Math.random() * 4;
+      el.style.animation = `scroll ${{dur}}s linear forwards`;
+      container.appendChild(el);
+      setTimeout(() => el.remove(), dur * 1000);
+    }};
+    shoot();
+    setInterval(shoot, 1200);
+  }});
 </script>
 </body>
 </html>"""
