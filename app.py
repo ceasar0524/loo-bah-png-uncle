@@ -562,12 +562,13 @@ def _get_title(unique_count: int) -> str:
     return "無職轉生者"
 
 
-def _get_title_number(user_id: str, title: str):
-    """產生稱號代號數字。無職轉生者用 user_id 後4碼，其餘用 Firestore transaction 遞增。"""
+def _get_title_number(user_id: str, title: str) -> str:
+    """產生稱號代號。無職轉生者用 user_id 後4碼，其餘用流水號-後4碼格式（如 1-a3f9）。"""
+    suffix = user_id[-4:]
     if title == "無職轉生者":
-        return user_id[-4:]
+        return suffix
     if _db is None:
-        return 1
+        return f"1-{suffix}"
     try:
         counter_ref = _db.collection("title_counter").document(title)
         transaction = _db.transaction()
@@ -579,9 +580,10 @@ def _get_title_number(user_id: str, title: str):
             txn.set(ref, {"count": count})
             return count
 
-        return _increment(transaction, counter_ref)
+        count = _increment(transaction, counter_ref)
+        return f"{count}-{suffix}"
     except Exception:
-        return 1
+        return f"1-{suffix}"
 
 
 def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -> list:
