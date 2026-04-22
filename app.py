@@ -947,34 +947,41 @@ h2 {{ font-size: 1.1rem; margin-bottom: 1rem; color: #FFD700; }}
 <div class="danmaku-container" id="danmaku"></div>
 <div class="empty" id="emptyMsg" style="display:none">還沒有人評價，你來當第一個！</div>
 <script>
-const store = decodeURIComponent("{store}");
-document.getElementById("storeName").textContent = store;
-liff.init({{ liffId: "{liff_id}" }}).catch(() => {{}});
-
-fetch("/api/ratings/" + encodeURIComponent(store))
-  .then(r => r.json())
-  .then(data => {{
-    const votes = data.votes || [];
-    if (votes.length === 0) {{
-      document.getElementById("emptyMsg").style.display = "block";
-      return;
-    }}
-    const container = document.getElementById("danmaku");
-    let delay = 0;
-    const shoot = () => {{
-      const idx = Math.floor(Math.random() * votes.length);
-      const el = document.createElement("div");
-      el.className = "danmaku-item";
-      el.textContent = votes[idx] + " 說必吃！";
-      el.style.top = Math.random() * 80 + "%";
-      const dur = 4 + Math.random() * 4;
-      el.style.animation = `scroll ${{dur}}s linear forwards`;
-      container.appendChild(el);
-      setTimeout(() => el.remove(), dur * 1000);
-    }};
-    shoot();
-    setInterval(shoot, 1200);
-  }});
+liff.init({{ liffId: "{liff_id}" }}).then(() => {{
+  const params = new URLSearchParams(window.location.search);
+  const store = params.get("store") || "";
+  document.getElementById("storeName").textContent = store;
+  if (!store) {{
+    document.getElementById("emptyMsg").style.display = "block";
+    return;
+  }}
+  fetch("/api/ratings/" + encodeURIComponent(store))
+    .then(r => r.json())
+    .then(data => {{
+      const votes = data.votes || [];
+      if (votes.length === 0) {{
+        document.getElementById("emptyMsg").style.display = "block";
+        return;
+      }}
+      const container = document.getElementById("danmaku");
+      const shoot = () => {{
+        const idx = Math.floor(Math.random() * votes.length);
+        const el = document.createElement("div");
+        el.className = "danmaku-item";
+        el.textContent = votes[idx] + " 說必吃！";
+        el.style.top = Math.random() * 80 + "%";
+        const dur = 4 + Math.random() * 4;
+        el.style.animation = `scroll ${{dur}}s linear forwards`;
+        container.appendChild(el);
+        setTimeout(() => el.remove(), dur * 1000);
+      }};
+      shoot();
+      setInterval(shoot, 1200);
+    }});
+}}).catch(err => {{
+  document.getElementById("emptyMsg").style.display = "block";
+  document.getElementById("emptyMsg").textContent = "載入失敗，請稍後再試";
+}});
 </script>
 </body>
 </html>"""
@@ -984,11 +991,7 @@ fetch("/api/ratings/" + encodeURIComponent(store))
 @app.route("/liff/share", methods=["GET"])
 def liff_share():
     """LIFF 分享頁：立即呼叫 shareTargetPicker 發送店家 Flex Message。"""
-    store = request.args.get("store", "")
-    lat = request.args.get("lat", "")
-    lng = request.args.get("lng", "")
     liff_id = os.getenv("SHARE_LIFF_ID", "")
-    maps_url = f"https://maps.google.com/?q={lat},{lng}" if lat and lng else "https://maps.google.com/"
     html = f"""<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -1004,9 +1007,16 @@ p {{ color: #AAAAAA; font-size: 0.9rem; }}
 <body>
 <p>準備分享中⋯</p>
 <script>
-const store = decodeURIComponent("{store}");
-const mapsUrl = "{maps_url}";
 liff.init({{ liffId: "{liff_id}" }}).then(() => {{
+  const params = new URLSearchParams(window.location.search);
+  const store = params.get("store") || "";
+  const lat = params.get("lat") || "";
+  const lng = params.get("lng") || "";
+  const mapsUrl = (lat && lng) ? "https://maps.google.com/?q=" + lat + "," + lng : "https://maps.google.com/";
+  if (!store) {{
+    document.querySelector("p").textContent = "找不到店家資訊";
+    return;
+  }}
   return liff.shareTargetPicker([{{
     type: "flex",
     altText: "🍚 同好推薦：" + store,
