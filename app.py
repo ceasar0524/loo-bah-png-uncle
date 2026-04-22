@@ -949,7 +949,12 @@ h2 {{ font-size: 1.1rem; margin-bottom: 1rem; color: #FFD700; }}
 <script>
 liff.init({{ liffId: "{liff_id}" }}).then(() => {{
   const params = new URLSearchParams(window.location.search);
-  const store = params.get("store") || "";
+  let store = params.get("store") || "";
+  if (!store) {{
+    const liffState = decodeURIComponent(params.get("liff.state") || "");
+    const stateParams = new URLSearchParams(liffState.startsWith("?") ? liffState.slice(1) : liffState);
+    store = stateParams.get("store") || "";
+  }}
   document.getElementById("storeName").textContent = store;
   if (!store) {{
     document.getElementById("emptyMsg").style.display = "block";
@@ -1008,9 +1013,16 @@ p {{ color: #AAAAAA; font-size: 0.9rem; }}
 <script>
 liff.init({{ liffId: "{liff_id}" }}).then(() => {{
   const params = new URLSearchParams(window.location.search);
-  const store = params.get("store") || "";
-  const lat = params.get("lat") || "";
-  const lng = params.get("lng") || "";
+  let store = params.get("store") || "";
+  let lat = params.get("lat") || "";
+  let lng = params.get("lng") || "";
+  if (!store) {{
+    const liffState = decodeURIComponent(params.get("liff.state") || "");
+    const stateParams = new URLSearchParams(liffState.startsWith("?") ? liffState.slice(1) : liffState);
+    store = stateParams.get("store") || "";
+    lat = stateParams.get("lat") || "";
+    lng = stateParams.get("lng") || "";
+  }}
   const mapsUrl = (lat && lng) ? "https://maps.google.com/?q=" + lat + "," + lng : "https://maps.google.com/";
   if (!store) {{
     document.querySelector("p").textContent = "找不到店家資訊";
