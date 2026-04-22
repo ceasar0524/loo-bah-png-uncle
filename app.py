@@ -987,7 +987,8 @@ liff.init({{ liffId: "{liff_id}" }}).then(() => {{
       shoot();
       setInterval(shoot, 1200);
     }});
-}}).catch(() => {{
+}}).catch(err => {{
+  document.getElementById("emptyMsg").textContent = "err:" + (err && err.message || String(err));
   document.getElementById("emptyMsg").style.display = "block";
 }});
 </script>
