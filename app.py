@@ -1770,21 +1770,42 @@ def _build_footprint_flex(user_id: str):
 
     display_stores = unique_stores[:10]
 
+    certification = _TITLE_CERTIFICATIONS.get(current_title, "")
+    next_info = ""
+    for next_title, threshold in _TITLE_NEXT:
+        if unique_count < threshold:
+            next_info = f"再吃 {threshold - unique_count} 家升級{next_title}！"
+            break
+
+    header_contents = [
+        FlexText(text="🍚 魯肉飯足跡", weight="bold", size="md", color="#FFFFFF"),
+        FlexText(
+            text=f"踩點 {unique_count} / {total_stores} 家",
+            size="xxl", weight="bold", color="#FFD700", margin="sm",
+        ),
+        FlexText(text=title_display, size="sm", color="#FFD700", margin="xs"),
+    ]
+    if certification:
+        header_contents.append(FlexText(
+            text=f"大叔認證：{certification}",
+            size="xs", color="#C8A97E", wrap=True, margin="sm",
+        ))
+
     header = FlexBox(
         layout="vertical",
         background_color="#4B2F24",
         padding_all="lg",
-        contents=[
-            FlexText(text="🍚 魯肉飯足跡", weight="bold", size="md", color="#FFFFFF"),
-            FlexText(
-                text=f"踩點 {unique_count} / {total_stores} 家",
-                size="xxl", weight="bold", color="#FFD700", margin="sm",
-            ),
-            FlexText(text=title_display, size="sm", color="#FFD700", margin="xs"),
-        ],
+        contents=header_contents,
     )
 
     body_contents = []
+    if next_info:
+        body_contents.append(FlexText(
+            text=next_info,
+            size="sm", color="#B85A2B", wrap=True, weight="bold",
+        ))
+        body_contents.append(FlexSeparator(margin="md"))
+
     if recent_name:
         body_contents.append(FlexText(
             text=f"最近：{recent_name}" + (f"（{recent_date}）" if recent_date else ""),
