@@ -530,7 +530,7 @@ def _build_title_flex(display: str, current_title: str, unique_count: int) -> Fl
         FlexText(text="🍚", size="5xl", align="center", margin="lg"),
         FlexSeparator(margin="lg"),
         FlexText(
-            text=f"你已解鎖 {unique_count} / 94 家",
+            text=f"你已解鎖 {unique_count} / 96 家",
             weight="bold", size="md", align="center", margin="lg", color="#4B2F24",
         ),
         FlexText(
@@ -987,8 +987,7 @@ liff.init({{ liffId: "{liff_id}" }}).then(() => {{
       shoot();
       setInterval(shoot, 1200);
     }});
-}}).catch(err => {{
-  document.getElementById("emptyMsg").textContent = "err:" + (err && err.message || String(err));
+}}).catch(() => {{
   document.getElementById("emptyMsg").style.display = "block";
 }});
 </script>
@@ -1016,41 +1015,58 @@ p {{ color: #AAAAAA; font-size: 0.9rem; }}
 <body>
 <p>準備分享中⋯</p>
 <script>
+function getShareParam(url, key) {{
+  const re = new RegExp("[?&]" + key.replace(".", "\\.") + "=([^&]+)");
+  const m = url.match(re);
+  return m ? decodeURIComponent(m[1]) : "";
+}}
 liff.init({{ liffId: "{liff_id}" }}).then(() => {{
-  const params = new URLSearchParams(window.location.search);
-  let store = params.get("store") || "";
-  let lat = params.get("lat") || "";
-  let lng = params.get("lng") || "";
+  const href = window.location.href;
+  let store = getShareParam(href, "store");
+  let lat = getShareParam(href, "lat");
+  let lng = getShareParam(href, "lng");
   if (!store) {{
-    const liffState = decodeURIComponent(params.get("liff.state") || "");
-    const stateParams = new URLSearchParams(liffState.startsWith("?") ? liffState.slice(1) : liffState);
-    store = stateParams.get("store") || "";
-    lat = stateParams.get("lat") || "";
-    lng = stateParams.get("lng") || "";
+    const rawState = getShareParam(href, "liff\\.state");
+    if (rawState) {{
+      const decoded = decodeURIComponent(rawState);
+      store = getShareParam(decoded, "store");
+      lat = getShareParam(decoded, "lat");
+      lng = getShareParam(decoded, "lng");
+    }}
   }}
   const mapsUrl = (lat && lng) ? "https://maps.google.com/?q=" + lat + "," + lng : "https://maps.google.com/";
   if (!store) {{
     document.querySelector("p").textContent = "找不到店家資訊";
     return;
   }}
-  return liff.shareTargetPicker([{{
-    type: "flex",
-    altText: "🍚 同好推薦：" + store,
-    contents: {{
-      type: "bubble",
-      header: {{
-        type: "box", layout: "vertical", backgroundColor: "#4B2F24", paddingAll: "lg",
-        contents: [{{ type: "text", text: "🍚 同好推薦", weight: "bold", color: "#FFFFFF", size: "md" }}]
-      }},
-      body: {{
-        type: "box", layout: "vertical", paddingAll: "lg",
-        contents: [
-          {{ type: "text", text: store, weight: "bold", size: "xl", wrap: true, color: "#4B2F24" }},
-          {{ type: "button", action: {{ type: "uri", label: "📍 地圖", uri: mapsUrl }}, style: "primary", margin: "md", height: "sm" }}
-        ]
-      }}
+  return fetch("/api/user-title", {{
+    headers: {{ "Authorization": "Bearer " + liff.getAccessToken() }}
+  }}).then(r => r.ok ? r.json() : {{}}).catch(() => ({{}})).then(data => {{
+    const display = data.display || "";
+    const bodyContents = [
+      {{ type: "text", text: store, weight: "bold", size: "xl", wrap: true, color: "#4B2F24" }}
+    ];
+    if (display) {{
+      bodyContents.push({{ type: "text", text: display + " 推薦這家！", size: "sm", color: "#B85A2B", margin: "sm", wrap: true }});
     }}
-  }}]);
+    bodyContents.push({{ type: "button", action: {{ type: "uri", label: "📍 地圖", uri: mapsUrl }}, style: "primary", margin: "md", height: "sm" }});
+    bodyContents.push({{ type: "button", action: {{ type: "uri", label: "🤖 加入魯肉飯大叔", uri: "https://line.me/R/ti/p/%40940srtss" }}, style: "secondary", margin: "sm", height: "sm" }});
+    return liff.shareTargetPicker([{{
+      type: "flex",
+      altText: (display ? display + " 推薦：" : "🍚 同好推薦：") + store,
+      contents: {{
+        type: "bubble",
+        header: {{
+          type: "box", layout: "vertical", backgroundColor: "#4B2F24", paddingAll: "lg",
+          contents: [{{ type: "text", text: "🍚 同好推薦", weight: "bold", color: "#FFFFFF", size: "md" }}]
+        }},
+        body: {{
+          type: "box", layout: "vertical", paddingAll: "lg",
+          contents: bodyContents
+        }}
+      }}
+    }}]);
+  }});
 }}).then(() => liff.closeWindow()).catch(err => {{
   document.querySelector("p").textContent = "錯誤：" + (err && err.message || JSON.stringify(err));
 }});
@@ -2000,9 +2016,12 @@ def _build_nearby_hidden_gems_flex(gems: list) -> FlexMessage:
         lat = loc.get("lat")
         lng = loc.get("lng")
         maps_url = f"https://maps.google.com/?q={lat},{lng}" if lat and lng else "https://maps.google.com/"
+        must_eat_count = _get_must_eat_count(name)
         contents.append(FlexSeparator(margin="lg"))
         display_name = name if is_open else f"{name}（目前打烊）"
         contents.append(FlexText(text=display_name, weight="bold", size="md", margin="md", wrap=True, color="#333333" if is_open else "#AAAAAA"))
+        if must_eat_count > 0:
+            contents.append(FlexText(text=f"{must_eat_count} 位同好推薦 🔥", size="sm", color="#B85A2B", weight="bold"))
         contents.append(FlexText(text=f"距你約 {dist} 公里", size="sm", color="#888888"))
         contents.append(FlexButton(
             action=URIAction(label="📍 地圖", uri=maps_url),
@@ -2010,6 +2029,24 @@ def _build_nearby_hidden_gems_flex(gems: list) -> FlexMessage:
             margin="md",
             height="sm",
         ))
+        if RATINGS_LIFF_URL:
+            from urllib.parse import quote
+            ratings_url = f"{RATINGS_LIFF_URL}?store={quote(name)}"
+            contents.append(FlexButton(
+                action=URIAction(label="查看評價 💬", uri=ratings_url),
+                style="secondary",
+                margin="sm",
+                height="sm",
+            ))
+        if SHARE_LIFF_URL:
+            from urllib.parse import quote
+            share_url = f"{SHARE_LIFF_URL}?store={quote(name)}&lat={lat or ''}&lng={lng or ''}"
+            contents.append(FlexButton(
+                action=URIAction(label="分享這家店 📤", uri=share_url),
+                style="secondary",
+                margin="sm",
+                height="sm",
+            ))
     bubble = FlexBubble(
         body=FlexBox(layout="vertical", contents=contents, padding_all="lg")
     )
@@ -2035,7 +2072,13 @@ def _find_nearby_checkin_stores(lat: float, lng: float, radius_km: float = 0.5) 
         if dist <= radius_km:
             result.append((name, "hidden_gems", dist))
     result.sort(key=lambda x: x[2])
-    return [(name, db) for name, db, _ in result]
+    seen = set()
+    deduped = []
+    for name, db, dist in result:
+        if name not in seen:
+            seen.add(name)
+            deduped.append((name, db, dist))
+    return [(name, db) for name, db, _ in deduped]
 
 
 def _build_footprint_flex(user_id: str):
@@ -2069,7 +2112,7 @@ def _build_footprint_flex(user_id: str):
             unique_stores.append(name)
 
     unique_count = len(unique_stores)
-    total_stores = 94
+    total_stores = 96
 
     # 稱號資料
     user_data = user_doc.to_dict() if user_doc.exists else {}
