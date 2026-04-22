@@ -1007,14 +1007,9 @@ p {{ color: #AAAAAA; font-size: 0.9rem; }}
 const store = decodeURIComponent("{store}");
 const mapsUrl = "{maps_url}";
 liff.init({{ liffId: "{liff_id}" }}).then(() => {{
-  return fetch("/api/user-title", {{
-    headers: {{ "Authorization": "Bearer " + liff.getAccessToken() }}
-  }});
-}}).then(r => r.json()).then(data => {{
-  const display = data.display || "魯肉飯同好";
   return liff.shareTargetPicker([{{
     type: "flex",
-    altText: display + " 推薦：" + store,
+    altText: "🍚 同好推薦：" + store,
     contents: {{
       type: "bubble",
       header: {{
@@ -1025,13 +1020,14 @@ liff.init({{ liffId: "{liff_id}" }}).then(() => {{
         type: "box", layout: "vertical", paddingAll: "lg",
         contents: [
           {{ type: "text", text: store, weight: "bold", size: "xl", wrap: true, color: "#4B2F24" }},
-          {{ type: "text", text: display + " 推薦這家！", size: "sm", color: "#B85A2B", margin: "sm" }},
           {{ type: "button", action: {{ type: "uri", label: "📍 地圖", uri: mapsUrl }}, style: "primary", margin: "md", height: "sm" }}
         ]
       }}
     }}
   }}]);
-}}).then(() => liff.closeWindow()).catch(() => liff.closeWindow());
+}}).then(() => liff.closeWindow()).catch(err => {{
+  document.querySelector("p").textContent = "錯誤：" + (err && err.message || JSON.stringify(err));
+}});
 </script>
 </body>
 </html>"""
