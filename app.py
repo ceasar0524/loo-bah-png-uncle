@@ -868,19 +868,25 @@ def webhook():
 
 @app.route("/api/ratings/<path:store_name>", methods=["GET"])
 def api_ratings(store_name):
-    """回傳指定店家的 must_eat 評價代號清單，依稱號等級排序。"""
+    """回傳指定店家的所有評價代號清單，依稱號等級排序。"""
     if _db is None:
         return {"votes": []}, 200
     try:
         _TITLE_RANK = {"魯肉飯大神": 4, "魯肉飯勇者": 3, "滷鍋守護者": 2, "肉汁騎士": 1, "無職轉生者": 0}
+        _RATING_LABEL = {"must_eat": "說必吃！🔥", "neutral": "說普通 😐", "bad": "說不能只有我吃到 🤫"}
         votes_ref = _db.collection("store_ratings").document(store_name).collection("votes")
-        docs = votes_ref.where("rating", "==", "must_eat").stream()
+        docs = votes_ref.stream()
         results = []
         for doc in docs:
             d = doc.to_dict()
-            title = d.get("title", "無職轉生者")
-            title_number = d.get("title_number", "")
-            results.append({"display": f"{title}#{title_number}", "rank": _TITLE_RANK.get(title, 0)})
+            user_id = doc.id
+            user_doc = _db.collection("user_footprint").document(user_id).get()
+            user_data = user_doc.to_dict() if user_doc.exists else {}
+            title = user_data.get("current_title") or d.get("title", "無職轉生者")
+            title_number = user_data.get("title_number") or d.get("title_number", "")
+            rating = d.get("rating", "neutral")
+            label = _RATING_LABEL.get(rating, "說普通 😐")
+            results.append({"display": f"{title}#{title_number} {label}", "rank": _TITLE_RANK.get(title, 0)})
         results.sort(key=lambda x: x["rank"], reverse=True)
         return {"votes": [r["display"] for r in results]}, 200
     except Exception:
@@ -977,7 +983,7 @@ liff.init({{ liffId: "{liff_id}" }}).then(() => {{
         const idx = Math.floor(Math.random() * votes.length);
         const el = document.createElement("div");
         el.className = "danmaku-item";
-        el.textContent = votes[idx] + " 說必吃！";
+        el.textContent = votes[idx];
         el.style.top = Math.random() * 80 + "%";
         const dur = 4 + Math.random() * 4;
         el.style.animation = `scroll ${{dur}}s linear forwards`;
