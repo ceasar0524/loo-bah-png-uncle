@@ -1702,7 +1702,8 @@ def _build_store_list_flex() -> FlexMessage:
             map_uri = f"https://maps.google.com/?q={lat},{lng}" if lat and lng else f"https://maps.google.com/?q={name}"
             # 顯示名稱去掉區域後綴
             display_name = re.sub(r'[（(].+?[）)]$', '', name)
-            rows.append(
+            must_eat_count = _get_must_eat_count(name)
+            store_row_contents = [
                 FlexBox(
                     layout="horizontal",
                     contents=[
@@ -1716,7 +1717,10 @@ def _build_store_list_flex() -> FlexMessage:
                     ],
                     spacing="sm",
                 )
-            )
+            ]
+            if must_eat_count > 0:
+                store_row_contents.append(FlexText(text=f"{must_eat_count} 位同好推薦 🔥", size="sm", color="#B85A2B", weight="bold"))
+            rows.append(FlexBox(layout="vertical", contents=store_row_contents, spacing="xs"))
 
     header_text = f"目前收錄大台北 {n} 家店，準確率仍在優化中\n（魯肉飯真的都長太像了 XD）\n但已經可以玩玩看！"
     footer_text = "持續擴充中… 🍚\n\n💡 即使丟的店家不在收錄名單中，大叔仍會分析這碗魯肉飯/滷肉飯的風格，並從現有店家中找出相似風格的供參考。"
@@ -1934,9 +1938,10 @@ def _build_hidden_gems_flex(district: str) -> FlexMessage:
         map_uri = (f"https://maps.google.com/?q={lat},{lng}"
                    if lat and lng else f"https://maps.google.com/?q={name}")
         display_name = re.sub(r'[（(].+?[）)]$', '', name)
+        must_eat_count = _get_must_eat_count(name)
         if i > 0:
             rows.append(FlexSeparator(margin="md", color="#E6D9C8"))
-        rows.append(
+        store_row_contents = [
             FlexBox(
                 layout="horizontal",
                 contents=[
@@ -1953,7 +1958,10 @@ def _build_hidden_gems_flex(district: str) -> FlexMessage:
                 spacing="md",
                 margin="md" if i > 0 else "none",
             )
-        )
+        ]
+        if must_eat_count > 0:
+            store_row_contents.append(FlexText(text=f"{must_eat_count} 位同好推薦 🔥", size="sm", color="#B85A2B", weight="bold"))
+        rows.append(FlexBox(layout="vertical", contents=store_row_contents, spacing="xs"))
 
     bubble = FlexBubble(
         header=FlexBox(
