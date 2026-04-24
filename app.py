@@ -1728,7 +1728,7 @@ def _build_store_list_flex() -> FlexMessage:
                 store_row_contents.append(FlexText(text=f"{must_eat_count} 位同好推薦 🔥", size="sm", color="#B85A2B", weight="bold"))
             rows.append(FlexBox(layout="vertical", contents=store_row_contents, spacing="xs"))
 
-    header_text = f"目前收錄大台北 {n} 家店，準確率仍在優化中\n（魯肉飯真的都長太像了 XD）\n但已經可以玩玩看！"
+    header_text = f"目前可用AI辨識以下大台北 {n} 家店的魯肉飯，準確率仍在優化中\n（魯肉飯真的都長太像了 XD）\n但已經可以玩玩看！"
     footer_text = "持續擴充中… 🍚\n\n💡 即使丟的店家不在收錄名單中，大叔仍會分析這碗魯肉飯/滷肉飯的風格，並從現有店家中找出相似風格的供參考。"
 
     bubble = FlexBubble(
