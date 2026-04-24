@@ -1874,9 +1874,10 @@ def _build_taipei_city_flex() -> FlexMessage:
             map_uri = (f"https://maps.google.com/?q={lat},{lng}"
                        if lat and lng else f"https://maps.google.com/?q={name}")
             display_name = re.sub(r'[（(].+?[）)]$', '', name)
+            must_eat_count = _get_must_eat_count(name)
             if i > 0:
                 rows.append(FlexSeparator(margin="sm", color="#E6D9C8"))
-            rows.append(
+            store_row_contents = [
                 FlexBox(
                     layout="horizontal",
                     contents=[
@@ -1893,7 +1894,10 @@ def _build_taipei_city_flex() -> FlexMessage:
                     spacing="md",
                     margin="sm",
                 )
-            )
+            ]
+            if must_eat_count > 0:
+                store_row_contents.append(FlexText(text=f"{must_eat_count} 位同好推薦 🔥", size="sm", color="#B85A2B", weight="bold"))
+            rows.append(FlexBox(layout="vertical", contents=store_row_contents, spacing="xs"))
 
     bubble = FlexBubble(
         header=FlexBox(
