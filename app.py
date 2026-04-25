@@ -2214,7 +2214,10 @@ def _build_footprint_flex(user_id: str):
             margin="sm" if i > 0 else "md",
         ))
 
+    remaining = unique_stores[10:]
+    bubble_size = "giga" if remaining else None
     bubble = FlexBubble(
+        size=bubble_size,
         header=header,
         body=FlexBox(layout="vertical", contents=body_contents, padding_all="lg"),
         styles=FlexBubbleStyles(
@@ -2222,7 +2225,6 @@ def _build_footprint_flex(user_id: str):
         ),
     )
 
-    remaining = unique_stores[10:]
     if not remaining:
         return FlexMessage(alt_text=f"魯肉飯足跡 {unique_count}/{total_stores} 家", contents=bubble)
 
@@ -2242,6 +2244,7 @@ def _build_footprint_flex(user_id: str):
             margin="sm" if i > 0 else "none",
         ))
     more_bubble = FlexBubble(
+        size="giga",
         header=FlexBox(
             layout="vertical",
             background_color="#4B2F24",
@@ -2569,7 +2572,7 @@ def handle_postback(event):
                 favorites.append(store_name)
             user_ref.set({"favorites": favorites}, merge=True)
             # 回傳更新後的足跡卡
-            with ApiClient(configuration) as api_client:
+            with ApiClient(_config) as api_client:
                 messaging_api = MessagingApi(api_client)
                 flex = _build_footprint_flex(user_id)
                 if flex:
