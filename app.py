@@ -1733,7 +1733,8 @@ def _build_store_list_flex() -> FlexMessage:
                     )
                 ]
                 if must_eat_count > 0:
-                    store_row_contents.append(FlexText(text=f"{must_eat_count} 位同好推薦 🔥", size="xs", color="#C8A86B"))
+                    store_row_contents.append(FlexText(text=f"  {must_eat_count} 位同好推薦 🔥", size="xs", color="#E8854A", margin="xs"))
+                store_row_contents.append(FlexSeparator(color="#3A3020", margin="sm"))
             else:
                 store_row_contents = [
                     FlexBox(
@@ -1759,9 +1760,7 @@ def _build_store_list_flex() -> FlexMessage:
                 background_color="#1C1A14",
                 padding_all="lg",
                 contents=[
-                    FlexText(text="✦  大叔選錄", size="xs", color="#C8A86B", weight="bold"),
-                    FlexText(text="魯肉飯名店指南", size="xxl", weight="bold", color="#F5ECD7", margin="sm"),
-                    FlexText(text=f"大台北 {n} 家  |  AI 辨識收錄", size="xs", color="#8B7D5E", margin="sm"),
+                    FlexText(text=f"目前可用AI辨識以下大台北 {n} 家店的魯肉飯，準確率仍在優化中\n（魯肉飯真的都長太像了 XD）\n但已經可以玩玩看！", wrap=True, size="sm", color="#C8A86B"),
                 ],
             ),
             body=FlexBox(
@@ -1777,8 +1776,8 @@ def _build_store_list_flex() -> FlexMessage:
                 padding_all="md",
                 contents=[
                     FlexText(
-                        text="持續擴充中  ·  丟照片給大叔也能辨識未收錄店家",
-                        wrap=True, size="xs", color="#8B7D5E", align="center",
+                        text="持續擴充中… 🍚\n\n💡 即使丟的店家不在收錄名單中，大叔仍會分析這碗魯肉飯/滷肉飯的風格，並從現有店家中找出相似風格的供參考。",
+                        wrap=True, size="xs", color="#8B7D5E",
                     ),
                 ],
             ),
@@ -2251,14 +2250,20 @@ def _build_footprint_flex(user_id: str):
 
     for i, name in enumerate(display_stores):
         heart = "❤️" if name in favorites else "🤍"
+        loc = (_store_notes.get(name) or _hidden_gems.get(name) or {}).get("location", {})
+        row_buttons = [
+            FlexButton(action=PostbackAction(label=heart, data=f"fav:{name}"), flex=0, height="sm", style="link"),
+        ]
+        if RATINGS_LIFF_URL:
+            row_buttons.append(FlexButton(action=URIAction(label="💬", uri=f"{RATINGS_LIFF_URL}?store={quote(name)}"), flex=0, height="sm", style="link"))
+        if SHARE_LIFF_URL:
+            share_url = f"{SHARE_LIFF_URL}?store={quote(name)}&lat={loc.get('lat', '')}&lng={loc.get('lng', '')}"
+            row_buttons.append(FlexButton(action=URIAction(label="📤", uri=share_url), flex=0, height="sm", style="link"))
         body_contents.append(FlexBox(
             layout="horizontal",
             contents=[
                 FlexText(text=f"✅  {name}", flex=1, size="sm", weight="bold", color="#4B2F24", wrap=True, gravity="center"),
-                FlexButton(
-                    action=PostbackAction(label=heart, data=f"fav:{name}"),
-                    flex=0, height="sm", style="link",
-                ),
+                *row_buttons,
             ],
             margin="sm" if i > 0 else "md",
         ))
@@ -2281,14 +2286,20 @@ def _build_footprint_flex(user_id: str):
     more_contents = []
     for i, name in enumerate(remaining):
         heart = "❤️" if name in favorites else "🤍"
+        loc = (_store_notes.get(name) or _hidden_gems.get(name) or {}).get("location", {})
+        row_buttons = [
+            FlexButton(action=PostbackAction(label=heart, data=f"fav:{name}"), flex=0, height="sm", style="link"),
+        ]
+        if RATINGS_LIFF_URL:
+            row_buttons.append(FlexButton(action=URIAction(label="💬", uri=f"{RATINGS_LIFF_URL}?store={quote(name)}"), flex=0, height="sm", style="link"))
+        if SHARE_LIFF_URL:
+            share_url = f"{SHARE_LIFF_URL}?store={quote(name)}&lat={loc.get('lat', '')}&lng={loc.get('lng', '')}"
+            row_buttons.append(FlexButton(action=URIAction(label="📤", uri=share_url), flex=0, height="sm", style="link"))
         more_contents.append(FlexBox(
             layout="horizontal",
             contents=[
                 FlexText(text=f"✅  {name}", flex=1, size="sm", weight="bold", color="#4B2F24", wrap=True, gravity="center"),
-                FlexButton(
-                    action=PostbackAction(label=heart, data=f"fav:{name}"),
-                    flex=0, height="sm", style="link",
-                ),
+                *row_buttons,
             ],
             margin="sm" if i > 0 else "none",
         ))
