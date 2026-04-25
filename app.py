@@ -535,7 +535,7 @@ def _build_title_flex(display: str, current_title: str, unique_count: int) -> Fl
         FlexText(text="🍚", size="5xl", align="center", margin="lg"),
         FlexSeparator(margin="lg"),
         FlexText(
-            text=f"你已解鎖 {unique_count} / 96 家",
+            text=f"你已解鎖 {unique_count} / 99 家",
             weight="bold", size="md", align="center", margin="lg", color="#4B2F24",
         ),
         FlexText(
@@ -1315,10 +1315,11 @@ def _score_store_taste(store_info: dict, answers: dict) -> int:
 
 
 def _match_taste_stores(lat: float, lng: float, answers: dict, radius_km: float = 10.0) -> list:
-    """依口味偏好比對 store_notes 店家，回傳分數最高、距離最近的 2–3 家。"""
+    """依口味偏好比對 store_notes 和 hidden_gems 店家，回傳分數最高、距離最近的 2–3 家。"""
     from src.nearby_search.searcher import haversine_km
     candidates = []
-    for name, info in _store_notes.items():
+    all_stores = list(_store_notes.items()) + [(name, info) for name, info in _hidden_gems.items() if info.get("visual_profile")]
+    for name, info in all_stores:
         loc = info.get("location")
         if not loc:
             continue
@@ -2187,7 +2188,7 @@ def _build_footprint_flex(user_id: str):
             unique_stores.append(name)
 
     unique_count = len(unique_stores)
-    total_stores = 96
+    total_stores = 99
 
     # 稱號資料
     user_data = user_doc.to_dict() if user_doc.exists else {}

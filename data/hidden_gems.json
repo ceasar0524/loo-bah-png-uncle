@@ -1,27 +1,85 @@
 {
+  "行家魯肉飯（林口區）": {
+    "location": {
+      "lat": 25.079454541902216,
+      "lng": 121.38765162493728
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin"
+    },
+    "sauce_consistency": "水"
+  },
+  "料理心小吃（林口區）": {
+    "location": {
+      "lat": 25.07786553972949,
+      "lng": 121.390201238428
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "稠"
+  },
+  "青年小吃店（林口區）": {
+    "location": {
+      "lat": 25.077595862495794,
+      "lng": 121.3946124537738
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
+  },
   "路路食堂（林口區）": {
     "location": {
       "lat": 25.080586530990317,
       "lng": 121.38336074482584
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "春菊家小吃店（林口區）": {
     "location": {
       "lat": 25.081297933173857,
       "lng": 121.37879857551769
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "海口蔡（林口區）": {
     "location": {
       "lat": 25.069796949338933,
       "lng": 121.36734843842773
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin"
+    },
+    "sauce_consistency": "水"
   },
   "豪記台菜古早味（林口區）": {
     "location": {
       "lat": 25.078637308443575,
       "lng": 121.3927545672645
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "無招牌麵店（泰山區）": {
     "location": {
@@ -255,7 +313,13 @@
     "location": {
       "lat": 25.084061561882205,
       "lng": 121.38642609391991
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
   },
   "家香味食堂（萬華區）": {
     "location": {
