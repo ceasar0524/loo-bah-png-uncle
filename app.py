@@ -181,6 +181,9 @@ NEARBY_SEARCH_ENABLED = os.getenv("NEARBY_SEARCH_ENABLED", "true").lower() == "t
 # 打卡足跡功能開關（設為 "false" 可快速關閉，不影響辨識流程）
 CHECKIN_ENABLED = os.getenv("CHECKIN_ENABLED", "true").lower() == "true"
 
+# 店家清單版面風格："michelin" 米其林指南風、"classic" 原始版
+STORE_LIST_STYLE = "michelin"
+
 # LIFF URL（在 LINE Developers Console 建立後填入）
 RATINGS_LIFF_URL = os.getenv("RATINGS_LIFF_URL", "")
 SHARE_LIFF_URL = os.getenv("SHARE_LIFF_URL", "")
@@ -1695,62 +1698,108 @@ def _build_store_list_flex() -> FlexMessage:
 
     rows = []
     for district, names in sorted(district_stores.items()):
-        # 區標題
-        rows.append(FlexText(
-            text=district,
-            size="xs",
-            color="#aaaaaa",
-            weight="bold",
-            margin="md",
-        ))
+        if STORE_LIST_STYLE == "michelin":
+            rows.append(FlexBox(
+                layout="horizontal",
+                contents=[
+                    FlexText(text="✦", size="xs", color="#C8A86B", flex=0),
+                    FlexText(text=f"  {district}", size="xs", color="#C8A86B", weight="bold", flex=1),
+                ],
+                margin="lg",
+            ))
+            rows.append(FlexSeparator(color="#3A3020", margin="sm"))
+        else:
+            rows.append(FlexText(text=district, size="xs", color="#aaaaaa", weight="bold", margin="md"))
+
         for name in names:
             loc = _store_notes[name].get("location", {})
             lat = loc.get("lat")
             lng = loc.get("lng")
             map_uri = f"https://maps.google.com/?q={lat},{lng}" if lat and lng else f"https://maps.google.com/?q={name}"
-            # 顯示名稱去掉區域後綴
             display_name = re.sub(r'[（(].+?[）)]$', '', name)
             must_eat_count = _get_must_eat_count(name)
-            store_row_contents = [
-                FlexBox(
-                    layout="horizontal",
-                    contents=[
-                        FlexText(text=display_name, flex=1, size="md", weight="bold", wrap=True, gravity="center"),
-                        FlexButton(
-                            action=URIAction(label="📍", uri=map_uri),
-                            flex=0,
-                            height="sm",
-                            style="link",
-                        ),
-                    ],
-                    spacing="sm",
-                )
-            ]
-            if must_eat_count > 0:
-                store_row_contents.append(FlexText(text=f"{must_eat_count} 位同好推薦 🔥", size="sm", color="#B85A2B", weight="bold"))
+            if STORE_LIST_STYLE == "michelin":
+                store_row_contents = [
+                    FlexBox(
+                        layout="horizontal",
+                        contents=[
+                            FlexText(text=display_name, flex=1, size="md", weight="bold", wrap=True, gravity="center", color="#F5ECD7"),
+                            FlexButton(
+                                action=URIAction(label="📍", uri=map_uri),
+                                flex=0, height="sm", style="link", color="#C8A86B",
+                            ),
+                        ],
+                        spacing="sm", margin="sm",
+                    )
+                ]
+                if must_eat_count > 0:
+                    store_row_contents.append(FlexText(text=f"{must_eat_count} 位同好推薦 🔥", size="xs", color="#C8A86B"))
+            else:
+                store_row_contents = [
+                    FlexBox(
+                        layout="horizontal",
+                        contents=[
+                            FlexText(text=display_name, flex=1, size="md", weight="bold", wrap=True, gravity="center"),
+                            FlexButton(
+                                action=URIAction(label="📍", uri=map_uri),
+                                flex=0, height="sm", style="link",
+                            ),
+                        ],
+                        spacing="sm",
+                    )
+                ]
+                if must_eat_count > 0:
+                    store_row_contents.append(FlexText(text=f"{must_eat_count} 位同好推薦 🔥", size="sm", color="#B85A2B", weight="bold"))
             rows.append(FlexBox(layout="vertical", contents=store_row_contents, spacing="xs"))
 
-    header_text = f"目前可用AI辨識以下大台北 {n} 家店的魯肉飯，準確率仍在優化中\n（魯肉飯真的都長太像了 XD）\n但已經可以玩玩看！"
-    footer_text = "持續擴充中… 🍚\n\n💡 即使丟的店家不在收錄名單中，大叔仍會分析這碗魯肉飯/滷肉飯的風格，並從現有店家中找出相似風格的供參考。"
-
-    bubble = FlexBubble(
-        header=FlexBox(
-            layout="vertical",
-            contents=[FlexText(text=header_text, wrap=True, size="sm", color="#555555")],
-            padding_all="lg",
-        ),
-        body=FlexBox(
-            layout="vertical",
-            contents=rows,
-            spacing="sm",
-            padding_all="lg",
-        ),
-        footer=FlexBox(
-            layout="vertical",
-            contents=[FlexText(text=footer_text, wrap=True, size="xs", color="#888888")],
-            padding_all="lg",
-        ),
-    )
+    if STORE_LIST_STYLE == "michelin":
+        bubble = FlexBubble(
+            header=FlexBox(
+                layout="vertical",
+                background_color="#1C1A14",
+                padding_all="lg",
+                contents=[
+                    FlexText(text="✦  大叔選錄", size="xs", color="#C8A86B", weight="bold"),
+                    FlexText(text="魯肉飯名店指南", size="xxl", weight="bold", color="#F5ECD7", margin="sm"),
+                    FlexText(text=f"大台北 {n} 家  |  AI 辨識收錄", size="xs", color="#8B7D5E", margin="sm"),
+                ],
+            ),
+            body=FlexBox(
+                layout="vertical",
+                contents=rows,
+                spacing="xs",
+                padding_all="lg",
+                background_color="#252015",
+            ),
+            footer=FlexBox(
+                layout="vertical",
+                background_color="#1C1A14",
+                padding_all="md",
+                contents=[
+                    FlexText(
+                        text="持續擴充中  ·  丟照片給大叔也能辨識未收錄店家",
+                        wrap=True, size="xs", color="#8B7D5E", align="center",
+                    ),
+                ],
+            ),
+            styles=FlexBubbleStyles(body=FlexBlockStyle(background_color="#252015")),
+        )
+    else:
+        header_text = f"目前可用AI辨識以下大台北 {n} 家店的魯肉飯，準確率仍在優化中\n（魯肉飯真的都長太像了 XD）\n但已經可以玩玩看！"
+        footer_text = "持續擴充中… 🍚\n\n💡 即使丟的店家不在收錄名單中，大叔仍會分析這碗魯肉飯/滷肉飯的風格，並從現有店家中找出相似風格的供參考。"
+        bubble = FlexBubble(
+            header=FlexBox(
+                layout="vertical",
+                contents=[FlexText(text=header_text, wrap=True, size="sm", color="#555555")],
+                padding_all="lg",
+            ),
+            body=FlexBox(layout="vertical", contents=rows, spacing="sm", padding_all="lg"),
+            footer=FlexBox(
+                layout="vertical",
+                contents=[FlexText(text=footer_text, wrap=True, size="xs", color="#888888")],
+                padding_all="lg",
+            ),
+        )
     return FlexMessage(alt_text=f"收錄店家清單（{n} 家）", contents=bubble)
 
 
