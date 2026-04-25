@@ -2161,6 +2161,7 @@ def _build_footprint_flex(user_id: str):
         return TextMessage(text="目前無法讀取足跡，請稍後再試。")
     try:
         import zoneinfo
+        from urllib.parse import quote
         user_doc = _db.collection("user_footprint").document(user_id).get()
         records_ref = (
             _db.collection("user_footprint")
