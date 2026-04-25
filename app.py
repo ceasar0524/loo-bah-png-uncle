@@ -21,6 +21,7 @@ from linebot.v3.messaging import (
 from linebot.v3.messaging import (
     LocationAction,
     MessageAction,
+    PostbackAction,
     QuickReply,
     QuickReplyItem,
 )
@@ -33,9 +34,10 @@ from linebot.v3.messaging import (
     FlexButton,
     FlexText,
     FlexSeparator,
+    FlexCarousel,
     URIAction,
 )
-from linebot.v3.webhooks import ImageMessageContent, LocationMessageContent, MessageEvent, TextMessageContent
+from linebot.v3.webhooks import ImageMessageContent, LocationMessageContent, MessageEvent, PostbackEvent, TextMessageContent
 
 from src import clip_model
 from src.nearby_search import search_nearby_stores, search_random_nearby_store
@@ -2143,6 +2145,7 @@ def _build_footprint_flex(user_id: str):
     current_title = user_data.get("current_title") or _get_title(unique_count)
     title_number = user_data.get("title_number") or user_id[-4:]
     title_display = f"{current_title}#{title_number}"
+    favorites = set(user_data.get("favorites", []))
 
     # 最近一次打卡
     recent_name = visits[0].get("store_name", "")
@@ -2198,16 +2201,17 @@ def _build_footprint_flex(user_id: str):
         body_contents.append(FlexSeparator(margin="md"))
 
     for i, name in enumerate(display_stores):
-        body_contents.append(FlexText(
-            text=f"✅  {name}",
-            size="sm", weight="bold", color="#4B2F24", wrap=True,
+        heart = "❤️" if name in favorites else "🤍"
+        body_contents.append(FlexBox(
+            layout="horizontal",
+            contents=[
+                FlexText(text=f"✅  {name}", flex=1, size="sm", weight="bold", color="#4B2F24", wrap=True, gravity="center"),
+                FlexButton(
+                    action=PostbackAction(label=heart, data=f"fav:{name}"),
+                    flex=0, height="sm", style="link",
+                ),
+            ],
             margin="sm" if i > 0 else "md",
-        ))
-
-    if len(unique_stores) > 10:
-        body_contents.append(FlexText(
-            text=f"…還有 {len(unique_stores) - 10} 家",
-            size="xs", color="#AAAAAA", margin="sm",
         ))
 
     bubble = FlexBubble(
@@ -2217,7 +2221,46 @@ def _build_footprint_flex(user_id: str):
             body=FlexBlockStyle(background_color="#F9F5F0"),
         ),
     )
-    return FlexMessage(alt_text=f"魯肉飯足跡 {unique_count}/{total_stores} 家", contents=bubble)
+
+    remaining = unique_stores[10:]
+    if not remaining:
+        return FlexMessage(alt_text=f"魯肉飯足跡 {unique_count}/{total_stores} 家", contents=bubble)
+
+    # 第二張卡：剩餘店家
+    more_contents = []
+    for i, name in enumerate(remaining):
+        heart = "❤️" if name in favorites else "🤍"
+        more_contents.append(FlexBox(
+            layout="horizontal",
+            contents=[
+                FlexText(text=f"✅  {name}", flex=1, size="sm", weight="bold", color="#4B2F24", wrap=True, gravity="center"),
+                FlexButton(
+                    action=PostbackAction(label=heart, data=f"fav:{name}"),
+                    flex=0, height="sm", style="link",
+                ),
+            ],
+            margin="sm" if i > 0 else "none",
+        ))
+    more_bubble = FlexBubble(
+        header=FlexBox(
+            layout="vertical",
+            background_color="#4B2F24",
+            padding_all="lg",
+            contents=[
+                FlexText(text="🍚 魯肉飯足跡", weight="bold", size="md", color="#FFFFFF"),
+                FlexText(text=f"全部 {unique_count} 家（續）", size="sm", color="#FFD700", margin="sm"),
+            ],
+        ),
+        body=FlexBox(layout="vertical", contents=more_contents, padding_all="lg"),
+        styles=FlexBubbleStyles(
+            body=FlexBlockStyle(background_color="#F9F5F0"),
+        ),
+    )
+
+    return FlexMessage(
+        alt_text=f"魯肉飯足跡 {unique_count}/{total_stores} 家",
+        contents=FlexCarousel(contents=[bubble, more_bubble]),
+    )
 
 
 def _radar_text() -> str:
@@ -2503,6 +2546,39 @@ def handle_text(event):
                         messages=send_msgs,
                     )
                 )
+    except Exception:
+        import traceback
+        traceback.print_exc()
+
+
+@_handler.add(PostbackEvent)
+def handle_postback(event):
+    """處理 Postback 事件（目前用於愛店 toggle）。"""
+    try:
+        user_id = event.source.user_id
+        data = event.postback.data
+        if data.startswith("fav:") and _db is not None:
+            store_name = data[4:]
+            user_ref = _db.collection("user_footprint").document(user_id)
+            user_doc = user_ref.get()
+            user_data = user_doc.to_dict() if user_doc.exists else {}
+            favorites = user_data.get("favorites", [])
+            if store_name in favorites:
+                favorites.remove(store_name)
+            else:
+                favorites.append(store_name)
+            user_ref.set({"favorites": favorites}, merge=True)
+            # 回傳更新後的足跡卡
+            with ApiClient(configuration) as api_client:
+                messaging_api = MessagingApi(api_client)
+                flex = _build_footprint_flex(user_id)
+                if flex:
+                    messaging_api.reply_message(
+                        ReplyMessageRequest(
+                            reply_token=event.reply_token,
+                            messages=[flex],
+                        )
+                    )
     except Exception:
         import traceback
         traceback.print_exc()
