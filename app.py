@@ -1447,7 +1447,12 @@ def _build_taste_flex(full: list, partial: list, intros: dict) -> FlexMessage:
         name = s["store_name"]
         dist = s["distance_km"]
         is_partial = s in partial
-        maps_url = _persona.maps_url(name)
+        info = s["info"]
+        loc = info.get("location", {})
+        if loc:
+            maps_url = f"https://maps.google.com/?q={loc['lat']},{loc['lng']}"
+        else:
+            maps_url = _persona.maps_url(name)
         intro = intros.get(name, "")
         must_eat_count = _get_must_eat_count(name)
         contents.append(FlexSeparator(margin="lg"))
