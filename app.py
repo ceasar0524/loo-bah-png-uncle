@@ -1337,6 +1337,11 @@ def _match_taste_stores(lat: float, lng: float, answers: dict, radius_km: float 
 def _generate_taste_intros(stores: list) -> dict:
     """呼叫 Claude Haiku 為每家推薦店生成大叔風格介紹（30 字以內）。回傳 {store_name: intro}。"""
     import random as _random
+    _FAT_LABEL = {"fat_heavy": "肉質偏肥", "lean_heavy": "肉質偏瘦"}
+    _SKIN_LABEL = {"with_skin": "黏黏帶膠質", "no_skin": "不黏偏乾爽"}
+    _SAUCE_LABEL = {"稠": "滷汁濃稠", "水": "滷汁清爽不稠"}
+    _TASTE_LABEL = {"偏甜": "口味偏甜", "偏鹹": "口味偏鹹"}
+
     store_inputs = []
     for s in stores:
         name = s["store_name"]
@@ -1344,7 +1349,22 @@ def _generate_taste_intros(stores: list) -> dict:
         notes = info.get("notes", "")
         toppings = info.get("available_toppings", [])
         topping_str = f"，可加點：{'、'.join(toppings)}" if toppings else ""
-        store_inputs.append(f"【{name}】{notes[:150]}{topping_str}")
+        if notes:
+            store_inputs.append(f"【{name}】{notes[:150]}{topping_str}")
+        else:
+            vp = info.get("visual_profile", {})
+            traits = []
+            if vp.get("fat_ratio") in _FAT_LABEL:
+                traits.append(_FAT_LABEL[vp["fat_ratio"]])
+            if vp.get("skin") in _SKIN_LABEL:
+                traits.append(_SKIN_LABEL[vp["skin"]])
+            sc = info.get("sauce_consistency")
+            if sc in _SAUCE_LABEL:
+                traits.append(_SAUCE_LABEL[sc])
+            if vp.get("sauce_taste") in _TASTE_LABEL:
+                traits.append(_TASTE_LABEL[vp["sauce_taste"]])
+            trait_str = "，".join(traits) if traits else "口味資料有限"
+            store_inputs.append(f"【{name}】特色：{trait_str}{topping_str}")
 
     combined = "\n\n".join(store_inputs)
     opening_phrase = _random.choice(["哎唷", "齁", "不錯哦", "夭壽喔", "哇賽", "嘖嘖嘖"])
