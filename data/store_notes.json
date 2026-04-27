@@ -535,5 +535,26 @@
     },
     "sauce_consistency": "水",
     "random_tagline": "今日宜迺夜市 🍢"
+  },
+  "夯・魯肉飯(信義區)": {
+    "notes": "五分埔一帶有名的魯肉飯店，擄獲不少在地人的味蕾，這碗走的是帶皮肥肉路線，入口偏甜，還會微微黏嘴唇，很明顯是南部風格，上面再灑一層魚鬆，口感直接多一層，最後記得加點辣油整碗風味會更完整。店面翻新後走文青風，風格清新不少。",
+    "known_toppings": [
+      "pork_floss"
+    ],
+    "topping_names": {
+      "pork_floss": "魚鬆"
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "location": {
+      "lat": 25.04760379024289,
+      "lng": 121.57746862672572
+    },
+    "sauce_consistency": "水",
+    "hours": "週一至週日 11:30–21:00",
+    "random_tagline": "今日宜添新衣"
   }
 }
