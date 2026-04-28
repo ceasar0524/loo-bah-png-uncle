@@ -121,19 +121,38 @@
     "location": {
       "lat": 25.05257050618734,
       "lng": 121.44490570959084
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水",
+    "random_tagline": "今日宜買樂透"
   },
   "眼鏡張（新莊區）": {
     "location": {
       "lat": 25.049082167391703,
       "lng": 121.45814628895461
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "家傳魯肉飯（新莊區）": {
     "location": {
       "lat": 25.043416161545604,
       "lng": 121.45270393842699
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "海山魯肉飯（板橋區）": {
     "location": {
@@ -187,7 +206,13 @@
     "location": {
       "lat": 25.010392976950108,
       "lng": 121.43288718899366
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "滷肉范（板橋區）": {
     "location": {
@@ -505,6 +530,60 @@
     "location": {
       "lat": 25.049177558190422,
       "lng": 121.45678105517845
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
+  },
+  "宵夜許涼麵小吃（新莊區）": {
+    "location": {
+      "lat": 25.05091926984069,
+      "lng": 121.45786580903912
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
+  },
+  "當歸豬腳（新莊區）": {
+    "location": {
+      "lat": 25.02067692994472,
+      "lng": 121.42213952883563
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
+  },
+  "三味麵館（新莊區）": {
+    "location": {
+      "lat": 25.024990602642095,
+      "lng": 121.42475480903818
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "稠"
+  },
+  "新豐鵝肉（新莊區）": {
+    "location": {
+      "lat": 25.03424527535328,
+      "lng": 121.44774846670974
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
   }
 }
