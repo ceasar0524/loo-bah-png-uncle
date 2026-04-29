@@ -1605,7 +1605,7 @@ def handle_location(event):
         lng = event.message.longitude
         seen = _get_seen(user_id)
         expanded = _get_expanded(user_id)
-        extended_km = 10.0 if expanded else 5.0
+        extended_km = 7.0 if expanded else 3.0
         reply_msg = None
         result = None
         open_pool = _get_open_pool()
@@ -1614,23 +1614,23 @@ def handle_location(event):
         exhausted = search_random_nearby_store(lat, lng, open_pool, seen=seen, extended_radius_km=extended_km) is None
         if exhausted:
             if not expanded:
-                # 先確認 5km 內有沒有任何店（不管打烊）
-                has_any_total = search_random_nearby_store(lat, lng, _random_pool, seen=set()) is not None
+                # 先確認 3km 內有沒有任何店（不管打烊）
+                has_any_total = search_random_nearby_store(lat, lng, _random_pool, seen=set(), extended_radius_km=3.0) is not None
                 if not has_any_total:
-                    # 5km 內根本沒有店
+                    # 3km 內根本沒有店
                     reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
                 else:
                     # 有店，再確認是打烊還是都看過
-                    has_any_open = search_random_nearby_store(lat, lng, open_pool, seen=set()) is not None
+                    has_any_open = search_random_nearby_store(lat, lng, open_pool, seen=set(), extended_radius_km=3.0) is not None
                     if not has_any_open:
                         # 有店但全打烊
                         reply_msg = TextMessage(text=_CLOSED_MSG)
                     else:
                         # 有開著的店但都看過了，提示擴大範圍
                         _set_expanded(user_id, True)
-                        reply_msg = TextMessage(text="大叔把5公里內的店都抽完了！要繼續擴大的話，再按一次隨機驚喜。")
+                        reply_msg = TextMessage(text="大叔把3公里內的店都抽完了！要繼續擴大的話，再按一次隨機驚喜。")
             else:
-                # 10km 也全部看過，重置
+                # 7km 也全部看過，重置
                 _reset_seen(user_id)
                 if len(seen) >= 10:
                     reply_msg = _build_exhausted_flex()
