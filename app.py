@@ -1163,7 +1163,7 @@ def _build_random_flex(result: dict) -> FlexMessage:
     loc = _random_pool.get(name, {}).get("location", {})
     maps_url = f"https://maps.google.com/?q={loc['lat']},{loc['lng']}"
     far_phrase = _persona.get_random_far_phrase(dist)
-    tagline = _store_notes.get(name, {}).get("random_tagline", "") if not far_phrase else ""
+    tagline = _random_pool.get(name, {}).get("random_tagline", "") if not far_phrase else ""
     phrase = far_phrase or tagline
 
     contents = [
