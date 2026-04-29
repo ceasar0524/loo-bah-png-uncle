@@ -535,7 +535,7 @@ def _build_title_flex(display: str, current_title: str, unique_count: int) -> Fl
         FlexText(text="🍚", size="5xl", align="center", margin="lg"),
         FlexSeparator(margin="lg"),
         FlexText(
-            text=f"你已解鎖 {unique_count} / 104 家",
+            text=f"你已解鎖 {unique_count} / 105 家",
             weight="bold", size="md", align="center", margin="lg", color="#4B2F24",
         ),
         FlexText(
@@ -1736,8 +1736,18 @@ def _build_store_list_flex() -> FlexMessage:
 
     n = sum(len(v) for v in district_stores.values())
 
+    _DISTRICT_ORDER = [
+        "大安區", "信義區", "中山區", "松山區", "北投區",
+        "萬華區", "中正區", "大同區", "中和區", "三重區", "林口區", "泰山區",
+    ]
+    ordered_districts = sorted(
+        district_stores.keys(),
+        key=lambda d: _DISTRICT_ORDER.index(d) if d in _DISTRICT_ORDER else len(_DISTRICT_ORDER),
+    )
+
     rows = []
-    for district, names in sorted(district_stores.items()):
+    for district in ordered_districts:
+        names = district_stores[district]
         if STORE_LIST_STYLE == "michelin":
             rows.append(FlexBox(
                 layout="horizontal",
@@ -2227,7 +2237,7 @@ def _build_footprint_flex(user_id: str):
             unique_stores.append(name)
 
     unique_count = len(unique_stores)
-    total_stores = 104
+    total_stores = 105
 
     # 稱號資料
     user_data = user_doc.to_dict() if user_doc.exists else {}

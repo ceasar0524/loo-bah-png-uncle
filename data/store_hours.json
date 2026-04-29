@@ -10618,5 +10618,27 @@
         "Sunday: 10:30 AM – 1:30 PM, 4:30 – 8:00 PM"
       ]
     }
+  },
+  "億香魯肉飯（萬華區）": {
+    "place_id": "",
+    "hours": {
+      "periods": [
+        { "open": { "day": 1, "hour": 11, "minute": 0 }, "close": { "day": 1, "hour": 19, "minute": 30 } },
+        { "open": { "day": 2, "hour": 11, "minute": 0 }, "close": { "day": 2, "hour": 19, "minute": 30 } },
+        { "open": { "day": 3, "hour": 11, "minute": 0 }, "close": { "day": 3, "hour": 19, "minute": 30 } },
+        { "open": { "day": 4, "hour": 11, "minute": 0 }, "close": { "day": 4, "hour": 19, "minute": 30 } },
+        { "open": { "day": 5, "hour": 11, "minute": 0 }, "close": { "day": 5, "hour": 19, "minute": 30 } },
+        { "open": { "day": 6, "hour": 11, "minute": 0 }, "close": { "day": 6, "hour": 19, "minute": 30 } }
+      ],
+      "weekday_text": [
+        "Monday: 11:00 AM – 7:30 PM",
+        "Tuesday: 11:00 AM – 7:30 PM",
+        "Wednesday: 11:00 AM – 7:30 PM",
+        "Thursday: 11:00 AM – 7:30 PM",
+        "Friday: 11:00 AM – 7:30 PM",
+        "Saturday: 11:00 AM – 7:30 PM",
+        "Sunday: Closed"
+      ]
+    }
   }
 }

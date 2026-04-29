@@ -585,5 +585,17 @@
       "sauce_taste": "偏甜"
     },
     "sauce_consistency": "水"
+  },
+  "億香魯肉飯（萬華區）": {
+    "location": {
+      "lat": 25.0351533322704,
+      "lng": 121.49990995321672
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "稠"
   }
 }
