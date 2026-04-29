@@ -250,11 +250,12 @@ def match_store(
             reverse=True,
         )
 
-        # Haiku 特徵獨贏：第一名有分、第二名為零 → 解除平手
+        # Haiku 特徵獨贏：第一名分數 >= 0.6 且第二名為零 → 解除平手
+        # 低分配料（如 yin_gua=0.3）只影響排序，不解除平手
         haiku_resolved = False
         if haiku_scores:
             scores_list = [haiku_scores.get(c["store_name"], 0.0) for c in candidates]
-            if len(scores_list) >= 2 and scores_list[0] > 0 and scores_list[1] == 0.0:
+            if len(scores_list) >= 2 and scores_list[0] >= 0.6 and scores_list[1] == 0.0:
                 logger.info("haiku tie resolved: %s (score=%.2f) beats %s (score=0)",
                             candidates[0]["store_name"], scores_list[0], candidates[1]["store_name"])
                 haiku_resolved = True
