@@ -1459,6 +1459,13 @@ def _build_taste_loaded_flex(answers: dict) -> FlexMessage:
 
 def _build_taste_flex(full: list, partial: list, intros: dict) -> FlexMessage:
     """組裝個人化推薦的 Flex Message。full 為全符合，partial 為部分符合（score==3）。"""
+    from datetime import datetime
+    import zoneinfo
+    now = datetime.now(zoneinfo.ZoneInfo("Asia/Taipei"))
+    google_day = now.isoweekday() % 7
+    current_hour = now.hour
+    current_minute = now.minute
+
     header = "大叔依你的口味找到了："
     contents = [
         FlexText(text=header, weight="bold", size="md", wrap=True),
@@ -1475,8 +1482,15 @@ def _build_taste_flex(full: list, partial: list, intros: dict) -> FlexMessage:
             maps_url = _persona.maps_url(name)
         intro = intros.get(name, "")
         must_eat_count = _get_must_eat_count(name)
+        hours_entry = _store_hours.get(name)
+        if hours_entry and hours_entry.get("hours"):
+            periods = hours_entry["hours"].get("periods", [])
+            is_open = _is_currently_open(periods, google_day, current_hour, current_minute) if periods else True
+        else:
+            is_open = True
+        display_name = name if is_open else f"{name}（目前打烊）"
         contents.append(FlexSeparator(margin="lg"))
-        contents.append(FlexText(text=name, weight="bold", size="md", margin="md", wrap=True))
+        contents.append(FlexText(text=display_name, weight="bold", size="md", margin="md", wrap=True, color="#333333" if is_open else "#AAAAAA"))
         if must_eat_count > 0:
             contents.append(FlexText(text=f"{must_eat_count} 位同好推薦 🔥", size="sm", color="#B85A2B", weight="bold"))
         if is_partial:
@@ -1486,7 +1500,7 @@ def _build_taste_flex(full: list, partial: list, intros: dict) -> FlexMessage:
         contents.append(FlexText(text=f"距你約 {dist} 公里", size="sm", color="#888888"))
         contents.append(FlexButton(
             action=URIAction(label="📍 地圖", uri=maps_url),
-            style="primary",
+            style="primary" if is_open else "secondary",
             margin="md",
             height="sm",
         ))
