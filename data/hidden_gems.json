@@ -298,12 +298,6 @@
       "lng": 121.4818767672628
     }
   },
-  "古早味魯肉飯（新店區）": {
-    "location": {
-      "lat": 24.955118339112506,
-      "lng": 121.53704819609746
-    }
-  },
   "中和米粉湯（中和區）": {
     "location": {
       "lat": 24.998655986451833,
@@ -356,7 +350,13 @@
     "location": {
       "lat": 24.972123557472127,
       "lng": 121.54034236519004
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "第一家魯肉飯（中正區）": {
     "location": {
@@ -428,7 +428,13 @@
     "location": {
       "lat": 24.975598109969937,
       "lng": 121.53465354685098
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "稠"
   },
   "景美無名米粉湯（文山區）": {
     "location": {
@@ -597,5 +603,41 @@
       "sauce_taste": "偏鹹"
     },
     "sauce_consistency": "稠"
+  },
+  "有間魯肉飯（新店區）": {
+    "location": {
+      "lat": 24.986958471186586,
+      "lng": 121.53715173787253
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
+  },
+  "一鼎魯肉飯（新店區）": {
+    "location": {
+      "lat": 24.98236280349775,
+      "lng": 121.54396232437927
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
+  },
+  "賴岡山羊肉（新店區）": {
+    "location": {
+      "lat": 24.973551640930843,
+      "lng": 121.53966099554323
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   }
 }
