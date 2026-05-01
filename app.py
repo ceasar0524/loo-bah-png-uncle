@@ -344,6 +344,35 @@ def _clear_taste_quiz(user_id: str) -> None:
             entry.pop("taste_quiz", None)
 
 
+def _save_taste_more(user_id: str, stores: list) -> None:
+    """儲存個人化推薦剩餘店家，供「更多家」按鈕使用。"""
+    with _sessions_lock:
+        if user_id not in _sessions:
+            _sessions[user_id] = {"store": None, "ts": time.time(), "seen": set()}
+        _sessions[user_id]["taste_more"] = stores
+        _sessions[user_id]["ts"] = time.time()
+
+
+def _get_taste_more(user_id: str) -> list | None:
+    """回傳個人化推薦剩餘店家，若無則回傳 None。"""
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is None:
+            return None
+        if time.time() - entry["ts"] > _SESSION_TTL:
+            del _sessions[user_id]
+            return None
+        return entry.get("taste_more")
+
+
+def _clear_taste_more(user_id: str) -> None:
+    """清除個人化推薦剩餘店家。"""
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is not None:
+            entry.pop("taste_more", None)
+
+
 def _save_last_location(user_id: str, lat: float, lng: float) -> None:
     """將用戶最後一次分享的位置存入 session，供後續「附近巷仔口店家」直接查附近店用。"""
     with _sessions_lock:
@@ -1457,7 +1486,7 @@ def _build_taste_loaded_flex(answers: dict) -> FlexMessage:
     return FlexMessage(alt_text="大叔記得你的口味", contents=bubble, quick_reply=qr)
 
 
-def _build_taste_flex(full: list, partial: list, intros: dict) -> FlexMessage:
+def _build_taste_flex(full: list, partial: list, intros: dict, has_more: bool = False) -> FlexMessage:
     """組裝個人化推薦的 Flex Message。full 為全符合，partial 為部分符合（score==3）。"""
     from datetime import datetime
     import zoneinfo
@@ -1526,9 +1555,10 @@ def _build_taste_flex(full: list, partial: list, intros: dict) -> FlexMessage:
     bubble = FlexBubble(
         body=FlexBox(layout="vertical", contents=contents, padding_all="lg")
     )
-    qr = QuickReply(items=[
-        QuickReplyItem(action=MessageAction(label="附近巷仔口 🏘️", text="附近巷仔口店家"))
-    ])
+    qr_items = [QuickReplyItem(action=MessageAction(label="附近巷仔口 🏘️", text="附近巷仔口店家"))]
+    if has_more:
+        qr_items.append(QuickReplyItem(action=MessageAction(label="更多家", text="更多家")))
+    qr = QuickReply(items=qr_items)
     return FlexMessage(alt_text="大叔幫你找到了！", contents=bubble, quick_reply=qr)
 
 
@@ -1594,12 +1624,16 @@ def handle_location(event):
         candidates = _match_taste_stores(lat, lng, answers)
         full = [c for c in candidates if c["score"] == len(_TASTE_QUIZ_QUESTIONS)]
         partial = [c for c in candidates if c["score"] == len(_TASTE_QUIZ_QUESTIONS) - 1]
+        _clear_taste_more(user_id)
         if not candidates:
             reply_msg = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
         elif full:
             top_full = full[:3]
+            remaining = full[3:]
+            if remaining:
+                _save_taste_more(user_id, remaining)
             intros = _generate_taste_intros(top_full)
-            reply_msg = _build_taste_flex(top_full, [], intros)
+            reply_msg = _build_taste_flex(top_full, [], intros, has_more=bool(remaining))
         elif partial:
             top_partial = partial[:2]
             intros = _generate_taste_intros(top_partial)
@@ -2602,6 +2636,19 @@ def handle_text(event):
                         reply = TextMessage(text="殘念！🏪 這附近大叔還在開發中，敬請期待... 🙇")
                 else:
                     reply = None
+            elif text == "更多家":
+                more = _get_taste_more(user_id)
+                if more:
+                    next_batch = more[:3]
+                    remaining = more[3:]
+                    if remaining:
+                        _save_taste_more(user_id, remaining)
+                    else:
+                        _clear_taste_more(user_id)
+                    intros = _generate_taste_intros(next_batch)
+                    reply = _build_taste_flex(next_batch, [], intros, has_more=bool(remaining))
+                else:
+                    reply = TextMessage(text="已經沒有更多符合的店囉！")
             elif text == "台北市區":
                 reply = _build_taipei_city_flex()
             elif text in _hidden_gems_districts():
