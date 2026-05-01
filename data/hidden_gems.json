@@ -158,13 +158,25 @@
     "location": {
       "lat": 25.009972934755748,
       "lng": 121.46695992493544
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
   },
   "阿輝滷肉飯（板橋區）": {
     "location": {
       "lat": 25.001353833286068,
       "lng": 121.44248447940394
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "再見一麵·麵食店（文山區）": {
     "location": {
@@ -218,13 +230,25 @@
     "location": {
       "lat": 25.008230872107426,
       "lng": 121.45360561107468
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "鐵皮屋麵攤（板橋區）": {
     "location": {
       "lat": 25.029141486000317,
       "lng": 121.48077134789229
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "下港排骨酥湯（永和區）": {
     "location": {
@@ -290,13 +314,25 @@
     "location": {
       "lat": 25.019532930102535,
       "lng": 121.46830798075355
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "甲鼎滷肉飯（板橋區）": {
     "location": {
       "lat": 25.019000442593022,
       "lng": 121.4818767672628
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "中和米粉湯（中和區）": {
     "location": {
@@ -410,7 +446,13 @@
     "location": {
       "lat": 25.005879450443675,
       "lng": 121.46455746982252
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "央二巷滷肉飯（土城區）": {
     "location": {
@@ -632,6 +674,54 @@
     "location": {
       "lat": 24.973551640930843,
       "lng": 121.53966099554323
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
+  },
+  "夜間食堂老爹肉羹（板橋區）": {
+    "location": {
+      "lat": 25.03437610783029,
+      "lng": 121.47382308167188
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
+  },
+  "大碗公當歸羊肉（板橋區）": {
+    "location": {
+      "lat": 25.024925107396907,
+      "lng": 121.46572007116407
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
+  },
+  "魯肉發無刺虱目魚粥（新莊區）": {
+    "location": {
+      "lat": 25.0236290131208,
+      "lng": 121.41425835283556
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
+  },
+  "二姊麵擔（板橋區）": {
+    "location": {
+      "lat": 25.028643683798464,
+      "lng": 121.47545508167163
     },
     "visual_profile": {
       "fat_ratio": "fat_heavy",
