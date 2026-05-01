@@ -188,7 +188,13 @@
     "location": {
       "lat": 25.06755626173759,
       "lng": 121.49781435562846
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "庄腳滷肉飯（中和區）": {
     "location": {
@@ -206,13 +212,25 @@
     "location": {
       "lat": 25.070877320149037,
       "lng": 121.48367818075491
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "歐家莊（三重區）": {
     "location": {
       "lat": 25.06348284298805,
       "lng": 121.49990958260993
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "丫財魯肉飯無刺虱目魚（新莊區）": {
     "location": {
@@ -284,19 +302,37 @@
     "location": {
       "lat": 25.083492871075187,
       "lng": 121.49350240025917
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "仁和街滷肉飯（三重區）": {
     "location": {
       "lat": 25.07452737657801,
       "lng": 121.49936821610535
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "冠味藥燉排骨（三重區）": {
     "location": {
       "lat": 25.05895500693418,
       "lng": 121.48608205705305
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "中央市場滷肉飯（萬華區）": {
     "location": {
@@ -560,19 +596,37 @@
     "location": {
       "lat": 25.064976260986878,
       "lng": 121.50030958870892
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
   },
   "無名魯肉飯.四神湯（三重區）": {
     "location": {
       "lat": 25.072447234947013,
       "lng": 121.49612683577051
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "滷好記豬腳飯（三重區）": {
     "location": {
       "lat": 25.074214497384975,
       "lng": 121.49089683832135
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "家食心地（新莊區）": {
     "location": {
