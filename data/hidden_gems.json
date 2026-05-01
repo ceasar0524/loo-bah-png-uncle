@@ -85,19 +85,37 @@
     "location": {
       "lat": 25.065977464370615,
       "lng": 121.42879013071853
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "蓬萊小吃店（五股區）": {
     "location": {
       "lat": 25.07971742810189,
       "lng": 121.4349896267924
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "洄鄉藥燉排骨（五股區）": {
     "location": {
       "lat": 25.08797766102937,
       "lng": 121.43422601144685
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "筒仔米糕滷肉飯貢丸湯（泰山區）": {
     "location": {
@@ -109,13 +127,25 @@
     "location": {
       "lat": 25.064526653966315,
       "lng": 121.42737182947694
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "稠"
   },
   "佳典魯肉飯（泰山區）": {
     "location": {
       "lat": 25.03204331536635,
       "lng": 121.42115652493594
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "阿峯魯肉飯（新莊區）": {
     "location": {
@@ -206,13 +236,25 @@
     "location": {
       "lat": 24.99741423128449,
       "lng": 121.50019555934881
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "洲子洋魯肉飯（五股區）": {
     "location": {
       "lat": 25.089224997444823,
       "lng": 121.44702081490941
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "稠"
   },
   "車路頭油飯（三重區）": {
     "location": {
@@ -278,31 +320,61 @@
     "location": {
       "lat": 25.007781732986942,
       "lng": 121.51263264140826
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "阿瑞魯肉飯（永和區）": {
     "location": {
       "lat": 24.99736277736102,
       "lng": 121.5227947162659
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "鑫鴨肉冬粉（永和區）": {
     "location": {
       "lat": 25.005236616099435,
       "lng": 121.51504673780228
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "小老闆滷味肉羹麵滷肉飯（永和區）": {
     "location": {
       "lat": 25.011194231943513,
       "lng": 121.52035942790421
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
   },
   "二姐肉羹（永和區）": {
     "location": {
       "lat": 25.000993790375198,
       "lng": 121.5244877979538
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "頂好魯肉飯羊肉羹湯（三重區）": {
     "location": {
@@ -392,13 +464,25 @@
     "location": {
       "lat": 24.998655986451833,
       "lng": 121.50960333842583
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "稠"
   },
   "好吃好，吃好吃（中和區）": {
     "location": {
       "lat": 25.006000858063384,
       "lng": 121.4796700001288
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "稠"
   },
   "巧緣魯肉飯（大安區）": {
     "location": {
@@ -578,7 +662,13 @@
     "location": {
       "lat": 24.976910808826602,
       "lng": 121.44238525377082
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "台灣古早味-正宗阿偉咖哩飯（萬華區）": {
     "location": {
