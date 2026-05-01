@@ -564,7 +564,7 @@ def _build_title_flex(display: str, current_title: str, unique_count: int) -> Fl
         FlexText(text="🍚", size="5xl", align="center", margin="lg"),
         FlexSeparator(margin="lg"),
         FlexText(
-            text=f"你已解鎖 {unique_count} / 111 家",
+            text=f"你已解鎖 {unique_count} / 110 家",
             weight="bold", size="md", align="center", margin="lg", color="#4B2F24",
         ),
         FlexText(
@@ -2251,6 +2251,8 @@ def _find_nearby_checkin_stores(lat: float, lng: float, radius_km: float = 0.5) 
         if dist <= radius_km:
             result.append((name, "store_notes", dist))
     for name, data in _hidden_gems.items():
+        if name in _HIDDEN_GEMS_RANDOM_EXCLUDE:
+            continue
         loc = data.get("location")
         if not loc:
             continue
@@ -2299,7 +2301,7 @@ def _build_footprint_flex(user_id: str):
             unique_stores.append(name)
 
     unique_count = len(unique_stores)
-    total_stores = 111
+    total_stores = 110
 
     # 稱號資料
     user_data = user_doc.to_dict() if user_doc.exists else {}
