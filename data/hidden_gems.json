@@ -182,7 +182,13 @@
     "location": {
       "lat": 25.002130021368085,
       "lng": 121.53691967373555
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "麗莉滷肉飯（三重區）": {
     "location": {
@@ -338,13 +344,25 @@
     "location": {
       "lat": 25.01904635792165,
       "lng": 121.50077340331946
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "三條路油飯＆排骨酥湯（萬華區）": {
     "location": {
       "lat": 25.03133842314025,
       "lng": 121.48978079858944
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
   },
   "福哥滷肉飯（總店）（板橋區）": {
     "location": {
@@ -386,19 +404,37 @@
     "location": {
       "lat": 25.029491244699297,
       "lng": 121.55619510568123
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
   },
   "政大赤肉羹滷肉飯（文山區）": {
     "location": {
       "lat": 24.988430191209805,
       "lng": 121.57646692243705
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "稠"
   },
   "感恩麵店（士林區）": {
     "location": {
       "lat": 25.137651047695766,
       "lng": 121.54203269277366
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "公孫古早味涼麵林口店（林口區）": {
     "location": {
@@ -416,7 +452,13 @@
     "location": {
       "lat": 25.02327350246368,
       "lng": 121.50130064817138
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "阿金老圓環魯肉飯（新店區）": {
     "location": {
@@ -434,37 +476,73 @@
     "location": {
       "lat": 25.043618341997057,
       "lng": 121.52704774028204
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "東門城滷肉飯（中正區）": {
     "location": {
       "lat": 25.034795353646025,
       "lng": 121.5269037095903
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "K哥魯肉飯（士林區）": {
     "location": {
       "lat": 25.09104532257089,
       "lng": 121.50854995562923
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "純發魯肉飯（松山區）": {
     "location": {
       "lat": 25.03884679757898,
       "lng": 121.57818834314754
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "光輝肉羹（士林區）": {
     "location": {
       "lat": 25.095945478551002,
       "lng": 121.52345851144702
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
   },
   "味家魯肉飯（信義區）": {
     "location": {
       "lat": 25.042483333413493,
       "lng": 121.56376511720079
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "啊興阿滷肉飯（中山區）": {
     "location": {
@@ -476,7 +554,13 @@
     "location": {
       "lat": 25.022028469529157,
       "lng": 121.52889064603725
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "稠"
   },
   "7號鴨生炒新港鴨肉羹（板橋區）": {
     "location": {
@@ -500,7 +584,13 @@
     "location": {
       "lat": 25.036580699631863,
       "lng": 121.50240738279919
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "小渝魯肉飯（新店區）": {
     "location": {
@@ -518,79 +608,157 @@
     "location": {
       "lat": 25.000376053412587,
       "lng": 121.55024194206572
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "上園花枝焿（文山區）": {
     "location": {
       "lat": 24.990061943058365,
       "lng": 121.5414634177975
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "稠"
   },
   "大直老店米粉湯（中山區）": {
     "location": {
       "lat": 25.07979360669901,
       "lng": 121.54513172493722
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "尚紅魯肉飯（內湖區）": {
     "location": {
       "lat": 25.05737640231462,
       "lng": 121.5847653384274
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
   },
   "大湖麵館（內湖區）": {
     "location": {
       "lat": 25.088543105627803,
       "lng": 121.59972125105226
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "稠"
   },
   "虎記魯肉飯（南港區）": {
     "location": {
       "lat": 25.05550470512887,
       "lng": 121.61361104395172
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "稠"
   },
   "四季豐米粉湯（內湖區）": {
     "location": {
       "lat": 25.0828603414755,
       "lng": 121.56701282994123
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
   },
   "小頭雞魯飯（內湖區）": {
     "location": {
       "lat": 25.07783379766487,
       "lng": 121.5904334423725
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
   },
   "老娘米粉湯（文山區）": {
     "location": {
       "lat": 24.987919443384705,
       "lng": 121.55200697186366
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "稠"
   },
   "市場轉角麵店（信義區）": {
     "location": {
       "lat": 25.03706231965832,
       "lng": 121.57914136911835
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "阿梅大餛飩（中山區）": {
     "location": {
       "lat": 25.081170976306513,
       "lng": 121.54860140050833
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "肥仔尹魯肉飯（北投區）": {
     "location": {
       "lat": 25.13184075757221,
       "lng": 121.50179312949092
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "王記咖哩飯（士林區）": {
     "location": {
       "lat": 25.087915895804997,
       "lng": 121.51003889510972
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "稠"
   },
   "阿卿魯肉飯切仔麵（三重區）": {
     "location": {

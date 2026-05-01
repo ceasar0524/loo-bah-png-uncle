@@ -1363,13 +1363,40 @@ def _match_taste_stores(lat: float, lng: float, answers: dict, radius_km: float 
     return candidates
 
 
+_TASTE_INTRO_FAT   = {"fat_heavy": "肉質偏肥", "lean_heavy": "肉質偏瘦"}
+_TASTE_INTRO_SKIN  = {"with_skin": "黏黏帶膠質", "no_skin": "不黏偏乾爽"}
+_TASTE_INTRO_SAUCE = {"稠": "滷汁濃稠", "水": "滷汁清爽不稠"}
+_TASTE_INTRO_TASTE = {"偏甜": "口味偏甜", "偏鹹": "口味偏鹹"}
+
+
+def _static_taste_intros(stores: list) -> dict:
+    """用 visual_profile 靜態拼出店家特色描述，不呼叫 API。回傳 {store_name: intro}。"""
+    intros = {}
+    for s in stores:
+        name = s["store_name"]
+        info = s["info"]
+        vp = info.get("visual_profile", {})
+        traits = []
+        if vp.get("fat_ratio") in _TASTE_INTRO_FAT:
+            traits.append(_TASTE_INTRO_FAT[vp["fat_ratio"]])
+        if vp.get("skin") in _TASTE_INTRO_SKIN:
+            traits.append(_TASTE_INTRO_SKIN[vp["skin"]])
+        sc = info.get("sauce_consistency")
+        if sc in _TASTE_INTRO_SAUCE:
+            traits.append(_TASTE_INTRO_SAUCE[sc])
+        if vp.get("sauce_taste") in _TASTE_INTRO_TASTE:
+            traits.append(_TASTE_INTRO_TASTE[vp["sauce_taste"]])
+        intros[name] = "、".join(traits) if traits else ""
+    return intros
+
+
 def _generate_taste_intros(stores: list) -> dict:
     """呼叫 Claude Haiku 為每家推薦店生成大叔風格介紹（30 字以內）。回傳 {store_name: intro}。"""
     import random as _random
-    _FAT_LABEL = {"fat_heavy": "肉質偏肥", "lean_heavy": "肉質偏瘦"}
-    _SKIN_LABEL = {"with_skin": "黏黏帶膠質", "no_skin": "不黏偏乾爽"}
-    _SAUCE_LABEL = {"稠": "滷汁濃稠", "水": "滷汁清爽不稠"}
-    _TASTE_LABEL = {"偏甜": "口味偏甜", "偏鹹": "口味偏鹹"}
+    _FAT_LABEL = _TASTE_INTRO_FAT
+    _SKIN_LABEL = _TASTE_INTRO_SKIN
+    _SAUCE_LABEL = _TASTE_INTRO_SAUCE
+    _TASTE_LABEL = _TASTE_INTRO_TASTE
 
     store_inputs = []
     for s in stores:
@@ -1555,9 +1582,10 @@ def _build_taste_flex(full: list, partial: list, intros: dict, has_more: bool = 
     bubble = FlexBubble(
         body=FlexBox(layout="vertical", contents=contents, padding_all="lg")
     )
-    qr_items = [QuickReplyItem(action=MessageAction(label="附近巷仔口 🏘️", text="附近巷仔口店家"))]
+    qr_items = []
     if has_more:
         qr_items.append(QuickReplyItem(action=MessageAction(label="更多家", text="更多家")))
+    qr_items.append(QuickReplyItem(action=MessageAction(label="附近巷仔口 🏘️", text="附近巷仔口店家")))
     qr = QuickReply(items=qr_items)
     return FlexMessage(alt_text="大叔幫你找到了！", contents=bubble, quick_reply=qr)
 
@@ -2645,7 +2673,7 @@ def handle_text(event):
                         _save_taste_more(user_id, remaining)
                     else:
                         _clear_taste_more(user_id)
-                    intros = _generate_taste_intros(next_batch)
+                    intros = _static_taste_intros(next_batch)
                     reply = _build_taste_flex(next_batch, [], intros, has_more=bool(remaining))
                 else:
                     reply = TextMessage(text="已經沒有更多符合的店囉！")
