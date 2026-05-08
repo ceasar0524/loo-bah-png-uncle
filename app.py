@@ -32,6 +32,7 @@ from linebot.v3.messaging import (
     FlexBlockStyle,
     FlexBox,
     FlexButton,
+    FlexImage,
     FlexText,
     FlexSeparator,
     FlexCarousel,
