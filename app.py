@@ -286,13 +286,13 @@ _GCS_ASSETS = "https://storage.googleapis.com/loo-bah-png-assets/personality"
 
 _PERSONALITY_TAGLINES: dict = {
     ("fat_heavy", "with_skin",    "水"): ("在滷汁迷宮尋求黏嘴邂逅\n是否搞錯了什麼",         f"{_GCS_ASSETS}/maze.jpg"),
-    ("fat_heavy", "with_skin",    "稠"): ("因為太思念那鍋濃稠滷汁而觸犯禁忌的我\n打開了魯肉飯的真相之門", None),
-    ("fat_heavy", "no_skin",      "水"): ("明明只想吃碗魯肉飯\n卻不小心踏上滷鼎雙修之路",    None),
-    ("lean_heavy", "no_skin",     "水"): ("我也曾經以為魯肉飯一定要肥\n直到遇見那碗瘦瘦的你", None),
-    ("lean_heavy", "no_skin",     "稠"): ("明明沒有油花與膠質\n卻靠鹹香濃汁成為最強魯肉飯",  None),
+    ("fat_heavy", "with_skin",    "稠"): ("因為太思念那鍋濃稠滷汁而觸犯禁忌的我\n打開了魯肉飯的真相之門", f"{_GCS_ASSETS}/forbidden.jpg"),
+    ("fat_heavy", "no_skin",      "水"): ("明明只想吃碗魯肉飯\n卻不小心踏上滷鼎雙修之路",    f"{_GCS_ASSETS}/dual.jpg"),
+    ("lean_heavy", "no_skin",     "水"): ("我也曾經以為魯肉飯一定要肥\n直到遇見那碗瘦瘦的你", f"{_GCS_ASSETS}/lean.jpg"),
+    ("lean_heavy", "no_skin",     "稠"): ("明明沒有油花與膠質\n卻靠鹹香濃汁成為最強魯肉飯",  f"{_GCS_ASSETS}/strongest.jpg"),
 }
-_TAGLINE_SWEET   = ("轉生成南部甜心的我\n今天也在滷鍋裡融化人心",         None)
-_TAGLINE_DEFAULT = ("明明什麼都可以\n卻意外成為魯肉飯最強通吃者", None)
+_TAGLINE_SWEET   = ("轉生成南部甜心的我\n今天也在滷鍋裡融化人心",         f"{_GCS_ASSETS}/sweet.jpg")
+_TAGLINE_DEFAULT = ("明明什麼都可以\n卻意外成為魯肉飯最強通吃者", f"{_GCS_ASSETS}/default.jpg")
 
 
 def get_personality_tagline(answers: dict) -> tuple[str, str | None]:
