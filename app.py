@@ -293,7 +293,7 @@ _PERSONALITY_TAGLINES: dict = {
     ("lean_heavy", "with_skin",   "稠"): ("明明只想吃碗魯肉飯\n卻不小心踏上滷鼎雙修之路",    f"{_GCS_ASSETS}/dual.jpg"),
 }
 _TAGLINE_SWEET   = ("轉生成南部甜心的我\n今天也在滷鍋裡融化人心",         f"{_GCS_ASSETS}/sweet.jpg")
-_TAGLINE_DEFAULT = ("明明什麼都可以\n卻意外成為魯肉飯最強通吃者", f"{_GCS_ASSETS}/default.jpg")
+_TAGLINE_DEFAULT = ("一次意外，我竟成了\n魯肉飯新手村的大Boss", f"{_GCS_ASSETS}/boss.jpg")
 
 
 def get_personality_tagline(answers: dict) -> tuple[str, str | None]:
