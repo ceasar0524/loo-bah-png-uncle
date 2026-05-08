@@ -188,6 +188,7 @@ STORE_LIST_STYLE = "michelin"
 # LIFF URL（在 LINE Developers Console 建立後填入）
 RATINGS_LIFF_URL = os.getenv("RATINGS_LIFF_URL", "")
 SHARE_LIFF_URL = os.getenv("SHARE_LIFF_URL", "")
+SHARE_TASTE_LIFF_URL = os.getenv("SHARE_TASTE_LIFF_URL", "")
 
 # Admin user ID，過濾測試流量不計入統計
 _ADMIN_USER_ID = os.getenv("ADMIN_USER_ID", "")
@@ -1172,6 +1173,99 @@ liff.init({{ liffId: "{liff_id}" }}).then(() => {{
     return html, 200, {"Content-Type": "text/html; charset=utf-8"}
 
 
+@app.route("/liff/share-taste", methods=["GET"])
+def liff_share_taste():
+    """LIFF 分享頁：分享個人口味人格台詞。"""
+    liff_id = os.getenv("SHARE_TASTE_LIFF_ID", "")
+    html = f"""<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>分享口味</title>
+<script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+<style>
+body {{ background: #1A1A2E; color: #FFD700; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; }}
+p {{ color: #AAAAAA; font-size: 0.9rem; }}
+</style>
+</head>
+<body>
+<p>準備分享中⋯</p>
+<script>
+function getParam(url, key) {{
+  const re = new RegExp("[?&]" + key.replace(".", "\\.") + "=([^&]+)");
+  const m = url.match(re);
+  return m ? decodeURIComponent(m[1]) : "";
+}}
+function extractParams(href) {{
+  let tagline = getParam(href, "tagline");
+  let img     = getParam(href, "img");
+  let fat     = getParam(href, "fat");
+  let skin    = getParam(href, "skin");
+  let sauce   = getParam(href, "sauce");
+  let taste   = getParam(href, "taste");
+  if (!tagline) {{
+    const rawState = getParam(href, "liff\\.state");
+    if (rawState) {{
+      const decoded = decodeURIComponent(rawState);
+      tagline = getParam(decoded, "tagline");
+      img     = getParam(decoded, "img");
+      fat     = getParam(decoded, "fat");
+      skin    = getParam(decoded, "skin");
+      sauce   = getParam(decoded, "sauce");
+      taste   = getParam(decoded, "taste");
+    }}
+  }}
+  return {{ tagline, img, fat, skin, sauce, taste }};
+}}
+liff.init({{ liffId: "{liff_id}" }}).then(() => {{
+  const p = extractParams(window.location.href);
+  if (!p.tagline) {{
+    document.querySelector("p").textContent = "找不到口味資訊";
+    return;
+  }}
+  const tasteRows = [];
+  if (p.fat)   tasteRows.push({{ type: "text", text: "🍖  " + p.fat,   size: "lg", weight: "bold", color: "#4B2F24" }});
+  if (p.skin)  tasteRows.push({{ type: "text", text: "💋  " + p.skin,  size: "lg", weight: "bold", color: "#4B2F24", margin: "md" }});
+  if (p.sauce) tasteRows.push({{ type: "text", text: "🍯  " + p.sauce, size: "lg", weight: "bold", color: "#4B2F24", margin: "md" }});
+  if (p.taste) tasteRows.push({{ type: "text", text: "🧂  " + p.taste, size: "lg", weight: "bold", color: "#4B2F24", margin: "md" }});
+  tasteRows.push({{ type: "separator", margin: "lg" }});
+  tasteRows.push({{ type: "button", action: {{ type: "uri", label: "🤖 加入魯肉飯大叔", uri: "https://line.me/R/ti/p/%40940srtss" }}, style: "secondary", margin: "md", height: "sm" }});
+  const taglineLines = p.tagline.split("\\n");
+  const line1 = "✦ " + taglineLines[0];
+  const line2 = taglineLines[1] || "";
+  const headerContents = [
+    {{ type: "text", text: line1, weight: "bold", size: "lg", color: "#FFFFFF", wrap: true }}
+  ];
+  if (line2) {{
+    headerContents.push({{ type: "text", text: line2, size: "sm", color: "#FFFFFF", align: "end", wrap: true, margin: "sm" }});
+  }}
+  const bubble = {{
+    type: "bubble",
+    hero: p.img ? {{ type: "image", url: p.img, size: "full", aspectRatio: "20:13", aspectMode: "cover" }} : undefined,
+    header: {{
+      type: "box", layout: "vertical", backgroundColor: "#6A3F2D", paddingAll: "lg",
+      contents: headerContents
+    }},
+    body: {{
+      type: "box", layout: "vertical", paddingAll: "lg", backgroundColor: "#E9E1D8",
+      contents: tasteRows
+    }}
+  }};
+  return liff.shareTargetPicker([{{
+    type: "flex",
+    altText: p.tagline.split("\\n")[0],
+    contents: bubble
+  }}]);
+}}).then(() => liff.closeWindow()).catch(err => {{
+  document.querySelector("p").textContent = "錯誤：" + (err && err.message || JSON.stringify(err));
+}});
+</script>
+</body>
+</html>"""
+    return html, 200, {"Content-Type": "text/html; charset=utf-8"}
+
+
 def _process_image(reply_token, message_id, user_id):
     if not _is_admin(user_id):
         logging.info("[event] image_received")
@@ -1298,7 +1392,7 @@ def _build_random_flex(result: dict) -> FlexMessage:
         if phrase:
             share_url += f"&tagline={quote(phrase)}"
         contents.append(FlexButton(
-            action=URIAction(label="分享籤詩 📤", uri=share_url),
+            action=URIAction(label="分享這家店 📤", uri=share_url),
             style="secondary",
             margin="sm",
             height="sm",
@@ -1571,10 +1665,27 @@ def _build_taste_loaded_flex(answers: dict) -> FlexMessage:
             body=FlexBlockStyle(background_color="#E9E1D8"),
         ),
     )
-    qr = QuickReply(items=[
+    qr_items = [
         QuickReplyItem(action=MessageAction(label="直接用 ✅", text="直接用 ✅")),
         QuickReplyItem(action=MessageAction(label="重新填 🔄", text="重新填 🔄")),
-    ])
+    ]
+    if SHARE_TASTE_LIFF_URL:
+        from urllib.parse import quote
+        fat_label   = labels["fat_ratio"].get(answers.get("fat_ratio"), "都可以")
+        skin_label  = labels["skin"].get(answers.get("skin"), "都可以")
+        sauce_label = labels["sauce_consistency"].get(answers.get("sauce_consistency"), "都可以")
+        taste_label = labels["sauce_taste"].get(answers.get("sauce_taste"), "都可以")
+        share_url = (
+            f"{SHARE_TASTE_LIFF_URL}"
+            f"?tagline={quote(tagline_text)}"
+            f"&img={quote(tagline_img or '')}"
+            f"&fat={quote(fat_label)}"
+            f"&skin={quote(skin_label)}"
+            f"&sauce={quote(sauce_label)}"
+            f"&taste={quote(taste_label)}"
+        )
+        qr_items.append(QuickReplyItem(action=URIAction(label="分享口味 📤", uri=share_url)))
+    qr = QuickReply(items=qr_items)
     return FlexMessage(alt_text="大叔記得你的口味", contents=bubble, quick_reply=qr)
 
 
