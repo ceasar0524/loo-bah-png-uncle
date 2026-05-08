@@ -281,19 +281,21 @@ _TASTE_SESSION = "__taste__"  # 個人化推薦模式的 session 標記
 
 # 魯肉飯人格台詞對應表
 # key: (fat_ratio, skin, sauce_consistency)，優先規則在 get_personality_tagline() 中處理
+_GCS_ASSETS = "https://storage.googleapis.com/loo-bah-png-assets/personality"
+
 _PERSONALITY_TAGLINES: dict = {
-    ("fat_heavy", "with_skin",    "水"): "在滷汁迷宮尋求黏嘴邂逅\n是否搞錯了什麼",
-    ("fat_heavy", "with_skin",    "稠"): "因為太思念那鍋濃稠滷汁而觸犯禁忌的我\n打開了魯肉飯的真相之門",
-    ("fat_heavy", "no_skin",      "水"): "明明只想吃碗魯肉飯\n卻不小心踏上滷鼎雙修之路",
-    ("lean_heavy", "no_skin",     "水"): "我也曾經以為魯肉飯一定要肥\n直到遇見那碗瘦瘦的你",
-    ("lean_heavy", "no_skin",     "稠"): "明明沒有油花與膠質\n卻靠鹹香濃汁成為最強魯肉飯",
+    ("fat_heavy", "with_skin",    "水"): ("在滷汁迷宮尋求黏嘴邂逅\n是否搞錯了什麼",         f"{_GCS_ASSETS}/maze.jpg"),
+    ("fat_heavy", "with_skin",    "稠"): ("因為太思念那鍋濃稠滷汁而觸犯禁忌的我\n打開了魯肉飯的真相之門", None),
+    ("fat_heavy", "no_skin",      "水"): ("明明只想吃碗魯肉飯\n卻不小心踏上滷鼎雙修之路",    None),
+    ("lean_heavy", "no_skin",     "水"): ("我也曾經以為魯肉飯一定要肥\n直到遇見那碗瘦瘦的你", None),
+    ("lean_heavy", "no_skin",     "稠"): ("明明沒有油花與膠質\n卻靠鹹香濃汁成為最強魯肉飯",  None),
 }
-_TAGLINE_SWEET   = "轉生成南部甜心的我\n今天也在滷鍋裡融化人心"
-_TAGLINE_DEFAULT = "明明什麼都可以\n卻意外成為魯肉飯最強通吃者"
+_TAGLINE_SWEET   = ("轉生成南部甜心的我\n今天也在滷鍋裡融化人心",         None)
+_TAGLINE_DEFAULT = ("明明什麼都可以\n卻意外成為魯肉飯最強通吃者", None)
 
 
-def get_personality_tagline(answers: dict) -> str:
-    """依口味答案回傳對應的人格台詞。優先順序：偏甜 > 全都可以 > 精確匹配 > fallback。"""
+def get_personality_tagline(answers: dict) -> tuple[str, str | None]:
+    """依口味答案回傳 (台詞, 圖片URL|None)。優先順序：偏甜 > 全都可以 > 精確匹配 > fallback。"""
     fat    = answers.get("fat_ratio")
     skin   = answers.get("skin")
     sauce  = answers.get("sauce_consistency")
@@ -302,8 +304,8 @@ def get_personality_tagline(answers: dict) -> str:
         return _TAGLINE_SWEET
     if fat is None and skin is None and sauce is None and taste is None:
         return _TAGLINE_DEFAULT
-    tagline = _PERSONALITY_TAGLINES.get((fat, skin, sauce))
-    return tagline if tagline else _TAGLINE_DEFAULT
+    result = _PERSONALITY_TAGLINES.get((fat, skin, sauce))
+    return result if result else _TAGLINE_DEFAULT
 
 
 # 個人化問卷題目定義
@@ -1506,8 +1508,8 @@ def _build_taste_loaded_flex(answers: dict) -> FlexMessage:
         ("🍯", labels["sauce_consistency"].get(answers.get("sauce_consistency"), "都可以")),
         ("🧂", labels["sauce_taste"].get(answers.get("sauce_taste"), "都可以")),
     ]
-    tagline = get_personality_tagline(answers)
-    tagline_lines = tagline.split("\n", 1)
+    tagline_text, tagline_img = get_personality_tagline(answers)
+    tagline_lines = tagline_text.split("\n", 1)
     line1 = "✦ " + tagline_lines[0]
     line2 = tagline_lines[1] if len(tagline_lines) > 1 else ""
     header = FlexBox(
@@ -1519,6 +1521,7 @@ def _build_taste_loaded_flex(answers: dict) -> FlexMessage:
             FlexText(text=line2, size="sm", color="#FFFFFF", align="end", wrap=True, margin="sm"),
         ],
     )
+    hero = FlexImage(url=tagline_img, size="full", aspect_ratio="20:13", aspect_mode="cover") if tagline_img else None
     body_contents = []
     for emoji, value in rows:
         body_contents.append(FlexBox(
@@ -1532,6 +1535,7 @@ def _build_taste_loaded_flex(answers: dict) -> FlexMessage:
             ],
         ))
     bubble = FlexBubble(
+        hero=hero,
         header=header,
         body=FlexBox(layout="vertical", contents=body_contents, padding_all="lg"),
         styles=FlexBubbleStyles(
