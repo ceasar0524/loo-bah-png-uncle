@@ -1096,6 +1096,7 @@ liff.init({{ liffId: "{liff_id}" }}).then(() => {{
   let store = getShareParam(href, "store");
   let lat = getShareParam(href, "lat");
   let lng = getShareParam(href, "lng");
+  let tagline = getShareParam(href, "tagline");
   if (!store) {{
     const rawState = getShareParam(href, "liff\\.state");
     if (rawState) {{
@@ -1103,6 +1104,7 @@ liff.init({{ liffId: "{liff_id}" }}).then(() => {{
       store = getShareParam(decoded, "store");
       lat = getShareParam(decoded, "lat");
       lng = getShareParam(decoded, "lng");
+      tagline = getShareParam(decoded, "tagline");
     }}
   }}
   const mapsUrl = (lat && lng) ? "https://maps.google.com/?q=" + lat + "," + lng : "https://maps.google.com/";
@@ -1114,18 +1116,36 @@ liff.init({{ liffId: "{liff_id}" }}).then(() => {{
     headers: {{ "Authorization": "Bearer " + liff.getAccessToken() }}
   }}).then(r => r.ok ? r.json() : {{}}).catch(() => ({{}})).then(data => {{
     const display = data.display || "";
-    const bodyContents = [
-      {{ type: "text", text: store, weight: "bold", size: "xl", wrap: true, color: "#4B2F24" }}
-    ];
-    if (display) {{
-      bodyContents.push({{ type: "text", text: display + " 推薦這家！", size: "sm", color: "#B85A2B", margin: "sm", wrap: true }});
-    }}
-    bodyContents.push({{ type: "button", action: {{ type: "uri", label: "📍 地圖", uri: mapsUrl }}, style: "primary", margin: "md", height: "sm" }});
-    bodyContents.push({{ type: "button", action: {{ type: "uri", label: "🤖 加入魯肉飯大叔", uri: "https://line.me/R/ti/p/%40940srtss" }}, style: "secondary", margin: "sm", height: "sm" }});
-    return liff.shareTargetPicker([{{
-      type: "flex",
-      altText: (display ? display + " 推薦：" : "🍚 同好推薦：") + store,
-      contents: {{
+    const bubbleContents = [];
+    if (tagline) {{
+      bubbleContents.push({{
+        type: "bubble",
+        header: {{
+          type: "box", layout: "vertical", backgroundColor: "#4B2F24", paddingAll: "lg",
+          contents: [{{ type: "text", text: "🎲 隨機驚喜", weight: "bold", color: "#FFFFFF", size: "md" }}]
+        }},
+        body: {{
+          type: "box", layout: "vertical", paddingAll: "lg",
+          contents: [
+            {{ type: "text", text: "📜  " + tagline, weight: "bold", size: "lg", color: "#8B4513", wrap: true, align: "center" }},
+            {{ type: "separator", margin: "lg" }},
+            {{ type: "text", text: store, weight: "bold", size: "xl", wrap: true, color: "#4B2F24", margin: "lg" }},
+            ...(display ? [{{ type: "text", text: display + " 抽到這家！", size: "sm", color: "#B85A2B", margin: "sm", wrap: true }}] : []),
+            {{ type: "button", action: {{ type: "uri", label: "📍 地圖", uri: mapsUrl }}, style: "primary", margin: "md", height: "sm" }},
+            {{ type: "button", action: {{ type: "uri", label: "🤖 加入魯肉飯大叔", uri: "https://line.me/R/ti/p/%40940srtss" }}, style: "secondary", margin: "sm", height: "sm" }}
+          ]
+        }}
+      }});
+    }} else {{
+      const bodyContents = [
+        {{ type: "text", text: store, weight: "bold", size: "xl", wrap: true, color: "#4B2F24" }}
+      ];
+      if (display) {{
+        bodyContents.push({{ type: "text", text: display + " 推薦這家！", size: "sm", color: "#B85A2B", margin: "sm", wrap: true }});
+      }}
+      bodyContents.push({{ type: "button", action: {{ type: "uri", label: "📍 地圖", uri: mapsUrl }}, style: "primary", margin: "md", height: "sm" }});
+      bodyContents.push({{ type: "button", action: {{ type: "uri", label: "🤖 加入魯肉飯大叔", uri: "https://line.me/R/ti/p/%40940srtss" }}, style: "secondary", margin: "sm", height: "sm" }});
+      bubbleContents.push({{
         type: "bubble",
         header: {{
           type: "box", layout: "vertical", backgroundColor: "#4B2F24", paddingAll: "lg",
@@ -1135,7 +1155,12 @@ liff.init({{ liffId: "{liff_id}" }}).then(() => {{
           type: "box", layout: "vertical", paddingAll: "lg",
           contents: bodyContents
         }}
-      }}
+      }});
+    }}
+    return liff.shareTargetPicker([{{
+      type: "flex",
+      altText: tagline ? "📜 " + tagline.split("\\n")[0] + "（" + store + "）" : (display ? display + " 推薦：" : "🍚 同好推薦：") + store,
+      contents: bubbleContents[0]
     }}]);
   }});
 }}).then(() => liff.closeWindow()).catch(err => {{
@@ -1270,8 +1295,10 @@ def _build_random_flex(result: dict) -> FlexMessage:
     if SHARE_LIFF_URL:
         from urllib.parse import quote
         share_url = f"{SHARE_LIFF_URL}?store={quote(name)}&lat={loc.get('lat', '')}&lng={loc.get('lng', '')}"
+        if phrase:
+            share_url += f"&tagline={quote(phrase)}"
         contents.append(FlexButton(
-            action=URIAction(label="分享這家店 📤", uri=share_url),
+            action=URIAction(label="分享籤詩 📤", uri=share_url),
             style="secondary",
             margin="sm",
             height="sm",
