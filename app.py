@@ -32,6 +32,7 @@ from linebot.v3.messaging import (
     FlexBlockStyle,
     FlexBox,
     FlexButton,
+    FlexFiller,
     FlexImage,
     FlexText,
     FlexSeparator,
@@ -523,6 +524,70 @@ _TITLE_EMOJIS = {
 }
 
 
+def _build_progress_flex(unique_count: int) -> FlexMessage | None:
+    """組裝打卡進度條 Flex Message，顯示距離下一個稱號的進度。已是最高稱號回傳 None。"""
+    next_title = None
+    threshold = None
+    for t, n in _TITLE_NEXT:
+        if unique_count < n:
+            next_title = t
+            threshold = n
+            break
+    if next_title is None:
+        return None
+
+    filled = int(unique_count / threshold * 10)
+    filled = max(0, min(10, filled))
+    empty = 10 - filled
+    bar = "█" * filled + "░" * empty
+
+    body_contents = [
+        FlexText(text=f"{next_title}", weight="bold", size="md", color="#4B2F24"),
+        FlexBox(
+            layout="horizontal",
+            margin="md",
+            contents=[
+                FlexBox(
+                    layout="horizontal",
+                    flex=filled if filled > 0 else 0,
+                    height="12px",
+                    background_color="#8B4513",
+                    corner_radius="4px",
+                    contents=[FlexFiller()],
+                ) if filled > 0 else FlexFiller(),
+                FlexBox(
+                    layout="horizontal",
+                    flex=empty if empty > 0 else 0,
+                    height="12px",
+                    background_color="#D9C8B8",
+                    corner_radius="4px",
+                    contents=[FlexFiller()],
+                ) if empty > 0 else FlexFiller(),
+            ],
+        ),
+        FlexBox(
+            layout="horizontal",
+            margin="sm",
+            contents=[
+                FlexText(text=f"{unique_count} / {threshold} 家", size="sm", color="#888888", flex=1),
+                FlexText(text=f"再 {threshold - unique_count} 家升級！", size="sm", color="#B85A2B", align="end"),
+            ],
+        ),
+    ]
+
+    bubble = FlexBubble(
+        body=FlexBox(
+            layout="vertical",
+            contents=body_contents,
+            padding_all="lg",
+        ),
+        styles=FlexBubbleStyles(
+            body=FlexBlockStyle(background_color="#F9F5F0"),
+        ),
+    )
+    return FlexMessage(alt_text=f"{next_title} 進度 {unique_count}/{threshold}", contents=bubble)
+
+
 def _build_upgrade_flex(old_title: str, new_title: str, display: str, message: str) -> FlexMessage:
     """組裝 RPG 風格升級 Flex Message。"""
     emoji = _TITLE_EMOJIS.get(new_title, "🎉")
@@ -741,7 +806,16 @@ def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -
             templates = _UPGRADE_MESSAGES.get(new_title, ["🎉 恭喜晉升！"])
             text = _random.choice(templates).format(display=display)
             upgrade_flex = _build_upgrade_flex(current_title, new_title, display, text)
-            return [confirm_msg, upgrade_flex, rating_msg]
+            progress_flex = _build_progress_flex(unique_count)
+            msgs = [confirm_msg, upgrade_flex]
+            if progress_flex:
+                msgs.append(progress_flex)
+            msgs.append(rating_msg)
+            return msgs
+
+        progress_flex = _build_progress_flex(unique_count)
+        if progress_flex:
+            return [confirm_msg, progress_flex, rating_msg]
 
     except Exception:
         import traceback
