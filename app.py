@@ -668,6 +668,25 @@ def _build_rating_prompt(store_name: str) -> TextMessage:
     )
 
 
+def _get_revisit_tagline(visit_count: int) -> str:
+    """依回訪次數回傳台詞，首次打卡（visit_count==1）回傳空字串。"""
+    if visit_count <= 1:
+        return ""
+    n = visit_count
+    if n == 2:
+        return f"第 {n} 次回訪，這碗有什麼魔力"
+    elif n == 3:
+        return f"第 {n} 次回訪，好吃到吃不膩耶！"
+    elif n == 4:
+        return f"第 {n} 次回訪，這家是有多好吃啦，大叔都心動了"
+    elif n <= 7:
+        return f"第 {n} 次回訪，大叔懷疑你家就住這附近"
+    elif n <= 9:
+        return f"第 {n} 次回訪，老實說，你是不是股東？"
+    else:
+        return f"第 {n} 次回訪，太猛啦～根本十里坡滷神，大叔甘拜下風！"
+
+
 def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -> list:
     """處理打卡並偵測稱號升級。回傳訊息列表（打卡確認 + 可能的升級儀式 + 評價邀請）。"""
     import random as _random
@@ -685,6 +704,11 @@ def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -
         existing_stores = {d.to_dict().get("store_name") for d in existing_docs}
         existing_stores.add(store_name)
         unique_count = len(existing_stores)
+
+        visit_count = sum(1 for d in existing_docs if d.to_dict().get("store_name") == store_name) + 1
+        revisit_tagline = _get_revisit_tagline(visit_count)
+        if revisit_tagline:
+            confirm_msg = TextMessage(text=f"「{store_name}」打卡成功！{revisit_tagline} 🍚")
 
         user_doc = _db.collection("user_footprint").document(user_id).get()
         user_data = user_doc.to_dict() if user_doc.exists else {}
