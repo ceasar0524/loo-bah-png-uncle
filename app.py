@@ -548,18 +548,10 @@ def _build_progress_flex(unique_count: int) -> FlexMessage | None:
     empty = 10 - filled
     bar = "█" * filled + "░" * empty
 
-    # 目前稱號與等級徽章
-    current_title = "無職轉生者"
-    for t, n in _TITLE_THRESHOLDS:
-        if unique_count >= n:
-            current_title = t
-            break
-    current_level = _TITLE_LEVEL_MAP.get(current_title, 0)
-    badge_text = f"🍚 Lv.{current_level}｜{current_title}"
+    next_level = _TITLE_LEVEL_MAP.get(next_title, 0)
 
     body_contents = [
-        FlexText(text=badge_text, size="xs", color="#9A4F12", weight="bold", margin="none"),
-        FlexText(text=f"{next_title}", weight="bold", size="md", color="#4A2A16", margin="sm"),
+        FlexText(text=f"即將解鎖｜Lv.{next_level} {next_title}", size="sm", color="#9A4F12", weight="bold", margin="none"),
         FlexBox(
             layout="horizontal",
             margin="md",
