@@ -1041,5 +1041,31 @@
       "sauce_taste": "偏鹹"
     },
     "sauce_consistency": "水"
+  },
+  "高雄一品鮮蝦扁食（大安區）": {
+    "location": {
+      "lat": 25.040842665415287,
+      "lng": 121.54666126670993
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水",
+    "random_tagline": "今日宜品鮮 🦐"
+  },
+  "一品魯肉飯（中山區）": {
+    "location": {
+      "lat": 25.06052479229691,
+      "lng": 121.54338866671071
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水",
+    "random_tagline": "今日宜品味 🍚"
   }
 }
