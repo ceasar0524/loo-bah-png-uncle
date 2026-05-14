@@ -490,6 +490,13 @@ _TITLE_THRESHOLDS = [
     ("滷鍋守護者", 15),
     ("肉汁騎士",   5),
 ]
+_TITLE_LEVEL_MAP = {
+    "無職轉生者": 0,
+    "肉汁騎士":   1,
+    "滷鍋守護者": 2,
+    "魯肉飯勇者": 3,
+    "魯肉飯大神": 4,
+}
 _TITLE_NEXT = [
     ("肉汁騎士",   5),
     ("滷鍋守護者", 15),
@@ -541,17 +548,28 @@ def _build_progress_flex(unique_count: int) -> FlexMessage | None:
     empty = 10 - filled
     bar = "█" * filled + "░" * empty
 
+    # 目前稱號與等級徽章
+    current_title = "無職轉生者"
+    for t, n in _TITLE_THRESHOLDS:
+        if unique_count >= n:
+            current_title = t
+            break
+    current_level = _TITLE_LEVEL_MAP.get(current_title, 0)
+    badge_text = f"🍚 Lv.{current_level}｜{current_title}"
+
     body_contents = [
-        FlexText(text=f"{next_title}", weight="bold", size="md", color="#4B2F24"),
+        FlexText(text=badge_text, size="xs", color="#9A4F12", weight="bold", margin="none"),
+        FlexText(text=f"{next_title}", weight="bold", size="md", color="#4A2A16", margin="sm"),
         FlexBox(
             layout="horizontal",
             margin="md",
+            align_items="center",
             contents=[
                 FlexBox(
                     layout="horizontal",
                     flex=filled if filled > 0 else 0,
                     height="12px",
-                    background_color="#8B4513",
+                    background_color="#9A4F12",
                     corner_radius="4px",
                     contents=[FlexFiller()],
                 ) if filled > 0 else FlexFiller(),
@@ -559,7 +577,7 @@ def _build_progress_flex(unique_count: int) -> FlexMessage | None:
                     layout="horizontal",
                     flex=empty if empty > 0 else 0,
                     height="12px",
-                    background_color="#D9C8B8",
+                    background_color="#D8B894",
                     corner_radius="4px",
                     contents=[FlexFiller()],
                 ) if empty > 0 else FlexFiller(),
@@ -569,8 +587,8 @@ def _build_progress_flex(unique_count: int) -> FlexMessage | None:
             layout="horizontal",
             margin="sm",
             contents=[
-                FlexText(text=f"{unique_count} / {threshold} 家", size="sm", color="#888888", flex=1),
-                FlexText(text=f"再 {threshold - unique_count} 家升級！", size="sm", color="#B85A2B", align="end"),
+                FlexText(text=f"{unique_count} / {threshold} 家", size="xs", color="#4A2A16", flex=1),
+                FlexText(text=f"🔥 再 {threshold - unique_count} 家升級！", size="sm", color="#D85A1F", align="end"),
             ],
         ),
     ]
@@ -582,7 +600,7 @@ def _build_progress_flex(unique_count: int) -> FlexMessage | None:
             padding_all="lg",
         ),
         styles=FlexBubbleStyles(
-            body=FlexBlockStyle(background_color="#F9F5F0"),
+            body=FlexBlockStyle(background_color="#FFF7EA"),
         ),
     )
     return FlexMessage(alt_text=f"{next_title} 進度 {unique_count}/{threshold}", contents=bubble)
