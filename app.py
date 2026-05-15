@@ -190,6 +190,8 @@ STORE_LIST_STYLE = "michelin"
 RATINGS_LIFF_URL = os.getenv("RATINGS_LIFF_URL", "")
 SHARE_LIFF_URL = os.getenv("SHARE_LIFF_URL", "")
 SHARE_TASTE_LIFF_URL = os.getenv("SHARE_TASTE_LIFF_URL", "")
+ABSOLUTE_DOMAIN_LIFF_URL = os.getenv("ABSOLUTE_DOMAIN_LIFF_URL", "")
+ABSOLUTE_DOMAIN_LIFF_ID = os.getenv("ABSOLUTE_DOMAIN_LIFF_ID", "")
 
 # Admin user ID，過濾測試流量不計入統計
 _ADMIN_USER_ID = os.getenv("ADMIN_USER_ID", "")
@@ -465,6 +467,80 @@ def _load_taste_preference(user_id: str) -> dict | None:
         return None
 
 
+def _get_user_title_and_count(user_id: str) -> tuple[str, int]:
+    """從 Firestore 一次讀取用戶的 current_title 與 unique_count。若無資料回傳 ('無職轉生者', 0)。"""
+    if _db is None:
+        return ("無職轉生者", 0)
+    try:
+        doc = _db.collection("user_footprint").document(user_id).get()
+        if doc.exists:
+            data = doc.to_dict()
+            title = data.get("current_title") or "無職轉生者"
+            count = data.get("unique_count", 0)
+            return (title, count)
+        return ("無職轉生者", 0)
+    except Exception:
+        return ("無職轉生者", 0)
+
+
+def _check_skill_unlocked(user_title: str, required_title: str) -> bool:
+    """依 _TITLE_LEVEL_MAP 判斷 user_title 是否達到 required_title 所需等級。"""
+    user_level = _TITLE_LEVEL_MAP.get(user_title, 0)
+    required_level = _TITLE_LEVEL_MAP.get(required_title, 0)
+    return user_level >= required_level
+
+
+def _build_skill_lock_message(current_title: str, unique_count: int, skill_name: str) -> TextMessage:
+    """組裝技能封印訊息，顯示目前稱號與距離解鎖所需家數。"""
+    _, required_threshold = _SKILL_REQUIREMENTS.get(skill_name, ("", 0))
+    remaining = max(0, required_threshold - unique_count)
+    text = (
+        f"🔒 技能尚未解鎖\n\n"
+        f"這招目前還被封印中。\n"
+        f"你現在是【{current_title}】，還差 {remaining} 家才能解鎖【{skill_name}】。\n\n"
+        f"繼續攻略魯肉飯，累積足跡吧 🍚"
+    )
+    return TextMessage(text=text)
+
+
+def _save_skill_session(user_id: str, skill: str, step: str, data: dict | None = None) -> None:
+    """儲存多步驟技能的 session 狀態。"""
+    with _sessions_lock:
+        _cleanup_sessions()
+        existing = _sessions.get(user_id, {})
+        _sessions[user_id] = {
+            **existing,
+            "skill": skill,
+            "step": step,
+            "data": data or {},
+            "ts": time.time(),
+        }
+
+
+def _get_skill_session(user_id: str) -> dict | None:
+    """取得技能 session，若無或已過期回傳 None。"""
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry is None:
+            return None
+        if time.time() - entry["ts"] > _SESSION_TTL:
+            del _sessions[user_id]
+            return None
+        if "skill" not in entry:
+            return None
+        return entry
+
+
+def _clear_skill_session(user_id: str) -> None:
+    """清除技能 session 的 skill/step/data 欄位。"""
+    with _sessions_lock:
+        entry = _sessions.get(user_id)
+        if entry:
+            entry.pop("skill", None)
+            entry.pop("step", None)
+            entry.pop("data", None)
+
+
 def _save_checkin_record(user_id: str, store_name: str, db_source: str) -> None:
     """非同步將打卡記錄寫入 Firestore user_footprint/<user_id>/records/。"""
     if _db is None:
@@ -529,6 +605,274 @@ _TITLE_EMOJIS = {
     "魯肉飯勇者": "⚔️",
     "魯肉飯大神": "👑",
 }
+
+_SKILL_UNLOCK_TEXT = {
+    "肉汁騎士": (
+        "技能解鎖：肉盾",
+        "大叔的第一個禮物。\n輸入「肉盾」，告訴大叔你想去吃哪家，\n大叔會依照你的口味偏好，幫你先擋雷。",
+    ),
+    "滷鍋守護者": (
+        "技能解鎖：絕對滷域",
+        "你打卡過的魯肉飯店，\n已經開始形成專屬守護領域。\n\n從現在開始，可以用地圖查看自己的魯肉飯版圖。",
+    ),
+    "魯肉飯勇者": (
+        "技能解鎖：魯拉（ルラ）",
+        "吃過的店，都將成為你的傳送據點。\n\n輸入「魯拉」，\n選擇曾經攻略過的店，\n即可一鍵開啟 Google Maps 導航，\n回到那碗熟悉的魯肉飯。",
+    ),
+    "魯肉飯大神": (
+        "技能解鎖：滷界敕令",
+        "你已不只是吃飯的人，\n而是能向眾勇者發布推薦的大神。\n\n輸入「號令」，\n選擇你認可的魯肉飯店，\n留下推薦理由，\n讓它登上大神推薦牆。",
+    ),
+}
+
+# 各技能所需最低等級與對應門檻
+_SKILL_REQUIREMENTS = {
+    "肉盾":           ("肉汁騎士",   5),
+    "絕對滷域":       ("滷鍋守護者", 15),
+    "魯拉（ルラ）":   ("魯肉飯勇者", 30),
+    "滷界敕令":       ("魯肉飯大神", 60),
+}
+
+# 關鍵字黑名單（號令內容過濾）
+_DECREE_BLOCKLIST = ["幹", "操", "靠北", "廢話", "垃圾", "爛", "死", "殺"]
+
+
+def _meat_shield_fuzzy_match(query: str) -> list[str]:
+    """模糊比對店名，回傳符合的店家名稱清單（涵蓋 _store_notes 和 _hidden_gems）。"""
+    q = query.strip()
+    matches = []
+    for name in list(_store_notes.keys()) + list(_hidden_gems.keys()):
+        if q in name or name in q:
+            if name not in matches:
+                matches.append(name)
+    return matches
+
+
+def _meat_shield_evaluate(store_name: str, taste: dict | None) -> str:
+    """依口味偏好對比店家屬性，回傳判定結果文字。無口味偏好時只回傳店家資訊。"""
+    # 取得店家資料
+    store_data = _store_notes.get(store_name) or _hidden_gems.get(store_name, {})
+    vp = store_data.get("visual_profile", {})
+    store_fat = vp.get("fat_ratio")
+    store_skin = vp.get("skin")
+    store_sauce_taste = vp.get("sauce_taste")
+    store_sauce = store_data.get("sauce_consistency")
+
+    # 店家屬性描述
+    fat_label = {"fat_heavy": "偏肥", "lean_heavy": "偏瘦"}.get(store_fat, "不明")
+    skin_label = {"with_skin": "黏黏", "no_skin": "不黏"}.get(store_skin, "不明")
+    sauce_label = store_sauce or "不明"
+    taste_label = store_sauce_taste or "不明"
+    store_desc = f"🍚 {store_name}\n肉質：{fat_label}・黏度：{skin_label}・醬汁：{sauce_label}・口味：{taste_label}"
+
+    if not taste:
+        return (
+            f"🛡️ 大叔查到了！\n\n{store_desc}\n\n"
+            f"想知道適不適合你？先去填個人口味設定，大叔幫你精準判定 🎯"
+        )
+
+    # 比對 4 個屬性（用戶選 None 代表不限，視為符合）
+    user_fat = taste.get("fat_ratio")
+    user_skin = taste.get("skin")
+    user_sauce = taste.get("sauce_consistency")
+    user_taste = taste.get("sauce_taste")
+
+    matched = sum([
+        user_fat is None or user_fat == store_fat,
+        user_skin is None or user_skin == store_skin,
+        user_sauce is None or user_sauce == store_sauce,
+        user_taste is None or user_taste == store_sauce_taste,
+    ])
+
+    if matched >= 3:
+        verdict = "🟢 適合衝！"
+        comment = "跟你的口味偏好高度吻合，大叔建議直接衝！"
+    elif matched == 2:
+        verdict = "🟡 可以試"
+        comment = "部分符合你的偏好，可以試試看，不一定是本命口味。"
+    else:
+        verdict = "🔴 小心踩雷"
+        comment = "跟你的口味落差較大，大叔建議先觀望。"
+
+    return f"🛡️ 肉盾判定：{verdict}\n\n{store_desc}\n\n{comment}"
+
+
+def _handle_meat_shield_trigger(user_id: str) -> TextMessage:
+    """肉盾發動，提示用戶輸入店名。"""
+    _save_skill_session(user_id, "meat_shield", "await_store_name")
+    return TextMessage(text="🛡️ 肉盾發動！\n\n你想讓大叔先幫你擋哪一家？\n輸入店名，大叔來幫你把關 👊")
+
+
+def _handle_lura_trigger(user_id: str) -> tuple:
+    """魯拉發動，回覆分類 Quick Reply。"""
+    _save_skill_session(user_id, "lura", "await_category")
+    return (
+        TextMessage(
+            text="🌀 魯拉發動！\n\n召喚你曾經攻略過的魯肉飯據點，選擇要回訪哪一類：",
+            quick_reply=QuickReply(items=[
+                QuickReplyItem(action=MessageAction(label="🍚 最近攻略", text="🍚 最近攻略")),
+                QuickReplyItem(action=MessageAction(label="🍚 最常回訪", text="🍚 最常回訪")),
+                QuickReplyItem(action=MessageAction(label="🍚 好久沒吃", text="🍚 好久沒吃")),
+            ]),
+        ),
+    )
+
+
+def _get_lura_stores(user_id: str, category: str) -> list[dict]:
+    """依分類從 Firestore 取得用戶打卡過的店家清單，最多 5 筆。"""
+    if _db is None:
+        return []
+    try:
+        records_ref = _db.collection("user_footprint").document(user_id).collection("records")
+        docs = list(records_ref.stream())
+        records = [d.to_dict() for d in docs if d.to_dict().get("store_name")]
+
+        if category == "🍚 最近攻略":
+            # 依時間降序，取唯一店家前 5
+            records.sort(key=lambda r: r.get("checked_in_at", 0), reverse=True)
+            seen, result = set(), []
+            for r in records:
+                name = r["store_name"]
+                if name not in seen:
+                    seen.add(name)
+                    result.append(r)
+                    if len(result) >= 5:
+                        break
+        elif category == "🍚 最常回訪":
+            from collections import Counter
+            counts = Counter(r["store_name"] for r in records)
+            top5 = [name for name, _ in counts.most_common(5)]
+            result = [{"store_name": name} for name in top5]
+        else:  # 好久沒吃
+            # 每個店家取最後一次打卡，按時間升序（最久沒吃的在前）
+            last_visit: dict = {}
+            for r in records:
+                name = r["store_name"]
+                ts = r.get("checked_in_at")
+                if ts and (name not in last_visit or ts > last_visit[name]):
+                    last_visit[name] = ts
+            sorted_stores = sorted(last_visit.items(), key=lambda x: x[1])[:5]
+            result = [{"store_name": name} for name, _ in sorted_stores]
+
+        # 補上座標
+        all_stores = {**_store_notes, **_hidden_gems}
+        for r in result:
+            name = r["store_name"]
+            store = all_stores.get(name, {})
+            loc = store.get("location", {})
+            r["lat"] = loc.get("lat")
+            r["lng"] = loc.get("lng")
+        return result
+    except Exception:
+        return []
+
+
+def _build_lura_flex(stores: list[dict], category: str) -> FlexMessage | None:
+    """組裝魯拉導航 Flex Message。"""
+    if not stores:
+        return None
+
+    bubbles = []
+    for s in stores:
+        name = s["store_name"]
+        lat, lng = s.get("lat"), s.get("lng")
+        nav_url = f"https://www.google.com/maps/dir/?api=1&destination={lat},{lng}" if lat and lng else None
+
+        body_contents = [
+            FlexText(text=name, weight="bold", size="sm", wrap=True, color="#4A2A16"),
+        ]
+        if nav_url:
+            body_contents.append(
+                FlexButton(
+                    action=URIAction(label="前往導航 🗺️", uri=nav_url),
+                    style="primary",
+                    color="#9A4F12",
+                    margin="sm",
+                    height="sm",
+                )
+            )
+        else:
+            body_contents.append(FlexText(text="（無座標資料）", size="xs", color="#888888"))
+
+        bubbles.append(FlexBubble(
+            body=FlexBox(layout="vertical", contents=body_contents, padding_all="lg"),
+            styles=FlexBubbleStyles(body=FlexBlockStyle(background_color="#FFF7EA")),
+        ))
+
+    return FlexMessage(
+        alt_text=f"魯拉召喚：{category}",
+        contents=FlexCarousel(contents=bubbles),
+    )
+
+
+def _decree_is_blocked(text: str) -> bool:
+    """檢查文字是否含有黑名單關鍵字。"""
+    return any(kw in text for kw in _DECREE_BLOCKLIST)
+
+
+def _get_today_tw() -> str:
+    """回傳台灣時間今日日期字串 YYYY-MM-DD。"""
+    from datetime import datetime, timezone, timedelta
+    tz_tw = timezone(timedelta(hours=8))
+    return datetime.now(tz_tw).strftime("%Y-%m-%d")
+
+
+def _decree_post(user_id: str, store_name: str, reason: str, display_id: str) -> bool:
+    """將號令寫入 Firestore，回傳是否成功。"""
+    if _db is None:
+        return False
+    try:
+        from datetime import datetime, timezone
+        today = _get_today_tw()
+        _db.collection("decrees").document(today).collection("posts").document(user_id).set({
+            "store_name": store_name,
+            "reason": reason,
+            "display_id": display_id,
+            "posted_at": datetime.now(timezone.utc),
+            "user_id": user_id,
+        })
+        return True
+    except Exception:
+        return False
+
+
+def _decree_get_today_posts() -> list[dict]:
+    """讀取今日所有號令，回傳 list of dict。"""
+    if _db is None:
+        return []
+    try:
+        today = _get_today_tw()
+        docs = list(_db.collection("decrees").document(today).collection("posts").stream())
+        return [d.to_dict() for d in docs]
+    except Exception:
+        return []
+
+
+def _decree_user_posted_today(user_id: str) -> dict | None:
+    """檢查用戶今日是否已發令，回傳該筆資料或 None。"""
+    if _db is None:
+        return None
+    try:
+        today = _get_today_tw()
+        doc = _db.collection("decrees").document(today).collection("posts").document(user_id).get()
+        return doc.to_dict() if doc.exists else None
+    except Exception:
+        return None
+
+
+def _build_decree_wall_text(posts: list[dict]) -> str:
+    """組裝大神推薦牆文字。"""
+    if not posts:
+        return "📜 今日滷令\n\n今天還沒有大神發布號令，稍後再來看看 🍚"
+    lines = ["📜 今日滷令\n"]
+    for i, p in enumerate(posts):
+        display_id = p.get("display_id", "魯肉飯大神")
+        store = p.get("store_name", "")
+        reason = p.get("reason", "")
+        if i > 0:
+            lines.append("\n---\n")
+        lines.append(f"{display_id} 推薦：\n{store}\n\n理由：\n{reason}")
+    return "\n".join(lines)
 
 
 def _build_progress_flex(unique_count: int) -> FlexMessage | None:
@@ -616,16 +960,27 @@ def _build_upgrade_flex(old_title: str, new_title: str, display: str, message: s
         ],
     )
 
+    body_contents = [
+        FlexText(text=emoji, size="5xl", align="center"),
+        FlexText(text=new_title, weight="bold", size="xxl", color="#FFD700", align="center", margin="md"),
+        FlexText(text=f"#{display.split('#')[-1]}", size="sm", color="#AAAAAA", align="center", margin="xs"),
+        FlexSeparator(margin="lg"),
+        FlexText(text=message, size="sm", color="#CCCCCC", wrap=True, align="center", margin="lg"),
+    ]
+
+    skill_info = _SKILL_UNLOCK_TEXT.get(new_title)
+    if skill_info:
+        skill_name, skill_desc = skill_info
+        body_contents += [
+            FlexSeparator(margin="xl"),
+            FlexText(text=skill_name, weight="bold", size="sm", color="#FFD700", align="center", margin="lg"),
+            FlexText(text=skill_desc, size="xs", color="#AAAAAA", wrap=True, align="center", margin="sm"),
+        ]
+
     body = FlexBox(
         layout="vertical",
         padding_all="xl",
-        contents=[
-            FlexText(text=emoji, size="5xl", align="center"),
-            FlexText(text=new_title, weight="bold", size="xxl", color="#FFD700", align="center", margin="md"),
-            FlexText(text=f"#{display.split('#')[-1]}", size="sm", color="#AAAAAA", align="center", margin="xs"),
-            FlexSeparator(margin="lg"),
-            FlexText(text=message, size="sm", color="#CCCCCC", wrap=True, align="center", margin="lg"),
-        ],
+        contents=body_contents,
     )
 
     bubble = FlexBubble(
@@ -1096,6 +1451,134 @@ def api_user_title():
         return {"title": title, "title_number": title_number, "display": f"{title}#{title_number}"}, 200
     except Exception:
         return {"error": "server error"}, 500
+
+
+@app.route("/api/absolute-domain", methods=["GET"])
+def api_absolute_domain():
+    """回傳用戶打卡過的店家座標列表，供絕對滷域 LIFF 地圖使用。需帶 LIFF access token。"""
+    import urllib.request as _urllib_req
+    import json as _json
+    auth = request.headers.get("Authorization", "")
+    if not auth.startswith("Bearer "):
+        return {"error": "unauthorized"}, 401
+    access_token = auth[7:]
+    try:
+        req = _urllib_req.Request(
+            "https://api.line.me/v2/profile",
+            headers={"Authorization": f"Bearer {access_token}"},
+        )
+        with _urllib_req.urlopen(req, timeout=5) as resp:
+            profile = _json.loads(resp.read().decode())
+        user_id = profile.get("userId", "")
+        if not user_id:
+            return {"error": "invalid token"}, 401
+        if _db is None:
+            return {"stores": []}, 200
+        records_ref = _db.collection("user_footprint").document(user_id).collection("records")
+        docs = list(records_ref.stream())
+        seen: set = set()
+        stores = []
+        all_stores = {**_store_notes, **_hidden_gems}
+        for doc in docs:
+            d = doc.to_dict()
+            name = d.get("store_name", "")
+            if name and name not in seen:
+                seen.add(name)
+                store = all_stores.get(name, {})
+                loc = store.get("location", {})
+                lat = loc.get("lat")
+                lng = loc.get("lng")
+                if lat and lng:
+                    stores.append({"name": name, "lat": lat, "lng": lng})
+        return {"stores": stores}, 200
+    except Exception:
+        return {"error": "server error"}, 500
+
+
+@app.route("/liff/absolute-domain", methods=["GET"])
+def liff_absolute_domain():
+    """絕對滷域 LIFF 地圖頁：Leaflet.js + OpenStreetMap，顯示用戶打卡據點與半透明光暈。"""
+    liff_id = os.getenv("ABSOLUTE_DOMAIN_LIFF_ID", "")
+    html = f"""<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>絕對滷域</title>
+<script src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+* {{ box-sizing: border-box; margin: 0; padding: 0; }}
+body {{ background: #1A1A2E; color: #FFD700; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }}
+#header {{ padding: 12px 16px; background: #2E1A0E; color: #FFD700; font-size: 1rem; font-weight: bold; flex-shrink: 0; }}
+#map {{ flex: 1; }}
+#status {{ padding: 8px 16px; background: #2E1A0E; color: #C8A97E; font-size: 0.8rem; flex-shrink: 0; text-align: center; }}
+</style>
+</head>
+<body>
+<div id="header">🗺️ 絕對滷域</div>
+<div id="map"></div>
+<div id="status">載入中⋯</div>
+<script>
+const LIFF_ID = "{liff_id}";
+let map;
+
+function initMap(stores) {{
+  if (stores.length === 0) {{
+    document.getElementById("status").textContent = "還沒有打卡據點，快去攻略魯肉飯吧！";
+    map = L.map("map").setView([25.05, 121.53], 12);
+  }} else {{
+    const first = stores[0];
+    map = L.map("map").setView([first.lat, first.lng], 13);
+  }}
+  L.tileLayer("https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png", {{
+    attribution: "© OpenStreetMap contributors",
+    maxZoom: 18,
+  }}).addTo(map);
+
+  const icon = L.divIcon({{
+    html: "🍚",
+    className: "",
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+  }});
+
+  stores.forEach(function(s) {{
+    L.marker([s.lat, s.lng], {{ icon: icon }})
+      .bindPopup("<b>" + s.name + "</b>")
+      .addTo(map);
+    L.circle([s.lat, s.lng], {{
+      radius: 300,
+      color: "#9A4F12",
+      fillColor: "#9A4F12",
+      fillOpacity: 0.15,
+      weight: 1,
+    }}).addTo(map);
+  }});
+
+  document.getElementById("status").textContent =
+    stores.length > 0 ? "已攻略 " + stores.length + " 個據點" : "還沒有打卡據點";
+}}
+
+liff.init({{ liffId: LIFF_ID }}).then(function() {{
+  const token = liff.getAccessToken();
+  return fetch("/api/absolute-domain", {{
+    headers: {{ "Authorization": "Bearer " + token }}
+  }});
+}}).then(function(r) {{ return r.json(); }}).then(function(data) {{
+  initMap(data.stores || []);
+}}).catch(function(err) {{
+  document.getElementById("status").textContent = "載入失敗，請重試";
+  map = L.map("map").setView([25.05, 121.53], 12);
+  L.tileLayer("https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png", {{
+    attribution: "© OpenStreetMap contributors",
+  }}).addTo(map);
+}});
+</script>
+</body>
+</html>"""
+    return html
 
 
 @app.route("/liff/ratings", methods=["GET"])
@@ -2667,10 +3150,26 @@ def _build_footprint_flex(user_id: str):
 
     remaining = unique_stores[10:]
     bubble_size = "giga" if remaining else None
+    user_level = _TITLE_LEVEL_MAP.get(current_title, 0)
+    domain_footer = None
+    if user_level >= 2 and ABSOLUTE_DOMAIN_LIFF_URL:
+        domain_footer = FlexBox(
+            layout="vertical",
+            padding_all="md",
+            contents=[
+                FlexButton(
+                    action=URIAction(label="絕對滷域 🗺️", uri=ABSOLUTE_DOMAIN_LIFF_URL),
+                    style="primary",
+                    color="#6B3A2A",
+                    height="sm",
+                )
+            ],
+        )
     bubble = FlexBubble(
         size=bubble_size,
         header=header,
         body=FlexBox(layout="vertical", contents=body_contents, padding_all="lg"),
+        footer=domain_footer,
         styles=FlexBubbleStyles(
             body=FlexBlockStyle(background_color="#F9F5F0"),
         ),
@@ -2862,6 +3361,93 @@ def handle_text(event):
                         text=_TASTE_QUIZ_QUESTIONS[0]["question"],
                         quick_reply=_taste_quiz_quick_reply(0),
                     )
+            elif _get_skill_session(user_id) is not None:
+                sess = _get_skill_session(user_id)
+                skill = sess.get("skill")
+                step = sess.get("step")
+                data = sess.get("data", {})
+                if skill == "meat_shield":
+                    if step == "await_store_name":
+                        matches = _meat_shield_fuzzy_match(text)
+                        if not matches:
+                            _clear_skill_session(user_id)
+                            reply = TextMessage(text=f"🛡️ 找不到「{text}」這家店耶…\n大叔的資料庫裡沒有，請確認店名是否正確。")
+                        elif len(matches) == 1:
+                            _clear_skill_session(user_id)
+                            taste = _load_taste_preference(user_id)
+                            reply = TextMessage(text=_meat_shield_evaluate(matches[0], taste))
+                        else:
+                            _save_skill_session(user_id, "meat_shield", "await_store_select", {"candidates": matches})
+                            lines = ["大叔找到好幾家符合的，你說的是哪家？\n"]
+                            for i, name in enumerate(matches[:8], 1):
+                                lines.append(f"{i}. {name}")
+                            lines.append("\n請輸入編號或直接輸入店名")
+                            reply = TextMessage(text="\n".join(lines))
+                    elif step == "await_store_select":
+                        candidates = data.get("candidates", [])
+                        store_name = None
+                        if text.isdigit():
+                            idx = int(text) - 1
+                            if 0 <= idx < len(candidates):
+                                store_name = candidates[idx]
+                        else:
+                            for c in candidates:
+                                if text in c or c in text:
+                                    store_name = c
+                                    break
+                        if store_name:
+                            _clear_skill_session(user_id)
+                            taste = _load_taste_preference(user_id)
+                            reply = TextMessage(text=_meat_shield_evaluate(store_name, taste))
+                        else:
+                            reply = TextMessage(text="請輸入編號（例如：1）或直接輸入店名。")
+                    else:
+                        reply = None
+                elif skill == "lura":
+                    if step == "await_category" and text in ("🍚 最近攻略", "🍚 最常回訪", "🍚 好久沒吃"):
+                        _clear_skill_session(user_id)
+                        stores = _get_lura_stores(user_id, text)
+                        if stores:
+                            reply = _build_lura_flex(stores, text)
+                        else:
+                            reply = TextMessage(text=f"🌀 {text}：大叔找不到你的打卡記錄，快去攻略更多店吧！")
+                    else:
+                        reply = None
+                elif skill == "decree":
+                    if step == "await_store_name":
+                        if len(text) > 20:
+                            reply = TextMessage(text="店名太長了！請輸入 20 字以內的店名。")
+                        elif _decree_is_blocked(text):
+                            reply = TextMessage(text="大叔審核不通過，請重新輸入。")
+                        else:
+                            _save_skill_session(user_id, "decree", "await_reason", {"store_name": text})
+                            reply = TextMessage(text=f"「{text}」大叔收到了！\n\n接下來，說說你推薦這家的理由？（50 字以內）")
+                    elif step == "await_reason":
+                        if len(text) > 50:
+                            reply = TextMessage(text="理由太長了！請輸入 50 字以內的推薦理由。")
+                        elif _decree_is_blocked(text):
+                            reply = TextMessage(text="大叔審核不通過，請重新輸入。")
+                        else:
+                            store_name = data.get("store_name", "")
+                            _clear_skill_session(user_id)
+                            display_id = "魯肉飯大神"
+                            if _db is not None:
+                                try:
+                                    user_doc = _db.collection("user_footprint").document(user_id).get()
+                                    user_data = user_doc.to_dict() if user_doc.exists else {}
+                                    title_number = user_data.get("title_number") or user_id[-4:]
+                                    display_id = f"魯肉飯大神#{title_number}"
+                                except Exception:
+                                    pass
+                            success = _decree_post(user_id, store_name, text, display_id)
+                            if success:
+                                reply = TextMessage(text=f"📜 號令已發布！\n\n{display_id} 推薦：{store_name}\n理由：{text}\n\n滷界敕令，眾勇者皆知！")
+                            else:
+                                reply = TextMessage(text="號令發布失敗，請稍後再試。")
+                    else:
+                        reply = None
+                else:
+                    reply = None
             elif CHECKIN_ENABLED and text == "就是這家 ✅":
                 pending = _get_pending_checkin(user_id)
                 if pending:
@@ -2927,6 +3513,33 @@ def handle_text(event):
                     )
                 else:
                     reply = flex
+            elif CHECKIN_ENABLED and text == "肉盾":
+                user_title, unique_count = _get_user_title_and_count(user_id)
+                if _is_admin(user_id) or _check_skill_unlocked(user_title, "肉汁騎士"):
+                    reply = _handle_meat_shield_trigger(user_id)
+                else:
+                    reply = _build_skill_lock_message(user_title, unique_count, "肉盾")
+            elif CHECKIN_ENABLED and text == "魯拉":
+                user_title, unique_count = _get_user_title_and_count(user_id)
+                if _is_admin(user_id) or _check_skill_unlocked(user_title, "魯肉飯勇者"):
+                    reply = _handle_lura_trigger(user_id)[0]
+                else:
+                    reply = _build_skill_lock_message(user_title, unique_count, "魯拉（ルラ）")
+            elif CHECKIN_ENABLED and text == "號令":
+                user_title, unique_count = _get_user_title_and_count(user_id)
+                if _is_admin(user_id) or _check_skill_unlocked(user_title, "魯肉飯大神"):
+                    existing = _decree_user_posted_today(user_id)
+                    if existing:
+                        reply = TextMessage(
+                            text=f"📜 你今天已經發布過號令了！\n\n推薦店：{existing.get('store_name', '')}\n理由：{existing.get('reason', '')}"
+                        )
+                    else:
+                        _save_skill_session(user_id, "decree", "await_store_name")
+                        reply = TextMessage(text="📜 滷界敕令啟動！\n\n輸入你要推薦的店名（20 字以內）：")
+                else:
+                    posts = _decree_get_today_posts()
+                    wall = _build_decree_wall_text(posts)
+                    reply = TextMessage(text=wall)
             elif text == "統計" and _is_admin(event.source.user_id):
                 reply = _build_stats_message()
             elif text == "怎麼用":
