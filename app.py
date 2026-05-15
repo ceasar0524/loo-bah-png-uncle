@@ -3793,6 +3793,8 @@ def handle_text(event):
                     )
                 else:
                     reply = flex
+            elif text == "統計" and _is_admin(event.source.user_id):
+                reply = _build_stats_message()
             elif text == "怎麼用":
                 _clear_skill_session(user_id)
                 reply = TextMessage(text=_HOW_TO_USE_TEXT)
