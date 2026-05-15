@@ -1,10 +1,4 @@
-# luroufan-footprint Specification
-
-## Purpose
-
-TBD - created by archiving change 'luroufan-footprint'. Update Purpose after archive.
-
-## Requirements
+## ADDED Requirements
 
 ### Requirement: Check-in after successful photo recognition
 
@@ -37,17 +31,8 @@ The button label `✅ {store_name}` SHALL display the identified store name so t
 - **AND** the user does not tap either button
 - **THEN** no check-in record SHALL be created
 
-
-<!-- @trace
-source: luroufan-footprint
-updated: 2026-04-22
-code:
-  - src/pipeline.py
-  - app.py
-  - .github/workflows/deploy.yml
--->
-
 ---
+
 ### Requirement: Check-in rescue via location when recognition fails
 
 When photo recognition results in a tie or complete failure (no store identified), AND the image is identified as lu_rou_fan (`is_lu_rou_fan` is true), the system SHALL display a Quick Reply button「打卡這碗 📍」alongside the existing response.
@@ -82,17 +67,8 @@ When the user taps「打卡這碗 📍」, the system SHALL request the user's l
 - **AND** no stores exist within 500 metres
 - **THEN** the system SHALL reply indicating no nearby stores and clear the pending check-in session state
 
-
-<!-- @trace
-source: luroufan-footprint
-updated: 2026-04-22
-code:
-  - src/pipeline.py
-  - app.py
-  - .github/workflows/deploy.yml
--->
-
 ---
+
 ### Requirement: Footprint query
 
 The system SHALL allow users to query their footprint by sending the keyword「足跡」.
@@ -105,14 +81,13 @@ The system SHALL reply with a Flex Message showing:
 - Body (cream background):
   - Upgrade progress prompt if not at maximum title (orange-brown bold text)
   - Most recent check-in store name and date
-  - List of checked-in stores, up to 10, sorted by most recent first; each store row includes a heart toggle button (❤️ if favorited, 🤍 if not)
-  - If more than 10 stores, the response SHALL be a Flex Carousel with a second bubble showing the remaining stores, also with heart toggle buttons
+  - List of checked-in stores, up to 10, sorted by most recent first; if more than 10, show remaining count
 
 #### Scenario: User queries footprint with records
 
 - **WHEN** a user sends「足跡」
 - **AND** the user has at least one check-in record in Firestore
-- **THEN** the system SHALL reply with a Flex Message (or Carousel if >10 stores) summarising the user's footprint including title and upgrade progress
+- **THEN** the system SHALL reply with a Flex Message summarising the user's footprint including title and upgrade progress
 
 #### Scenario: User queries footprint with no records
 
@@ -120,27 +95,8 @@ The system SHALL reply with a Flex Message showing:
 - **AND** the user has no check-in records
 - **THEN** the system SHALL reply with a message encouraging the user to take a photo and start checking in
 
-
-<!-- @trace
-source: luroufan-footprint
-updated: 2026-04-22
-code:
-  - src/pipeline.py
-  - app.py
-  - .github/workflows/deploy.yml
--->
-
-
-<!-- @trace
-source: user-title-system
-updated: 2026-04-22
-code:
-  - src/pipeline.py
-  - app.py
-  - .github/workflows/deploy.yml
--->
-
 ---
+
 ### Requirement: Firestore check-in storage
 
 The system SHALL store check-in records in Firestore collection `user_footprint` with sub-collection `records`.
@@ -166,116 +122,8 @@ Firestore writes SHALL be performed asynchronously in a background thread to avo
 - **THEN** a new record SHALL be created (preserving full visit history)
 - **AND** footprint query SHALL count that store only once toward the unique total
 
-
-<!-- @trace
-source: luroufan-footprint
-updated: 2026-04-22
-code:
-  - src/pipeline.py
-  - app.py
-  - .github/workflows/deploy.yml
--->
-
 ---
----
-### Requirement: Favorite store (愛店)
 
-The system SHALL allow users to mark checked-in stores as favorites via a heart toggle button in the footprint Flex Message.
-
-Each store row in the footprint SHALL display a heart button: ❤️ if the store is in the user's favorites, 🤍 if not.
-
-Tapping the heart button SHALL trigger a Postback event with `data="fav:<store_name>"`.
-
-The system SHALL toggle the store's presence in the `favorites` list field of `user_footprint/<user_id>` (add if absent, remove if present).
-
-After toggling, the system SHALL reply with an updated footprint Flex Message reflecting the new favorite state.
-
-Favorites SHALL be stored as an array in the `user_footprint/<user_id>` document under the field `favorites`.
-
-#### Scenario: User favorites a store
-
-- **WHEN** a user taps 🤍 next to a store in the footprint
-- **THEN** the system SHALL add the store to `favorites` in Firestore
-- **AND** reply with an updated footprint Flex Message showing ❤️ for that store
-
-#### Scenario: User unfavorites a store
-
-- **WHEN** a user taps ❤️ next to a store in the footprint
-- **THEN** the system SHALL remove the store from `favorites` in Firestore
-- **AND** reply with an updated footprint Flex Message showing 🤍 for that store
-
----
 ### Requirement: CHECKIN_ENABLED feature flag
 
 All check-in related functionality (Quick Reply buttons, handlers, footprint query) SHALL be gated behind the `CHECKIN_ENABLED` environment variable (default: `true`). When set to `false`, no check-in buttons SHALL be displayed and check-in keyword handlers SHALL be inactive.
-
-<!-- @trace
-source: luroufan-footprint
-updated: 2026-04-22
-code:
-  - src/pipeline.py
-  - app.py
-  - .github/workflows/deploy.yml
--->
----
-### Requirement: Revisit tagline in check-in confirmation
-
-When a user checks in to a store they have visited before, the system SHALL replace the default confirmation message with a revisit tagline that reflects the visit count.
-
-The tagline mapping SHALL be:
-- 1st visit: 「打卡成功！大叔幫你記下來了」(default, no tagline)
-- 2nd visit: 「第 2 次回訪，這碗有什麼魔力」
-- 3rd visit: 「第 3 次回訪，好吃到吃不膩耶！」
-- 4th visit: 「第 4 次回訪，這家是有多好吃啦，大叔都心動了」
-- 5th–7th visit: 「第 N 次回訪，大叔懷疑你家就住這附近」
-- 8th–9th visit: 「第 N 次回訪，老實說，你是不是股東？」
-- 10th visit and above: 「第 N 次回訪，太猛啦～根本十里坡滷神，大叔甘拜下風！」
-
-Visit count SHALL be computed from the raw Firestore records (not deduplicated), so repeated check-ins to the same store are counted correctly.
-
-#### Scenario: First visit
-
-- **WHEN** a user checks in to a store for the first time
-- **THEN** the confirmation message SHALL be「「{store}」打卡成功！大叔幫你記下來了 🍚」
-
-#### Scenario: Revisit
-
-- **WHEN** a user checks in to a store they have visited before
-- **THEN** the confirmation message SHALL include the revisit tagline corresponding to the new visit count
-
-<!-- @trace
-source: checkin-revisit-tagline
-updated: 2026-05-15
-code:
-  - app.py
--->
-
----
-### Requirement: Absolute Domain button in footprint Flex Message
-
-The footprint Flex Message SHALL include a「絕對滷域 🗺️」button for users with title「滷鍋守護者」(Lv.2) or above. The button SHALL open the Absolute Domain LIFF map page.
-
-For users with title below Lv.2, the button SHALL NOT be rendered.
-
-#### Scenario: Lv.2+ user footprint includes map button
-
-- **WHEN** `_build_footprint_flex` is called for a user with title「滷鍋守護者」or above
-- **THEN** the returned Flex Message SHALL include a「絕對滷域 🗺️」URI button
-- **AND** the button URI SHALL point to the Absolute Domain LIFF URL
-
-#### Scenario: Below Lv.2 user footprint excludes map button
-
-- **WHEN** `_build_footprint_flex` is called for a user with title below「滷鍋守護者」
-- **THEN** the returned Flex Message SHALL NOT include the map button
-
-<!-- @trace
-source: title-unlock-skills
-updated: 2026-05-16
-code:
-  - assets/rpg_map.png
-  - Dockerfile
-  - data/hidden_gems.json
-  - data/store_hours.json
-  - app.py
-  - .github/workflows/deploy.yml
--->

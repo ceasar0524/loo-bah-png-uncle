@@ -58,7 +58,9 @@ A tie SHALL be declared when two or more stores have normalized vote counts with
 
 When a tie is detected and Haiku features are available, the system SHALL rank tied stores using a combined score of Haiku feature compatibility and average cosine similarity. The Haiku feature scoring SHALL use the same rules as the override mechanism (topping matches, distinctive bowl features). Stores with higher Haiku scores SHALL be ranked above stores with no Haiku score. When Haiku scores are equal, stores SHALL be ranked by average cosine similarity descending.
 
-After Haiku ranking, if `DINO_TIEBREAK_ENABLED` is `"true"` and the top two candidates have different `sauce_consistency` labels in `store_notes.json`, the system SHALL apply the sauce consistency tiebreak as a final ranking step. See `sauce-consistency-tiebreak` spec for full conditions.
+After Haiku ranking, if the first candidate's Haiku score is >= 0.6 AND the second candidate's Haiku score is exactly 0.0, the system SHALL resolve the tie and set `is_tie: false`. Low Haiku scores (< 0.6, e.g., yin_gua=0.3) only affect ranking order within the tie pool but do NOT resolve the tie.
+
+If the tie is not resolved by Haiku, and `DINO_TIEBREAK_ENABLED` is `"true"` and the top two candidates have different `sauce_consistency` labels in `store_notes.json`, the system SHALL apply the sauce consistency tiebreak as a final ranking step. See `sauce-consistency-tiebreak` spec for full conditions.
 
 #### Scenario: Tie returns multiple candidates
 
@@ -69,6 +71,13 @@ After Haiku ranking, if `DINO_TIEBREAK_ENABLED` is `"true"` and the top two cand
 
 - **WHEN** a tie is detected and haiku_features are provided
 - **THEN** tied stores with detected toppings or bowl features matching their store_notes SHALL be ranked above stores with no Haiku feature match
+
+#### Scenario: High Haiku score resolves tie
+
+- **WHEN** after Haiku ranking, the first candidate's Haiku score is >= 0.6 AND the second candidate's Haiku score is 0.0
+- **THEN** the system SHALL set `is_tie: false` and return the first candidate as the winner
+- **WHEN** the first candidate's Haiku score is < 0.6 (e.g., yin_gua=0.3) even if nonzero
+- **THEN** the tie SHALL NOT be resolved by Haiku alone; `is_tie` SHALL remain `true` pending sauce consistency tiebreak
 
 #### Scenario: Sauce consistency tiebreak applied after Haiku ranking
 

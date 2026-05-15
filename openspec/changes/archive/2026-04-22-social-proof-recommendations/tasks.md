@@ -18,10 +18,10 @@
 
 - [x] 4.1 隨機驚喜 Flex Message 加入「查看評價 💬」URIAction 按鈕（Social proof LIFF button and weight boost in random recommendation）
 - [x] 4.2 個人化推薦 Flex Message 加入「查看評價 💬」URIAction 按鈕（Social proof LIFF button in personal taste recommendation）
-- [x] 4.3 巷仔口清單 Flex Message 加入「查看評價 💬」URIAction 按鈕（Social proof LIFF button in hidden gems list）<!-- skipped: 巷仔口不加 LIFF 按鈕 -->
+- [x] 4.3 巷仔口清單 Flex Message 加入「查看評價 💬」URIAction 按鈕（Social proof LIFF button in hidden gems list）
 - [x] 4.4 隨機驚喜 Flex Message 加入「分享這家店 📤」URIAction 按鈕（Share LIFF page）
 - [x] 4.5 個人化推薦 Flex Message 加入「分享這家店 📤」URIAction 按鈕（Share LIFF page）
-- [x] 4.6 巷仔口清單 Flex Message 加入「分享這家店 📤」URIAction 按鈕（Share LIFF page）<!-- skipped: 巷仔口不加 LIFF 按鈕 -->
+- [x] 4.6 巷仔口清單 Flex Message 加入「分享這家店 📤」URIAction 按鈕（Share LIFF page）
 - [x] 4.7 確認 Social proof LIFF button in recommendations 統一套用至所有推薦類型
 
 ## 5. 隨機驚喜推薦權重加成（Rating weight boost for random recommendation）

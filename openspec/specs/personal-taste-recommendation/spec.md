@@ -72,6 +72,13 @@ If neither full nor partial matches exist, the system SHALL reply with a fallbac
 - **THEN** the system SHALL return a Flex Message listing up to 2 partial-match stores
 - **AND** each partial-match store SHALL be labeled「很接近，可以考慮」below the store name
 
+#### Scenario: Recommended store is currently closed
+
+- **WHEN** a recommended store's opening hours in `store_hours.json` indicate it is currently closed
+- **THEN** the store name SHALL have「（目前打烊）」appended, the name text SHALL be grayed (`#AAAAAA`), and the map button SHALL use secondary style
+- **WHEN** a store has no hours data in `store_hours.json`
+- **THEN** the store SHALL be treated as open
+
 #### Scenario: No stores within radius or no matches at all
 
 - **WHEN** no `store_notes` stores exist within 10 km, OR neither full nor partial matches exist
@@ -148,4 +155,103 @@ updated: 2026-04-19
 code:
   - app.py
   - data/store_hours.json
+-->
+
+---
+### Requirement: Social proof LIFF button in personal taste recommendation
+
+The personal taste recommendation Flex Message SHALL include a「查看評價 💬」LIFF button for each recommended store.
+
+#### Scenario: Personal recommendation includes LIFF button
+
+- **WHEN** the personal taste recommendation Flex Message is built for a store
+- **THEN** the system SHALL include a「查看評價 💬」URIAction button linking to the LIFF ratings page for that store
+
+<!-- @trace
+source: social-proof-recommendations
+updated: 2026-04-22
+code:
+  - app.py
+  - .github/workflows/deploy.yml
+  - src/pipeline.py
+-->
+
+---
+### Requirement: Photo recognition response includes check-in entry point
+
+The system SHALL include a check-in Quick Reply button in the photo recognition response, depending on the recognition outcome.
+
+When recognition identifies a single store with high confidence, the system SHALL:
+1. Store the identified store name in the user session under `pending_checkin`
+2. Append a Quick Reply button「就是這家 ✅」to the response
+
+When recognition results in a tie or complete failure, the system SHALL:
+1. Append a Quick Reply button「打卡這碗 📍」to the response
+
+#### Scenario: High-confidence recognition — check-in button appended
+
+- **WHEN** photo recognition identifies a store with high confidence
+- **THEN** the system SHALL store the store name in session `pending_checkin`
+- **AND** include「就是這家 ✅」as a Quick Reply button alongside existing Quick Reply options
+
+#### Scenario: Tie or failure recognition — rescue button appended
+
+- **WHEN** photo recognition results in a tie or complete failure
+- **THEN** the system SHALL include「打卡這碗 📍」as a Quick Reply button alongside existing Quick Reply options
+
+<!-- @trace
+source: luroufan-footprint
+updated: 2026-04-22
+code:
+  - src/pipeline.py
+  - app.py
+  - .github/workflows/deploy.yml
+-->
+
+---
+### Requirement: Display personality tagline in taste settings
+
+When a user views their saved taste preferences, the system SHALL compute and display a personality tagline based on their saved quiz answers using the `luroufan-personality-tagline` mapping rules.
+
+The tagline SHALL be displayed as a separate line below the taste preference summary in the reply message.
+
+#### Scenario: User views taste settings with saved preferences
+
+- **WHEN** the user triggers the 查看個人口味設定 command and has saved taste preferences in Firestore
+- **THEN** the system SHALL compute the personality tagline from the saved answers and include it in the reply message below the preference summary
+
+#### Scenario: User has no saved preferences
+
+- **WHEN** the user triggers the 查看個人口味設定 command and has no saved taste preferences
+- **THEN** the system SHALL NOT display a personality tagline and SHALL prompt the user to complete the quiz
+
+<!-- @trace
+source: luroufan-personality-tagline
+updated: 2026-05-11
+code:
+  - .github/workflows/deploy.yml
+  - app.py
+-->
+---
+### Requirement: Share taste profile
+
+The 查看個人口味設定 Flex Message SHALL include a「分享口味 📤」Quick Reply button that opens the `/liff/share-taste` LIFF page.
+
+The share URL SHALL include the personality tagline text, hero image URL, and all four taste dimension labels as query parameters.
+
+The `/liff/share-taste` LIFF page SHALL use `liff.shareTargetPicker` to send a Flex Message containing the hero image, tagline in the header, four taste dimension rows in the body, and a「加入魯肉飯大叔」button.
+
+#### Scenario: User shares taste profile
+
+- **WHEN** the user taps「分享口味 📤」from the 查看個人口味設定 reply
+- **THEN** the LIFF page SHALL open and immediately invoke `liff.shareTargetPicker`
+- **AND** the shared Flex Message SHALL display the hero image, tagline, and all four taste dimensions
+- **AND** include a「🤖 加入魯肉飯大叔」button
+
+<!-- @trace
+source: share-taste-profile
+updated: 2026-05-11
+code:
+  - app.py
+  - .github/workflows/deploy.yml
 -->

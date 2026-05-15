@@ -8,7 +8,7 @@
 
 ### Requirement: Random nearby store recommendation
 
-The system SHALL accept a user location (latitude, longitude) and return one randomly selected store using a three-tier radius expansion: 3 km → 5 km → 10 km.
+The system SHALL accept a user location (latitude, longitude) and return one randomly selected store using a two-tier radius expansion: 3 km → 7 km.
 
 The selected store SHALL include `store_name` and `distance_km`.
 
@@ -19,31 +19,26 @@ Already-recommended stores (tracked in `seen`) SHALL be excluded from each draw 
 - **WHEN** a user location is provided and at least one unseen store exists within 3 km
 - **THEN** the system SHALL randomly select one store from within 3 km
 
-#### Scenario: 3 km exhausted, stores in 5 km
+#### Scenario: 3 km exhausted — prompt user to expand
 
-- **WHEN** all stores within 3 km have been seen and at least one unseen store exists within 5 km
-- **THEN** the system SHALL randomly select one store from the 3–5 km range
-
-#### Scenario: 5 km exhausted — prompt user to expand
-
-- **WHEN** all stores within 5 km have been seen
+- **WHEN** all stores within 3 km have been seen
 - **THEN** the system SHALL reply with a prompt message and set `expanded = True` in the session
 - **AND** the system SHALL NOT auto-reset or auto-pick; the user must press the button again to continue
 
-#### Scenario: Expanded mode — stores in 10 km
+#### Scenario: Expanded mode — stores in 7 km
 
 - **WHEN** `expanded = True` and the user shares location again
-- **THEN** the system SHALL randomly select one store from the 5–10 km range (still excluding seen stores)
+- **THEN** the system SHALL randomly select one store from the 3–7 km range (still excluding seen stores)
 
-#### Scenario: 10 km exhausted, session has seen 10+ stores — easter egg
+#### Scenario: 7 km exhausted, session has seen 10+ stores — easter egg
 
-- **WHEN** all stores within 10 km have been seen AND `len(seen) >= 10`
+- **WHEN** all stores within 7 km have been seen AND `len(seen) >= 10`
 - **THEN** the system SHALL reset `seen` and reply with the exhausted easter egg Flex Message
 - The easter egg SHALL display store name as "自己家", a playful Taiwanese phrase as the tagline, and a disabled map button
 
-#### Scenario: 10 km exhausted, session has seen fewer than 10 stores — silent reset
+#### Scenario: 7 km exhausted, session has seen fewer than 10 stores — silent reset
 
-- **WHEN** all stores within 10 km have been seen AND `len(seen) < 10`
+- **WHEN** all stores within 7 km have been seen AND `len(seen) < 10`
 - **THEN** the system SHALL silently reset `seen` and draw again from the flat pool
 
 #### Scenario: Random selection is uniform (flat pool)
@@ -51,6 +46,7 @@ Already-recommended stores (tracked in `seen`) SHALL be excluded from each draw 
 - **WHEN** drawing a store for recommendation
 - **THEN** the system SHALL use `primary_radius_km = extended_km` so all stores within range have equal probability regardless of distance tier
 
+---
 ### Requirement: Opening hours filtering
 
 The system SHALL filter the store pool to currently open stores before each draw, based on data in `store_hours.json` (fetched from Google Places API).
@@ -70,6 +66,7 @@ The current time SHALL be evaluated in Asia/Taipei timezone.
 - **WHEN** at least one open store exists within range
 - **THEN** the system SHALL draw only from open stores
 
+---
 ### Requirement: Store pool includes hidden gems
 
 The random recommendation pool SHALL include stores from both `store_notes` (24 stores with full metadata) and `hidden_gems` (巷仔口 stores with location only).
@@ -172,6 +169,8 @@ code:
 
 The uncle persona SHALL generate a response for the random nearby recommendation using `generate_random`, referencing the store's style attributes from `store_notes` (fat_ratio, skin, sauce_color, sauce_taste).
 
+The `random_tagline` (籤詩文字) for the recommended store SHALL be fetched from `_random_pool`, which covers both `store_notes` and `hidden_gems` stores.
+
 #### Scenario: Store has style data
 
 - **WHEN** the randomly selected store has `visual_profile` entries in `store_notes`
@@ -181,6 +180,12 @@ The uncle persona SHALL generate a response for the random nearby recommendation
 
 - **WHEN** the randomly selected store has no `visual_profile` in `store_notes`
 - **THEN** the response SHALL omit style details and return a location-only recommendation
+
+#### Scenario: Store has random_tagline
+
+- **WHEN** the randomly selected store has a `random_tagline` field in `_random_pool`
+- **AND** the recommendation is not a far-distance phrase (far_phrase is falsy)
+- **THEN** the system SHALL include the tagline text in the Flex Message response
 
 <!-- @trace
 source: random-surprise
@@ -266,4 +271,80 @@ code:
   - photos_sauce_crop/玉女號滷肉飯（稠）/photo_3.jpg
   - photos_sauce_crop/一甲子餐飲（萬華區）（水）/photo_14.jpg
   - photos_sauce_crop/珠記大橋頭油飯(大同區)（水）/photo_1.jpg
+-->
+
+---
+### Requirement: Social proof LIFF button and weight boost in random recommendation
+
+The random nearby recommendation SHALL apply rating weight boost and include a LIFF ratings button.
+
+#### Scenario: Random draw applies rating weights
+
+- **WHEN** the system draws a random store from nearby candidates
+- **THEN** stores with `must_eat` votes SHALL have weight = min(1.0 + votes × 0.5, 3.0)
+- **AND** stores without votes SHALL have weight = 1.0
+
+#### Scenario: Random recommendation Flex Message includes LIFF button
+
+- **WHEN** the random recommendation Flex Message is built
+- **THEN** the system SHALL include a「查看評價 💬」URIAction button linking to the LIFF ratings page for that store
+
+<!-- @trace
+source: social-proof-recommendations
+updated: 2026-04-22
+code:
+  - app.py
+  - .github/workflows/deploy.yml
+  - src/pipeline.py
+-->
+---
+### Requirement: Re-draw without re-sharing location
+
+After receiving a random recommendation, the system SHALL include a「下一抽 🎲」Quick Reply button that allows the user to draw again without re-sharing their location.
+
+When the user taps「下一抽 🎲」, the system SHALL use the saved `last_location` from the session and run the same random recommendation logic as the location event handler, including seen tracking, radius expansion, and exhaustion handling.
+
+If no `last_location` exists in the session, the system SHALL reply with a prompt asking the user to share their location again.
+
+#### Scenario: User taps 下一抽 after receiving recommendation
+
+- **WHEN** the user taps「下一抽 🎲」
+- **AND** a `last_location` exists in the session
+- **THEN** the system SHALL run the same random recommendation logic and return a new Flex Message
+
+#### Scenario: No saved location
+
+- **WHEN** the user taps「下一抽 🎲」
+- **AND** no `last_location` exists in the session
+- **THEN** the system SHALL reply with a location prompt
+
+<!-- @trace
+source: random-surprise-redraw
+updated: 2026-05-11
+code:
+  - app.py
+-->
+
+---
+### Requirement: Share random recommendation with tagline
+
+The random recommendation Flex Message SHALL include a「分享這家店 📤」LIFF button. When a tagline (籤詩 or far-distance phrase) is present, the share URL SHALL include a `tagline` parameter so the shared Flex Message displays the tagline text alongside the store name.
+
+#### Scenario: Share includes tagline
+
+- **WHEN** the random recommendation has a phrase (random_tagline or far_phrase)
+- **THEN** the share URL SHALL include `&tagline=<encoded phrase>`
+- **AND** the `/liff/share` page SHALL display the tagline prominently in the shared Flex Message
+
+#### Scenario: Share without tagline
+
+- **WHEN** the random recommendation has no phrase
+- **THEN** the share URL SHALL omit the tagline parameter
+- **AND** the `/liff/share` page SHALL display the standard store recommendation format
+
+<!-- @trace
+source: random-surprise-share-tagline
+updated: 2026-05-11
+code:
+  - app.py
 -->

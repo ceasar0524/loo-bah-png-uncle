@@ -539,3 +539,195 @@ code:
   - app.py
   - data/store_hours.json
 -->
+
+---
+### Requirement: Footprint keyword handler
+
+The system SHALL handle the keyword「足跡」as a top-level message trigger.
+
+When a user sends「足跡」, the system SHALL query Firestore for that user's check-in records and reply with the footprint Flex Message.
+
+#### Scenario: User sends 足跡
+
+- **WHEN** a user sends the text「足跡」
+- **THEN** the system SHALL read check-in records from `user_footprint/<user_id>/records/`
+- **AND** reply with the footprint summary Flex Message
+
+
+<!-- @trace
+source: luroufan-footprint
+updated: 2026-04-22
+code:
+  - src/pipeline.py
+  - app.py
+  - .github/workflows/deploy.yml
+-->
+
+---
+### Requirement: Check-in confirmation handler
+
+The system SHALL handle the message「就是這家 ✅」as a check-in confirmation trigger.
+
+The system SHALL look up the pending check-in store name stored in the user session under `pending_checkin`, write the check-in record, and clear the session state.
+
+#### Scenario: User confirms check-in
+
+- **WHEN** a user sends「就是這家 ✅」
+- **AND** a `pending_checkin` entry exists in the user session
+- **THEN** the system SHALL write the check-in record to Firestore
+- **AND** clear `pending_checkin` from the session
+- **AND** reply with a confirmation message
+
+
+<!-- @trace
+source: luroufan-footprint
+updated: 2026-04-22
+code:
+  - src/pipeline.py
+  - app.py
+  - .github/workflows/deploy.yml
+-->
+
+---
+### Requirement: Check-in rescue handler
+
+The system SHALL handle the message「打卡這碗 📍」as a check-in rescue trigger.
+
+The system SHALL set a `checkin_rescue` flag in the user session and send a location request.
+
+When the subsequent location event is received with `checkin_rescue` active, the system SHALL search nearby stores (500 m) across both databases and present them as Quick Reply buttons.
+
+#### Scenario: User initiates check-in rescue
+
+- **WHEN** a user sends「打卡這碗 📍」
+- **THEN** the system SHALL set `checkin_rescue: true` in the session
+- **AND** reply with a location request using LocationAction Quick Reply
+
+#### Scenario: Location received during check-in rescue
+
+- **WHEN** a location event is received
+- **AND** the user session contains `checkin_rescue: true`
+- **THEN** the system SHALL search `store_notes` and `hidden_gems` for stores within 500 m
+- **AND** present results as Quick Reply buttons (up to 5 stores)
+- **AND** clear `checkin_rescue` from the session
+
+<!-- @trace
+source: luroufan-footprint
+updated: 2026-04-22
+code:
+  - src/pipeline.py
+  - app.py
+  - .github/workflows/deploy.yml
+-->
+---
+### Requirement: 下一抽 keyword handler
+
+The system SHALL handle the keyword「下一抽 🎲」as a re-draw trigger for random recommendation.
+
+When received, the system SHALL read `last_location` from the session and run the full random recommendation logic without requiring the user to re-share their location.
+
+#### Scenario: User sends 下一抽
+
+- **WHEN** a user sends「下一抽 🎲」
+- **AND** `last_location` exists in the session
+- **THEN** the system SHALL run random recommendation logic using the saved location and return a new recommendation
+
+#### Scenario: No saved location
+
+- **WHEN** a user sends「下一抽 🎲」
+- **AND** no `last_location` exists in the session
+- **THEN** the system SHALL reply with a location prompt
+
+<!-- @trace
+source: random-surprise-redraw
+updated: 2026-05-11
+code:
+  - app.py
+-->
+
+---
+### Requirement: 肉盾 text trigger
+
+The system SHALL handle the text「肉盾」as a skill trigger for users with title「肉汁騎士」or above.
+
+#### Scenario: 肉盾 trigger with sufficient title
+
+- **WHEN** a user with Lv.1+ title sends the text「肉盾」
+- **THEN** the system SHALL enter the meat shield evaluation flow as defined in `title-skill-meat-shield`
+
+#### Scenario: 肉盾 trigger with insufficient title
+
+- **WHEN** a user with title「無職轉生者」sends the text「肉盾」
+- **THEN** the system SHALL reply indicating the skill has not been unlocked yet
+
+
+<!-- @trace
+source: title-unlock-skills
+updated: 2026-05-16
+code:
+  - assets/rpg_map.png
+  - Dockerfile
+  - data/hidden_gems.json
+  - data/store_hours.json
+  - app.py
+  - .github/workflows/deploy.yml
+-->
+
+---
+### Requirement: 魯拉 text trigger
+
+The system SHALL handle the text「魯拉」as a skill trigger for users with title「魯肉飯勇者」or above.
+
+#### Scenario: 魯拉 trigger with sufficient title
+
+- **WHEN** a user with Lv.3+ title sends the text「魯拉」
+- **THEN** the system SHALL enter the Lura navigation flow as defined in `title-skill-lura`
+
+#### Scenario: 魯拉 trigger with insufficient title
+
+- **WHEN** a user with title below「魯肉飯勇者」sends the text「魯拉」
+- **THEN** the system SHALL reply indicating the skill has not been unlocked yet
+
+
+<!-- @trace
+source: title-unlock-skills
+updated: 2026-05-16
+code:
+  - assets/rpg_map.png
+  - Dockerfile
+  - data/hidden_gems.json
+  - data/store_hours.json
+  - app.py
+  - .github/workflows/deploy.yml
+-->
+
+---
+### Requirement: 號令 text trigger
+
+The system SHALL handle the text「號令」as a skill trigger.
+
+For users with title「魯肉飯大神」, the system SHALL enter the decree posting flow.
+
+For all other users, the system SHALL display the Decree Wall (today's recommendations).
+
+#### Scenario: 號令 trigger for 大神 user
+
+- **WHEN** a user with title「魯肉飯大神」sends the text「號令」
+- **THEN** the system SHALL enter the decree posting flow as defined in `title-skill-decree`
+
+#### Scenario: 號令 trigger for non-大神 user
+
+- **WHEN** a user with title below「魯肉飯大神」sends the text「號令」
+- **THEN** the system SHALL display the Decree Wall
+
+<!-- @trace
+source: title-unlock-skills
+updated: 2026-05-16
+code:
+  - assets/rpg_map.png
+  - Dockerfile
+  - data/hidden_gems.json
+  - data/store_hours.json
+  - app.py
+  - .github/workflows/deploy.yml
+-->

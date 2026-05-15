@@ -467,26 +467,63 @@ def _load_taste_preference(user_id: str) -> dict | None:
         return None
 
 
-def _get_user_title_and_count(user_id: str) -> tuple[str, int]:
-    """從 Firestore 一次讀取用戶的 current_title 與 unique_count。若無資料回傳 ('無職轉生者', 0)。"""
+_FOUNDING_MEMBER_LIMIT = 25
+
+
+def _get_user_title_and_count(user_id: str) -> tuple[str, int, bool]:
+    """從 Firestore 一次讀取用戶的 current_title、unique_count 與 founding_member。若無資料回傳 ('無職轉生者', 0, False)。"""
     if _db is None:
-        return ("無職轉生者", 0)
+        return ("無職轉生者", 0, False)
     try:
         doc = _db.collection("user_footprint").document(user_id).get()
         if doc.exists:
             data = doc.to_dict()
             title = data.get("current_title") or "無職轉生者"
             count = data.get("unique_count", 0)
-            return (title, count)
-        return ("無職轉生者", 0)
+            founding = bool(data.get("founding_member", False))
+            return (title, count, founding)
+        return ("無職轉生者", 0, False)
     except Exception:
-        return ("無職轉生者", 0)
+        return ("無職轉生者", 0, False)
 
 
-def _check_skill_unlocked(user_title: str, required_title: str) -> bool:
-    """依 _TITLE_LEVEL_MAP 判斷 user_title 是否達到 required_title 所需等級。"""
-    user_level = _TITLE_LEVEL_MAP.get(user_title, 0)
+def _mark_founding_member(user_id: str) -> tuple[bool, int]:
+    """首次升到 Lv.1 時，若 founding counter < 25 且非管理者，打 founding_member 標記。
+    回傳 (是否標記成功, 第幾位封測成員)。"""
+    if _db is None:
+        return (False, 0)
+    try:
+        counter_ref = _db.collection("title_counter").document("founding_member")
+        transaction = _db.transaction()
+
+        @_firestore.transactional
+        def _try_mark(txn, ref):
+            snap = ref.get(transaction=txn)
+            count = ((snap.to_dict() or {}).get("count") or 0)
+            if count >= _FOUNDING_MEMBER_LIMIT:
+                return 0
+            new_count = count + 1
+            txn.set(ref, {"count": new_count})
+            return new_count
+
+        number = _try_mark(transaction, counter_ref)
+        if number > 0:
+            _db.collection("user_footprint").document(user_id).set(
+                {"founding_member": True}, merge=True
+            )
+            return (True, number)
+        return (False, 0)
+    except Exception:
+        return (False, 0)
+
+
+def _check_skill_unlocked(user_title: str, required_title: str, founding_member: bool = False) -> bool:
+    """依 _TITLE_LEVEL_MAP 判斷 user_title 是否達到 required_title 所需等級。
+    founding_member 用戶可解鎖 Lv.3（魯肉飯勇者）以下技能，但 Lv.4（號令）仍需達到條件。"""
     required_level = _TITLE_LEVEL_MAP.get(required_title, 0)
+    if founding_member and required_level <= 3:
+        return True
+    user_level = _TITLE_LEVEL_MAP.get(user_title, 0)
     return user_level >= required_level
 
 
@@ -1144,6 +1181,53 @@ def _build_upgrade_flex(old_title: str, new_title: str, display: str, message: s
     return FlexMessage(alt_text=f"稱號解鎖：{new_title}", contents=bubble)
 
 
+def _build_founding_member_flex(member_number: int) -> FlexMessage:
+    """封測成員特別解鎖 Flex Message，顯示第 N 位封測成員及 Lv.1~3 全技能。"""
+    founding_titles = ["滷鍋守護者", "魯肉飯勇者"]
+
+    header = FlexBox(
+        layout="vertical",
+        background_color="#1A1A2E",
+        padding_all="lg",
+        contents=[
+            FlexText(text="🎖️ 封測成員特權", weight="bold", size="sm", color="#FFD700", align="center"),
+            FlexText(
+                text=f"你是第 {member_number} 位封測成員",
+                size="xs", color="#AAAAAA", align="center", margin="sm",
+            ),
+        ],
+    )
+
+    body_contents = [
+        FlexText(text="Lv.2～3 技能全數解鎖", weight="bold", size="md", color="#FFD700", align="center"),
+    ]
+
+    for title in founding_titles:
+        skill_info = _SKILL_UNLOCK_TEXT.get(title)
+        if skill_info:
+            skill_name, skill_desc = skill_info
+            body_contents += [
+                FlexSeparator(margin="xl"),
+                FlexText(text=skill_name, weight="bold", size="sm", color="#FFD700", align="center", margin="lg"),
+                FlexText(text=skill_desc, size="xs", color="#AAAAAA", wrap=True, align="center", margin="sm"),
+            ]
+
+    body = FlexBox(
+        layout="vertical",
+        padding_all="xl",
+        contents=body_contents,
+    )
+
+    bubble = FlexBubble(
+        header=header,
+        body=body,
+        styles=FlexBubbleStyles(
+            body=FlexBlockStyle(background_color="#16213E"),
+        ),
+    )
+    return FlexMessage(alt_text="🎖️ 封測成員特權解鎖", contents=bubble)
+
+
 _TITLE_CERTIFICATIONS = {
     "無職轉生者": "初踏江湖，年輕人終究是年輕人！",
     "肉汁騎士":   "年紀輕輕就有坐騎，前途無量！",
@@ -1304,6 +1388,11 @@ def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -
         if needs_update:
             title_number = _get_title_number(user_id, new_title)
 
+            # 首次升到 Lv.1 時同步標記 founding_member（需回傳結果給訊息組裝）
+            founding_marked, founding_number = (False, 0)
+            if new_title == "肉汁騎士" and not _is_admin(user_id):
+                founding_marked, founding_number = _mark_founding_member(user_id)
+
             def _update():
                 try:
                     _db.collection("user_footprint").document(user_id).set(
@@ -1316,6 +1405,7 @@ def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -
             threading.Thread(target=_update, daemon=True).start()
         else:
             title_number = user_data.get("title_number") or user_id[-4:]
+            founding_marked, founding_number = (False, 0)
 
         if is_ceremony:
             display = f"{new_title}#{title_number}"
@@ -1324,6 +1414,8 @@ def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -
             upgrade_flex = _build_upgrade_flex(current_title, new_title, display, text)
             progress_flex = _build_progress_flex(unique_count)
             msgs = [confirm_msg, upgrade_flex]
+            if founding_marked:
+                msgs.append(_build_founding_member_flex(founding_number))
             if progress_flex:
                 msgs.append(progress_flex)
             msgs.append(rating_msg)
@@ -3786,19 +3878,19 @@ def handle_text(event):
                         quick_reply=_taste_quiz_quick_reply(0),
                     )
             elif CHECKIN_ENABLED and text == "肉盾":
-                user_title, unique_count = _get_user_title_and_count(user_id)
-                if _is_admin(user_id) or _check_skill_unlocked(user_title, "肉汁騎士"):
+                user_title, unique_count, founding_member = _get_user_title_and_count(user_id)
+                if _is_admin(user_id) or _check_skill_unlocked(user_title, "肉汁騎士", founding_member):
                     reply = _handle_meat_shield_trigger(user_id)
                 else:
                     reply = _build_skill_lock_message(user_title, unique_count, "肉盾")
             elif CHECKIN_ENABLED and text == "魯拉":
-                user_title, unique_count = _get_user_title_and_count(user_id)
-                if _is_admin(user_id) or _check_skill_unlocked(user_title, "魯肉飯勇者"):
+                user_title, unique_count, founding_member = _get_user_title_and_count(user_id)
+                if _is_admin(user_id) or _check_skill_unlocked(user_title, "魯肉飯勇者", founding_member):
                     reply = _handle_lura_trigger(user_id)
                 else:
                     reply = _build_skill_lock_message(user_title, unique_count, "魯拉（ルラ）")
             elif CHECKIN_ENABLED and text == "號令":
-                user_title, unique_count = _get_user_title_and_count(user_id)
+                user_title, unique_count, founding_member = _get_user_title_and_count(user_id)
                 if _is_admin(user_id) or _check_skill_unlocked(user_title, "魯肉飯大神"):
                     existing = _decree_user_posted_today(user_id)
                     if existing:

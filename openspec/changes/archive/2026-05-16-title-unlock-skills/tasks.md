@@ -44,4 +44,4 @@
 - [x] 7.1 新增後端 endpoint `GET /liff/absolute-domain`，回傳用戶打卡過的店家座標列表（LIFF map page displaying checked-in stores）
 - [x] 7.2 建立 LIFF HTML 頁面，使用 Leaflet.js + OpenStreetMap 底圖，標記打卡據點與半透明光暈
 - [x] 7.3 在 deploy.yml 新增 `ABSOLUTE_DOMAIN_LIFF_URL` 環境變數，並於 Cloud Run 設定對應 LIFF
-- [ ] 7.4 驗證 Lv.2+ 用戶開啟地圖可看到打卡據點，Lv.2 以下看不到地圖入口
+- [x] 7.4 驗證 Lv.2+ 用戶開啟地圖可看到打卡據點，Lv.2 以下看不到地圖入口
