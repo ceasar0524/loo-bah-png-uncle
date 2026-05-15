@@ -1648,7 +1648,7 @@ def api_absolute_domain():
 
 @app.route("/liff/absolute-domain", methods=["GET"])
 def liff_absolute_domain():
-    """絕對滷域 LIFF 地圖頁：Leaflet.js + OpenStreetMap，顯示用戶打卡據點與半透明光暈。"""
+    """絕對滷域 LIFF 地圖頁：RPG 像素風格地圖，顯示打卡據點與勢力範圍。"""
     liff_id = os.getenv("ABSOLUTE_DOMAIN_LIFF_ID", "")
     html = f"""<!DOCTYPE html>
 <html lang="zh-TW">
@@ -1660,71 +1660,253 @@ def liff_absolute_domain():
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-body {{ background: #1A1A2E; color: #FFD700; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }}
-#header {{ padding: 12px 16px; background: #2E1A0E; color: #FFD700; font-size: 1rem; font-weight: bold; flex-shrink: 0; }}
-#map {{ flex: 1; }}
-#status {{ padding: 8px 16px; background: #2E1A0E; color: #C8A97E; font-size: 0.8rem; flex-shrink: 0; text-align: center; }}
+body {{ background: #0D1B0D; color: #A3D977; font-family: 'Press Start 2P', monospace, sans-serif; display: flex; flex-direction: column; height: 100vh; }}
+
+/* RPG 頂部標題列 */
+#header {{
+  padding: 10px 14px;
+  background: #0A120A;
+  border-bottom: 3px solid #3A7A3A;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}}
+#header-title {{
+  color: #FFD700;
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px #000;
+}}
+#header-count {{
+  color: #A3D977;
+  font-size: 0.5rem;
+  text-shadow: 1px 1px #000;
+}}
+
+/* 地圖容器 */
+#map-wrap {{
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  border: 3px solid #3A7A3A;
+  image-rendering: pixelated;
+}}
+#map {{
+  width: 100%;
+  height: 100%;
+  /* 像素化濾鏡效果 */
+  image-rendering: pixelated;
+  filter: saturate(0.7) hue-rotate(30deg) brightness(0.75) contrast(1.1);
+}}
+/* 讓地圖磁磚也像素化 */
+.leaflet-tile {{
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}}
+/* 掃描線疊層，增加 RPG 螢幕感 */
+#map-wrap::after {{
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 3px,
+    rgba(0,0,0,0.08) 3px,
+    rgba(0,0,0,0.08) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}}
+
+/* 底部狀態列 */
+#status {{
+  padding: 8px 14px;
+  background: #0A120A;
+  border-top: 3px solid #3A7A3A;
+  color: #A3D977;
+  font-size: 0.45rem;
+  flex-shrink: 0;
+  text-align: center;
+  text-shadow: 1px 1px #000;
+  letter-spacing: 1px;
+}}
+
+/* 自訂 popup */
+.leaflet-popup-content-wrapper {{
+  background: #0D1B0D;
+  border: 2px solid #FFD700;
+  border-radius: 0;
+  color: #FFD700;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  box-shadow: 3px 3px 0 #000;
+}}
+.leaflet-popup-tip {{ background: #FFD700; }}
+.leaflet-popup-content {{ margin: 8px 10px; line-height: 1.6; }}
+
+/* 隱藏 Leaflet 預設 attribution 背景 */
+.leaflet-control-attribution {{
+  background: rgba(10,18,10,0.8) !important;
+  color: #3A7A3A !important;
+  font-size: 0.4rem !important;
+}}
+
+/* 切換按鈕 */
+#toggle-btn {{
+  background: #1A2E1A;
+  border: 2px solid #3A7A3A;
+  color: #A3D977;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.4rem;
+  padding: 5px 7px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 #000;
+  letter-spacing: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}}
+#toggle-btn:active {{
+  transform: translate(2px,2px);
+  box-shadow: none;
+}}
+/* 原版模式下地圖不套濾鏡 */
+#map.normal-mode {{
+  filter: none;
+  image-rendering: auto;
+}}
+#map-wrap.normal-mode::after {{
+  display: none;
+}}
+#map-wrap.normal-mode {{
+  border-color: #888;
+}}
+body.normal-mode {{ background: #f5f5f5; color: #333; }}
+body.normal-mode #header {{ background: #fff; border-color: #ccc; }}
+body.normal-mode #header-title {{ color: #333; text-shadow: none; }}
+body.normal-mode #header-count {{ color: #666; text-shadow: none; }}
+body.normal-mode #toggle-btn {{ background: #fff; border-color: #aaa; color: #555; box-shadow: 1px 1px 0 #aaa; }}
+body.normal-mode #status {{ background: #fff; border-color: #ccc; color: #555; text-shadow: none; }}
 </style>
 </head>
 <body>
-<div id="header">🗺️ 絕對滷域</div>
-<div id="map"></div>
-<div id="status">載入中⋯</div>
+<div id="header">
+  <span id="header-title">⚔ 絕對滷域</span>
+  <span id="header-count">據點：－</span>
+  <button id="toggle-btn" onclick="toggleMapMode()">🗺️ 原版</button>
+</div>
+<div id="map-wrap">
+  <div id="map"></div>
+</div>
+<div id="status">▶ 讀取中…</div>
 <script>
 const LIFF_ID = "{liff_id}";
 let map;
+let rpgTileLayer = null;
+let normalTileLayer = null;
+let isRpgMode = true;
+
+const RPG_TILE_URL = "https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png";
+const NORMAL_TILE_URL = "https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png";
+
+function toggleMapMode() {{
+  isRpgMode = !isRpgMode;
+  const mapEl = document.getElementById("map");
+  const mapWrap = document.getElementById("map-wrap");
+  const btn = document.getElementById("toggle-btn");
+
+  if (isRpgMode) {{
+    // 切回 RPG 模式
+    if (normalTileLayer) {{ map.removeLayer(normalTileLayer); normalTileLayer = null; }}
+    if (!rpgTileLayer) {{
+      rpgTileLayer = L.tileLayer(RPG_TILE_URL, {{
+        attribution: "© CartoDB © OSM", maxZoom: 19, subdomains: "abcd"
+      }});
+    }}
+    rpgTileLayer.addTo(map);
+    mapEl.classList.remove("normal-mode");
+    mapWrap.classList.remove("normal-mode");
+    document.body.classList.remove("normal-mode");
+    btn.textContent = "🗺️ 原版";
+  }} else {{
+    // 切到原版模式
+    if (rpgTileLayer) {{ map.removeLayer(rpgTileLayer); rpgTileLayer = null; }}
+    if (!normalTileLayer) {{
+      normalTileLayer = L.tileLayer(NORMAL_TILE_URL, {{
+        attribution: "© OpenStreetMap contributors", maxZoom: 19
+      }});
+    }}
+    normalTileLayer.addTo(map);
+    mapEl.classList.add("normal-mode");
+    mapWrap.classList.add("normal-mode");
+    document.body.classList.add("normal-mode");
+    btn.textContent = "⚔ RPG";
+  }}
+}}
+
+const markerIcon = L.divIcon({{
+  html: '<div style="width:22px;height:22px;background:#FFD700;border:2px solid #000;display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:2px 2px 0 #000;image-rendering:pixelated;">⚑</div>',
+  className: '',
+  iconSize: [22, 22],
+  iconAnchor: [11, 11],
+  popupAnchor: [0, -14],
+}});
 
 function initMap(stores) {{
-  if (stores.length === 0) {{
-    document.getElementById("status").textContent = "還沒有打卡據點，快去攻略魯肉飯吧！";
-    map = L.map("map").setView([25.05, 121.53], 12);
-  }} else {{
-    const first = stores[0];
-    map = L.map("map").setView([first.lat, first.lng], 13);
-  }}
-  L.tileLayer("https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png", {{
-    attribution: "© OpenStreetMap contributors",
-    maxZoom: 18,
-  }}).addTo(map);
+  const center = stores.length > 0 ? [stores[0].lat, stores[0].lng] : [25.05, 121.53];
+  const zoom = stores.length > 0 ? 13 : 12;
 
-  const icon = L.divIcon({{
-    html: "🍚",
-    className: "",
-    iconSize: [28, 28],
-    iconAnchor: [14, 14],
+  map = L.map("map", {{ zoomControl: true }}).setView(center, zoom);
+
+  /* CartoDB Dark Matter — 暗色底圖，配合 RPG 濾鏡效果最佳 */
+  rpgTileLayer = L.tileLayer(RPG_TILE_URL, {{
+    attribution: "© CartoDB © OSM",
+    maxZoom: 19,
+    subdomains: "abcd",
   }});
+  rpgTileLayer.addTo(map);
 
   stores.forEach(function(s) {{
-    L.marker([s.lat, s.lng], {{ icon: icon }})
-      .bindPopup("<b>" + s.name + "</b>")
-      .addTo(map);
+    /* 勢力光暈 */
     L.circle([s.lat, s.lng], {{
-      radius: 300,
-      color: "#9A4F12",
-      fillColor: "#9A4F12",
-      fillOpacity: 0.15,
-      weight: 1,
+      radius: 250,
+      color: "#FFD700",
+      fillColor: "#4A7A1A",
+      fillOpacity: 0.18,
+      weight: 1.5,
+      dashArray: "4 4",
     }}).addTo(map);
+    /* 旗幟標記 */
+    L.marker([s.lat, s.lng], {{ icon: markerIcon }})
+      .bindPopup("<div>⚑ " + s.name + "</div>")
+      .addTo(map);
   }});
 
+  document.getElementById("header-count").textContent =
+    "據點：" + stores.length;
   document.getElementById("status").textContent =
-    stores.length > 0 ? "已攻略 " + stores.length + " 個據點" : "還沒有打卡據點";
+    stores.length > 0
+      ? "▶ 已攻略 " + stores.length + " 個據點"
+      : "▶ 尚無據點　快去攻略魯肉飯吧";
 }}
 
 liff.init({{ liffId: LIFF_ID }}).then(function() {{
-  const token = liff.getAccessToken();
   return fetch("/api/absolute-domain", {{
-    headers: {{ "Authorization": "Bearer " + token }}
+    headers: {{ "Authorization": "Bearer " + liff.getAccessToken() }}
   }});
 }}).then(function(r) {{ return r.json(); }}).then(function(data) {{
   initMap(data.stores || []);
-}}).catch(function(err) {{
-  document.getElementById("status").textContent = "載入失敗，請重試";
+}}).catch(function() {{
+  document.getElementById("status").textContent = "▶ 載入失敗，請重試";
   map = L.map("map").setView([25.05, 121.53], 12);
-  L.tileLayer("https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png", {{
-    attribution: "© OpenStreetMap contributors",
-  }}).addTo(map);
+  rpgTileLayer = L.tileLayer(RPG_TILE_URL, {{
+    attribution: "© CartoDB © OSM", subdomains: "abcd",
+  }});
+  rpgTileLayer.addTo(map);
 }});
 </script>
 </body>
