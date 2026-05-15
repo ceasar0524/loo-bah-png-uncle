@@ -1814,9 +1814,57 @@ let normalTileLayer = null;
 let isRpgMode = true;
 
 /* 雙北 RPG 底圖的地理邊界（粗略校正，標記位置大致對應） */
-const RPG_BOUNDS = [[24.78, 121.15], [25.38, 121.88]];
+/* 校正後的底圖地理邊界（最小二乘法，基於 8 個地標） */
+const RPG_BOUNDS = [[24.768, 121.273], [25.275, 121.801]];
 const RPG_IMG_URL = "/assets/rpg_map.png";
 const NORMAL_TILE_URL = "https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png";
+const IMG_SIZE = 900;  // 底圖解析度
+
+/* 各區在底圖上的目測像素位置 [px_from_left, py_from_top]（900x900 圖） */
+const DISTRICT_PIXELS = {{
+  /* 台北市 */
+  '中山區': [460, 350], '中正區': [440, 415], '大安區': [460, 435],
+  '信義區': [510, 415], '松山區': [515, 355], '內湖區': [545, 350],
+  '南港區': [575, 425], '士林區': [420, 280], '北投區': [370, 245],
+  '文山區': [458, 492], '萬華區': [405, 435], '大同區': [430, 370],
+  /* 新北市 */
+  '三重區': [375, 340], '新莊區': [275, 355], '泰山區': [245, 330],
+  '林口區': [100, 400], '五股區': [310, 308], '八里區': [140, 270],
+  '淡水區': [270, 255], '板橋區': [378, 438], '中和區': [422, 458],
+  '永和區': [442, 432], '土城區': [315, 548], '三峽區': [228, 602],
+  '新店區': [505, 562], '汐止區': [592, 308], '瑞芳區': [728, 312],
+  '深坑區': [510, 530], '石碇區': [540, 560], '坪林區': [548, 615],
+  '烏來區': [492, 682], '金山區': [472, 78],  '萬里區': [618, 78],
+}};
+
+/* 像素座標 → 底圖 lat/lng（配合 RPG_BOUNDS） */
+function pixelToLatLng(px, py) {{
+  const lat = RPG_BOUNDS[1][0] - (py / IMG_SIZE) * (RPG_BOUNDS[1][0] - RPG_BOUNDS[0][0]);
+  const lng = RPG_BOUNDS[0][1] + (px / IMG_SIZE) * (RPG_BOUNDS[1][1] - RPG_BOUNDS[0][1]);
+  return [lat, lng];
+}}
+
+/* 用店名 hash 算出固定微偏移，避免同區多家疊在一起 */
+function nameJitter(name, range) {{
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) & 0xffff;
+  const dx = ((h & 0xff) / 255 - 0.5) * range * 2;
+  const dy = (((h >> 8) & 0xff) / 255 - 0.5) * range * 2;
+  return [dx, dy];
+}}
+
+/* RPG 模式：從店名提取區名，對應像素位置 */
+function getRpgLatLng(s) {{
+  const m = s.name.match(/[（(](.{{2,4}}[區市鎮鄉])[）)]/);
+  if (m) {{
+    const pixels = DISTRICT_PIXELS[m[1]];
+    if (pixels) {{
+      const [dx, dy] = nameJitter(s.name, 18);
+      return pixelToLatLng(pixels[0] + dx, pixels[1] + dy);
+    }}
+  }}
+  return [s.lat, s.lng];  // fallback：使用真實 GPS
+}}
 
 function makeRpgIcon(emoji, size, bg, border) {{
   return L.divIcon({{
@@ -1880,10 +1928,11 @@ function refreshMarkers() {{
   _stores.forEach(function(s) {{
     const icon = getStoreIcon(s);
     const label = isRpgMode ? getStoreLabel(s) : "<b>" + s.name + "</b>";
+    const coords = isRpgMode ? getRpgLatLng(s) : [s.lat, s.lng];
 
     if (isRpgMode) {{
       const circleColor = s.visit_count >= 3 ? "#FFD700" : "#c8860a";
-      const circle = L.circle([s.lat, s.lng], {{
+      const circle = L.circle(coords, {{
         radius: 300,
         color: circleColor,
         fillColor: circleColor,
@@ -1894,7 +1943,7 @@ function refreshMarkers() {{
       storeCircles.push(circle);
     }}
 
-    const marker = L.marker([s.lat, s.lng], {{ icon: icon }})
+    const marker = L.marker(coords, {{ icon: icon }})
       .bindPopup("<div>" + label + "</div>")
       .addTo(map);
     storeMarkers.push(marker);
@@ -3441,7 +3490,7 @@ def _build_footprint_flex(user_id: str):
             unique_stores.append(name)
 
     unique_count = len(unique_stores)
-    total_stores = 112
+    total_stores = 113
 
     # 稱號資料
     user_data = user_doc.to_dict() if user_doc.exists else {}

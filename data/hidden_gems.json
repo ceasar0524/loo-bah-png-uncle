@@ -1067,5 +1067,17 @@
     },
     "sauce_consistency": "水",
     "random_tagline": "今日宜品味 🍚"
+  },
+  "良記福臨魯肉飯（士林區）": {
+    "location": {
+      "lat": 25.087214728952976,
+      "lng": 121.50948249554729
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   }
 }
