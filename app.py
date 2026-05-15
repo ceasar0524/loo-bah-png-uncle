@@ -968,19 +968,62 @@ def _decree_user_posted_today(user_id: str) -> dict | None:
         return None
 
 
-def _build_decree_wall_text(posts: list[dict]) -> str:
-    """組裝大神推薦牆文字。"""
+def _build_decree_wall_text(posts: list[dict]) -> FlexMessage:
+    """組裝大神推薦牆 Flex Message（👑 神級風格）。"""
+    from datetime import datetime, timezone, timedelta
+    today = datetime.now(timezone(timedelta(hours=8))).strftime("%m/%d")
+
+    def _header_contents():
+        return [
+            FlexText(text="👑", align="center", size="3xl", margin="none"),
+            FlexText(text="══  今 日 滷 令  ══", align="center", color="#F59E0B", size="md", weight="bold", margin="md"),
+            FlexText(text=today, align="center", color="#78350F", size="xs", margin="xs"),
+        ]
+
     if not posts:
-        return "📜 今日滷令\n\n目前還沒有大神發布滷界敕令。\n\n這片滷界，仍在等待第一位魯肉飯大神降臨……\n等你升到 Lv.4，就能推薦你認可的魯肉飯店，\n讓眾勇者跟著攻略"
-    lines = ["📜 今日滷令\n"]
-    for i, p in enumerate(posts):
+        bubble = FlexBubble(
+            body=FlexBox(
+                layout="vertical",
+                background_color="#0D0900",
+                padding_all="xl",
+                contents=[
+                    *_header_contents(),
+                    FlexSeparator(color="#78350F", margin="lg"),
+                    FlexText(
+                        text="這片滷界，仍在等待\n第一位魯肉飯大神降臨……\n\n升到 Lv.4，即可發布號令",
+                        align="center", color="#FDE68A", size="sm", wrap=True, margin="lg",
+                    ),
+                ],
+            ),
+            styles=FlexBubbleStyles(body=FlexBlockStyle(background_color="#0D0900")),
+        )
+        return FlexMessage(alt_text="👑 今日滷令：尚無大神發令", contents=bubble)
+
+    bubbles = []
+    for p in posts:
         display_id = p.get("display_id", "魯肉飯大神")
         store = p.get("store_name", "")
         reason = p.get("reason", "")
-        if i > 0:
-            lines.append("\n---\n")
-        lines.append(f"{display_id} 推薦：\n{store}\n\n理由：\n{reason}")
-    return "\n".join(lines)
+        bubbles.append(FlexBubble(
+            body=FlexBox(
+                layout="vertical",
+                background_color="#0D0900",
+                padding_all="xl",
+                contents=[
+                    *_header_contents(),
+                    FlexSeparator(color="#78350F", margin="lg"),
+                    FlexText(text=display_id, align="center", color="#FCD34D", size="xs", margin="lg"),
+                    FlexText(text=f"✦  {store}  ✦", align="center", color="#FFFBEB", size="xl", weight="bold", wrap=True, margin="sm"),
+                    FlexSeparator(color="#78350F", margin="lg"),
+                    FlexText(text="攻略理由", align="center", color="#F59E0B", size="xs", weight="bold", margin="lg"),
+                    FlexText(text=reason, align="center", color="#FDE68A", size="sm", wrap=True, margin="sm"),
+                ],
+            ),
+            styles=FlexBubbleStyles(body=FlexBlockStyle(background_color="#0D0900")),
+        ))
+
+    contents = bubbles[0] if len(bubbles) == 1 else FlexCarousel(contents=bubbles)
+    return FlexMessage(alt_text=f"👑 今日滷令：{posts[0].get('store_name', '')}", contents=contents)
 
 
 def _build_progress_flex(unique_count: int) -> FlexMessage | None:
@@ -3470,6 +3513,31 @@ def handle_text(event):
                         text=_TASTE_QUIZ_QUESTIONS[0]["question"],
                         quick_reply=_taste_quiz_quick_reply(0),
                     )
+            elif CHECKIN_ENABLED and text == "肉盾":
+                user_title, unique_count = _get_user_title_and_count(user_id)
+                if _is_admin(user_id) or _check_skill_unlocked(user_title, "肉汁騎士"):
+                    reply = _handle_meat_shield_trigger(user_id)
+                else:
+                    reply = _build_skill_lock_message(user_title, unique_count, "肉盾")
+            elif CHECKIN_ENABLED and text == "魯拉":
+                user_title, unique_count = _get_user_title_and_count(user_id)
+                if _is_admin(user_id) or _check_skill_unlocked(user_title, "魯肉飯勇者"):
+                    reply = _handle_lura_trigger(user_id)
+                else:
+                    reply = _build_skill_lock_message(user_title, unique_count, "魯拉（ルラ）")
+            elif CHECKIN_ENABLED and text == "號令":
+                user_title, unique_count = _get_user_title_and_count(user_id)
+                if _is_admin(user_id) or _check_skill_unlocked(user_title, "魯肉飯大神"):
+                    existing = _decree_user_posted_today(user_id)
+                    if existing:
+                        reply = TextMessage(
+                            text=f"📜 你今天已經發布過號令了！\n\n推薦店：{existing.get('store_name', '')}\n理由：{existing.get('reason', '')}"
+                        )
+                    else:
+                        _save_skill_session(user_id, "decree", "await_store_name")
+                        reply = TextMessage(text="📜 滷界敕令啟動！\n\n輸入你要推薦的店名（20 字以內）：")
+                else:
+                    reply = _build_skill_lock_message(user_title, unique_count, "滷界敕令")
             elif _get_skill_session(user_id) is not None:
                 sess = _get_skill_session(user_id)
                 skill = sess.get("skill")
@@ -3666,31 +3734,6 @@ def handle_text(event):
                     )
                 else:
                     reply = flex
-            elif CHECKIN_ENABLED and text == "肉盾":
-                user_title, unique_count = _get_user_title_and_count(user_id)
-                if _is_admin(user_id) or _check_skill_unlocked(user_title, "肉汁騎士"):
-                    reply = _handle_meat_shield_trigger(user_id)
-                else:
-                    reply = _build_skill_lock_message(user_title, unique_count, "肉盾")
-            elif CHECKIN_ENABLED and text == "魯拉":
-                user_title, unique_count = _get_user_title_and_count(user_id)
-                if _is_admin(user_id) or _check_skill_unlocked(user_title, "魯肉飯勇者"):
-                    reply = _handle_lura_trigger(user_id)
-                else:
-                    reply = _build_skill_lock_message(user_title, unique_count, "魯拉（ルラ）")
-            elif CHECKIN_ENABLED and text == "號令":
-                user_title, unique_count = _get_user_title_and_count(user_id)
-                if _is_admin(user_id) or _check_skill_unlocked(user_title, "魯肉飯大神"):
-                    existing = _decree_user_posted_today(user_id)
-                    if existing:
-                        reply = TextMessage(
-                            text=f"📜 你今天已經發布過號令了！\n\n推薦店：{existing.get('store_name', '')}\n理由：{existing.get('reason', '')}"
-                        )
-                    else:
-                        _save_skill_session(user_id, "decree", "await_store_name")
-                        reply = TextMessage(text="📜 滷界敕令啟動！\n\n輸入你要推薦的店名（20 字以內）：")
-                else:
-                    reply = _build_skill_lock_message(user_title, unique_count, "滷界敕令")
             elif text == "統計" and _is_admin(event.source.user_id):
                 reply = _build_stats_message()
             elif text == "怎麼用":
@@ -3709,8 +3752,7 @@ def handle_text(event):
                     reply = TextMessage(text="巷仔口名單還在整理中，敬請期待！")
             elif text == "大神推薦牆":
                 posts = _decree_get_today_posts()
-                wall = _build_decree_wall_text(posts)
-                reply = TextMessage(text=wall)
+                reply = _build_decree_wall_text(posts)
             elif text == "附近巷仔口店家":
                 last_loc = _get_last_location(user_id)
                 if last_loc and _hidden_gems:
