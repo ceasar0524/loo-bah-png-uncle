@@ -22,6 +22,7 @@ RUN python -c "import torch; torch.hub.load('facebookresearch/dinov2', 'dinov2_v
 # 複製程式碼與資料
 COPY src/ src/
 COPY data/ data/
+COPY assets/ assets/
 COPY index.npz .
 COPY index_sauce_crop.npz .
 COPY store_index.pkl.npz .

@@ -1607,10 +1607,8 @@ def api_user_title():
 @app.route("/assets/<path:filename>", methods=["GET"])
 def serve_asset(filename):
     """提供 assets 目錄下的靜態檔案。"""
-    import os as _os
     from flask import send_from_directory
-    assets_dir = _os.path.join(_os.path.dirname(__file__), "assets")
-    return send_from_directory(assets_dir, filename)
+    return send_from_directory("assets", filename)
 
 
 @app.route("/api/absolute-domain", methods=["GET"])
