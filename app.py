@@ -1785,13 +1785,7 @@ const rpgMarkerIcon = L.divIcon({{
   popupAnchor: [0, -15],
 }});
 
-const normalMarkerIcon = L.divIcon({{
-  html: '<div style="width:20px;height:20px;background:#e74c3c;border:2px solid #fff;border-radius:50%;box-shadow:1px 1px 3px rgba(0,0,0,0.4);"></div>',
-  className: '',
-  iconSize: [20, 20],
-  iconAnchor: [10, 10],
-  popupAnchor: [0, -12],
-}});
+const normalMarkerIcon = new L.Icon.Default();
 
 function toggleMapMode() {{
   isRpgMode = !isRpgMode;
