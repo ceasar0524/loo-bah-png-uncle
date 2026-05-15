@@ -1616,6 +1616,7 @@ def api_absolute_domain():
     """回傳用戶打卡過的店家座標列表，供絕對滷域 LIFF 地圖使用。需帶 LIFF access token。"""
     import urllib.request as _urllib_req
     import json as _json
+    import re as _re
     auth = request.headers.get("Authorization", "")
     if not auth.startswith("Bearer "):
         return {"error": "unauthorized"}, 401
@@ -1631,24 +1632,64 @@ def api_absolute_domain():
         if not user_id:
             return {"error": "invalid token"}, 401
         if _db is None:
-            return {"stores": []}, 200
+            return {"stores": [], "district_hints": []}, 200
+
         records_ref = _db.collection("user_footprint").document(user_id).collection("records")
         docs = list(records_ref.stream())
-        seen: set = set()
-        stores = []
-        all_stores = {**_store_notes, **_hidden_gems}
+
+        # 計算每家店的打卡次數
+        visit_counts: dict = {}
         for doc in docs:
-            d = doc.to_dict()
-            name = d.get("store_name", "")
-            if name and name not in seen:
-                seen.add(name)
-                store = all_stores.get(name, {})
-                loc = store.get("location", {})
-                lat = loc.get("lat")
-                lng = loc.get("lng")
-                if lat and lng:
-                    stores.append({"name": name, "lat": lat, "lng": lng})
-        return {"stores": stores}, 200
+            name = doc.to_dict().get("store_name", "")
+            if name:
+                visit_counts[name] = visit_counts.get(name, 0) + 1
+
+        all_stores = {**_store_notes, **_hidden_gems}
+        stores = []
+        visited_districts: set = set()
+        for name, count in visit_counts.items():
+            store = all_stores.get(name, {})
+            loc = store.get("location", {})
+            lat, lng = loc.get("lat"), loc.get("lng")
+            if not (lat and lng):
+                continue
+            is_hidden = name in _hidden_gems
+            stores.append({
+                "name": name,
+                "lat": lat,
+                "lng": lng,
+                "visit_count": count,
+                "is_hidden": is_hidden,
+            })
+            # 記錄用戶已攻略的巷仔口區域
+            if is_hidden:
+                m = _re.search(r'（(.+?)）', name)
+                if m:
+                    visited_districts.add(m.group(1))
+
+        # 未攻略區域提示：每個 hidden_gems 區域取平均座標，排除已攻略區
+        district_coords: dict = {}
+        for name in _hidden_gems:
+            m = _re.search(r'（(.+?)）', name)
+            if not m:
+                continue
+            district = m.group(1)
+            if district == "總店" or district in visited_districts:
+                continue
+            loc = _hidden_gems[name].get("location", {})
+            lat, lng = loc.get("lat"), loc.get("lng")
+            if lat and lng:
+                if district not in district_coords:
+                    district_coords[district] = []
+                district_coords[district].append((lat, lng))
+
+        district_hints = []
+        for district, locs in district_coords.items():
+            avg_lat = sum(l[0] for l in locs) / len(locs)
+            avg_lng = sum(l[1] for l in locs) / len(locs)
+            district_hints.append({"name": district, "lat": avg_lat, "lng": avg_lng})
+
+        return {"stores": stores, "district_hints": district_hints}, 200
     except Exception:
         return {"error": "server error"}, 500
 
@@ -1777,15 +1818,20 @@ const RPG_BOUNDS = [[24.78, 121.15], [25.38, 121.88]];
 const RPG_IMG_URL = "/assets/rpg_map.png";
 const NORMAL_TILE_URL = "https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png";
 
-const rpgMarkerIcon = L.divIcon({{
-  html: '<div style="width:24px;height:24px;background:#FFD700;border:2px solid #4a2e00;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:2px 2px 0 #000;">⚑</div>',
-  className: '',
-  iconSize: [24, 24],
-  iconAnchor: [12, 12],
-  popupAnchor: [0, -15],
-}});
+function makeRpgIcon(emoji, size, bg, border) {{
+  return L.divIcon({{
+    html: `<div style="width:${{size}}px;height:${{size}}px;background:${{bg}};border:2px solid ${{border}};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:${{Math.floor(size*0.6)}}px;box-shadow:2px 2px 0 #000;">${{emoji}}</div>`,
+    className: '',
+    iconSize: [size, size],
+    iconAnchor: [size/2, size/2],
+    popupAnchor: [0, -size/2 - 4],
+  }});
+}}
 
-const normalMarkerIcon = new L.Icon.Default();
+/* RPG 三種標記 */
+const ICON_REVISIT  = makeRpgIcon('⭐', 28, '#1a0a00', '#FFD700');  // 回訪多次 3+
+const ICON_VISITED  = makeRpgIcon('🍚', 26, '#1a0a00', '#FFD700');  // 已攻略
+const ICON_UNKNOWN  = makeRpgIcon('❓', 24, '#2a2a2a', '#888');      // 未攻略
 
 function toggleMapMode() {{
   isRpgMode = !isRpgMode;
@@ -1812,6 +1858,18 @@ function toggleMapMode() {{
 }}
 
 let _stores = [];
+let _districtHints = [];
+
+function getStoreIcon(s) {{
+  if (!isRpgMode) return new L.Icon.Default();
+  if (s.visit_count >= 3) return ICON_REVISIT;
+  return ICON_VISITED;
+}}
+
+function getStoreLabel(s) {{
+  if (s.visit_count >= 3) return "⭐ " + s.name + "（回訪 " + s.visit_count + " 次）";
+  return "🍚 " + s.name;
+}}
 
 function refreshMarkers() {{
   storeMarkers.forEach(function(m) {{ map.removeLayer(m); }});
@@ -1820,17 +1878,16 @@ function refreshMarkers() {{
   storeCircles = [];
 
   _stores.forEach(function(s) {{
-    const icon = isRpgMode ? rpgMarkerIcon : normalMarkerIcon;
-    const popupContent = isRpgMode
-      ? "<div>⚑ " + s.name + "</div>"
-      : "<div><b>" + s.name + "</b></div>";
+    const icon = getStoreIcon(s);
+    const label = isRpgMode ? getStoreLabel(s) : "<b>" + s.name + "</b>";
 
     if (isRpgMode) {{
+      const circleColor = s.visit_count >= 3 ? "#FFD700" : "#c8860a";
       const circle = L.circle([s.lat, s.lng], {{
         radius: 300,
-        color: "#FFD700",
-        fillColor: "#c8860a",
-        fillOpacity: 0.15,
+        color: circleColor,
+        fillColor: circleColor,
+        fillOpacity: 0.1,
         weight: 1.5,
         dashArray: "5 5",
       }}).addTo(map);
@@ -1838,14 +1895,25 @@ function refreshMarkers() {{
     }}
 
     const marker = L.marker([s.lat, s.lng], {{ icon: icon }})
-      .bindPopup(popupContent)
+      .bindPopup("<div>" + label + "</div>")
       .addTo(map);
     storeMarkers.push(marker);
   }});
+
+  /* 未攻略區域提示（僅 RPG 模式顯示） */
+  if (isRpgMode) {{
+    _districtHints.forEach(function(h) {{
+      const marker = L.marker([h.lat, h.lng], {{ icon: ICON_UNKNOWN, opacity: 0.7 }})
+        .bindPopup("<div style='color:#aaa'>❓ " + h.name + "<br><span style='font-size:0.4rem'>尚未攻略</span></div>")
+        .addTo(map);
+      storeMarkers.push(marker);
+    }});
+  }}
 }}
 
-function initMap(stores) {{
+function initMap(stores, districtHints) {{
   _stores = stores;
+  _districtHints = districtHints || [];
 
   map = L.map("map", {{
     zoomControl: true,
@@ -1873,7 +1941,7 @@ liff.init({{ liffId: LIFF_ID }}).then(function() {{
     headers: {{ "Authorization": "Bearer " + liff.getAccessToken() }}
   }});
 }}).then(function(r) {{ return r.json(); }}).then(function(data) {{
-  initMap(data.stores || []);
+  initMap(data.stores || [], data.district_hints || []);
 }}).catch(function(err) {{
   document.getElementById("status").textContent = "▶ 載入失敗，請重試";
   map = L.map("map").setView([25.05, 121.53], 11);
