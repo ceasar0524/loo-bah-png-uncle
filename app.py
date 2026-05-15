@@ -1604,6 +1604,15 @@ def api_user_title():
         return {"error": "server error"}, 500
 
 
+@app.route("/assets/<path:filename>", methods=["GET"])
+def serve_asset(filename):
+    """提供 assets 目錄下的靜態檔案。"""
+    import os as _os
+    from flask import send_from_directory
+    assets_dir = _os.path.join(_os.path.dirname(__file__), "assets")
+    return send_from_directory(assets_dir, filename)
+
+
 @app.route("/api/absolute-domain", methods=["GET"])
 def api_absolute_domain():
     """回傳用戶打卡過的店家座標列表，供絕對滷域 LIFF 地圖使用。需帶 LIFF access token。"""
@@ -1648,7 +1657,7 @@ def api_absolute_domain():
 
 @app.route("/liff/absolute-domain", methods=["GET"])
 def liff_absolute_domain():
-    """絕對滷域 LIFF 地圖頁：RPG 像素風格地圖，顯示打卡據點與勢力範圍。"""
+    """絕對滷域 LIFF 地圖頁：RPG 冒險地圖底圖（可切換原版），顯示打卡據點。"""
     liff_id = os.getenv("ABSOLUTE_DOMAIN_LIFF_ID", "")
     html = f"""<!DOCTYPE html>
 <html lang="zh-TW">
@@ -1662,135 +1671,90 @@ def liff_absolute_domain():
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 * {{ box-sizing: border-box; margin: 0; padding: 0; }}
-body {{ background: #0D1B0D; color: #A3D977; font-family: 'Press Start 2P', monospace, sans-serif; display: flex; flex-direction: column; height: 100vh; }}
+body {{ background: #1a1008; color: #FFD700; font-family: 'Press Start 2P', monospace, sans-serif; display: flex; flex-direction: column; height: 100vh; }}
 
-/* RPG 頂部標題列 */
 #header {{
-  padding: 10px 14px;
-  background: #0A120A;
-  border-bottom: 3px solid #3A7A3A;
+  padding: 8px 12px;
+  background: #0e0904;
+  border-bottom: 3px solid #7a5c1e;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-  image-rendering: pixelated;
 }}
 #header-title {{
   color: #FFD700;
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   letter-spacing: 1px;
   text-shadow: 2px 2px #000;
 }}
 #header-count {{
-  color: #A3D977;
-  font-size: 0.5rem;
+  color: #d4af37;
+  font-size: 0.45rem;
   text-shadow: 1px 1px #000;
 }}
 
-/* 地圖容器 */
 #map-wrap {{
   flex: 1;
   position: relative;
   overflow: hidden;
-  border: 3px solid #3A7A3A;
-  image-rendering: pixelated;
+  border: 3px solid #7a5c1e;
 }}
-#map {{
-  width: 100%;
-  height: 100%;
-  /* 像素化濾鏡效果 */
-  image-rendering: pixelated;
-  filter: saturate(0.7) hue-rotate(30deg) brightness(0.75) contrast(1.1);
-}}
-/* 讓地圖磁磚也像素化 */
-.leaflet-tile {{
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-}}
-/* 掃描線疊層，增加 RPG 螢幕感 */
-#map-wrap::after {{
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent,
-    transparent 3px,
-    rgba(0,0,0,0.08) 3px,
-    rgba(0,0,0,0.08) 4px
-  );
-  pointer-events: none;
-  z-index: 1000;
-}}
+#map {{ width: 100%; height: 100%; }}
 
-/* 底部狀態列 */
+/* RPG 模式：地圖背景深色，image-overlay 顯示 */
+/* 原版模式覆蓋 */
+body.normal-mode {{ background: #f0ede8; color: #333; }}
+body.normal-mode #header {{ background: #fff; border-color: #ccc; }}
+body.normal-mode #header-title {{ color: #333; text-shadow: none; font-size: 0.55rem; }}
+body.normal-mode #header-count {{ color: #666; text-shadow: none; }}
+body.normal-mode #toggle-btn {{ background: #fff; border-color: #aaa; color: #555; box-shadow: 1px 1px 0 #aaa; }}
+body.normal-mode #status {{ background: #fff; border-color: #ccc; color: #555; text-shadow: none; }}
+body.normal-mode #map-wrap {{ border-color: #ccc; }}
+
 #status {{
-  padding: 8px 14px;
-  background: #0A120A;
-  border-top: 3px solid #3A7A3A;
-  color: #A3D977;
-  font-size: 0.45rem;
+  padding: 7px 12px;
+  background: #0e0904;
+  border-top: 3px solid #7a5c1e;
+  color: #d4af37;
+  font-size: 0.42rem;
   flex-shrink: 0;
   text-align: center;
   text-shadow: 1px 1px #000;
   letter-spacing: 1px;
 }}
 
-/* 自訂 popup */
+#toggle-btn {{
+  background: #2a1e06;
+  border: 2px solid #7a5c1e;
+  color: #FFD700;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.38rem;
+  padding: 5px 7px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 #000;
+  white-space: nowrap;
+  flex-shrink: 0;
+}}
+#toggle-btn:active {{ transform: translate(2px,2px); box-shadow: none; }}
+
+/* popup */
 .leaflet-popup-content-wrapper {{
-  background: #0D1B0D;
+  background: #1a1008;
   border: 2px solid #FFD700;
   border-radius: 0;
   color: #FFD700;
   font-family: 'Press Start 2P', monospace;
-  font-size: 0.5rem;
+  font-size: 0.48rem;
   box-shadow: 3px 3px 0 #000;
 }}
 .leaflet-popup-tip {{ background: #FFD700; }}
-.leaflet-popup-content {{ margin: 8px 10px; line-height: 1.6; }}
-
-/* 隱藏 Leaflet 預設 attribution 背景 */
+.leaflet-popup-content {{ margin: 8px 10px; line-height: 1.8; }}
 .leaflet-control-attribution {{
-  background: rgba(10,18,10,0.8) !important;
-  color: #3A7A3A !important;
-  font-size: 0.4rem !important;
+  background: rgba(10,8,2,0.75) !important;
+  color: #7a5c1e !important;
+  font-size: 0.38rem !important;
 }}
-
-/* 切換按鈕 */
-#toggle-btn {{
-  background: #1A2E1A;
-  border: 2px solid #3A7A3A;
-  color: #A3D977;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.4rem;
-  padding: 5px 7px;
-  cursor: pointer;
-  box-shadow: 2px 2px 0 #000;
-  letter-spacing: 0;
-  white-space: nowrap;
-  flex-shrink: 0;
-}}
-#toggle-btn:active {{
-  transform: translate(2px,2px);
-  box-shadow: none;
-}}
-/* 原版模式下地圖不套濾鏡 */
-#map.normal-mode {{
-  filter: none;
-  image-rendering: auto;
-}}
-#map-wrap.normal-mode::after {{
-  display: none;
-}}
-#map-wrap.normal-mode {{
-  border-color: #888;
-}}
-body.normal-mode {{ background: #f5f5f5; color: #333; }}
-body.normal-mode #header {{ background: #fff; border-color: #ccc; }}
-body.normal-mode #header-title {{ color: #333; text-shadow: none; }}
-body.normal-mode #header-count {{ color: #666; text-shadow: none; }}
-body.normal-mode #toggle-btn {{ background: #fff; border-color: #aaa; color: #555; box-shadow: 1px 1px 0 #aaa; }}
-body.normal-mode #status {{ background: #fff; border-color: #ccc; color: #555; text-shadow: none; }}
 </style>
 </head>
 <body>
@@ -1805,86 +1769,104 @@ body.normal-mode #status {{ background: #fff; border-color: #ccc; color: #555; t
 <div id="status">▶ 讀取中…</div>
 <script>
 const LIFF_ID = "{liff_id}";
-let map;
-let rpgTileLayer = null;
+let map, storeMarkers = [], storeCircles = [];
+let rpgOverlay = null;
 let normalTileLayer = null;
 let isRpgMode = true;
 
-const RPG_TILE_URL = "https://{{s}}.basemaps.cartocdn.com/dark_all/{{z}}/{{x}}/{{y}}{{r}}.png";
+/* 雙北 RPG 底圖的地理邊界（粗略校正，標記位置大致對應） */
+const RPG_BOUNDS = [[24.78, 121.15], [25.38, 121.88]];
+const RPG_IMG_URL = "/assets/rpg_map.png";
 const NORMAL_TILE_URL = "https://tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png";
+
+const rpgMarkerIcon = L.divIcon({{
+  html: '<div style="width:24px;height:24px;background:#FFD700;border:2px solid #4a2e00;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:2px 2px 0 #000;">⚑</div>',
+  className: '',
+  iconSize: [24, 24],
+  iconAnchor: [12, 12],
+  popupAnchor: [0, -15],
+}});
+
+const normalMarkerIcon = L.divIcon({{
+  html: '<div style="width:20px;height:20px;background:#e74c3c;border:2px solid #fff;border-radius:50%;box-shadow:1px 1px 3px rgba(0,0,0,0.4);"></div>',
+  className: '',
+  iconSize: [20, 20],
+  iconAnchor: [10, 10],
+  popupAnchor: [0, -12],
+}});
 
 function toggleMapMode() {{
   isRpgMode = !isRpgMode;
-  const mapEl = document.getElementById("map");
-  const mapWrap = document.getElementById("map-wrap");
   const btn = document.getElementById("toggle-btn");
 
   if (isRpgMode) {{
-    // 切回 RPG 模式
     if (normalTileLayer) {{ map.removeLayer(normalTileLayer); normalTileLayer = null; }}
-    if (!rpgTileLayer) {{
-      rpgTileLayer = L.tileLayer(RPG_TILE_URL, {{
-        attribution: "© CartoDB © OSM", maxZoom: 19, subdomains: "abcd"
-      }});
-    }}
-    rpgTileLayer.addTo(map);
-    mapEl.classList.remove("normal-mode");
-    mapWrap.classList.remove("normal-mode");
+    rpgOverlay.addTo(map);
     document.body.classList.remove("normal-mode");
     btn.textContent = "🗺️ 原版";
+    /* 重繪標記為 RPG 旗幟 */
+    refreshMarkers();
   }} else {{
-    // 切到原版模式
-    if (rpgTileLayer) {{ map.removeLayer(rpgTileLayer); rpgTileLayer = null; }}
-    if (!normalTileLayer) {{
-      normalTileLayer = L.tileLayer(NORMAL_TILE_URL, {{
-        attribution: "© OpenStreetMap contributors", maxZoom: 19
-      }});
-    }}
+    rpgOverlay.remove();
+    normalTileLayer = L.tileLayer(NORMAL_TILE_URL, {{
+      attribution: "© OpenStreetMap contributors", maxZoom: 19
+    }});
     normalTileLayer.addTo(map);
-    mapEl.classList.add("normal-mode");
-    mapWrap.classList.add("normal-mode");
     document.body.classList.add("normal-mode");
     btn.textContent = "⚔ RPG";
+    /* 重繪標記為原版圓點 */
+    refreshMarkers();
   }}
 }}
 
-const markerIcon = L.divIcon({{
-  html: '<div style="width:22px;height:22px;background:#FFD700;border:2px solid #000;display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:2px 2px 0 #000;image-rendering:pixelated;">⚑</div>',
-  className: '',
-  iconSize: [22, 22],
-  iconAnchor: [11, 11],
-  popupAnchor: [0, -14],
-}});
+let _stores = [];
+
+function refreshMarkers() {{
+  storeMarkers.forEach(function(m) {{ map.removeLayer(m); }});
+  storeCircles.forEach(function(c) {{ map.removeLayer(c); }});
+  storeMarkers = [];
+  storeCircles = [];
+
+  _stores.forEach(function(s) {{
+    const icon = isRpgMode ? rpgMarkerIcon : normalMarkerIcon;
+    const popupContent = isRpgMode
+      ? "<div>⚑ " + s.name + "</div>"
+      : "<div><b>" + s.name + "</b></div>";
+
+    if (isRpgMode) {{
+      const circle = L.circle([s.lat, s.lng], {{
+        radius: 300,
+        color: "#FFD700",
+        fillColor: "#c8860a",
+        fillOpacity: 0.15,
+        weight: 1.5,
+        dashArray: "5 5",
+      }}).addTo(map);
+      storeCircles.push(circle);
+    }}
+
+    const marker = L.marker([s.lat, s.lng], {{ icon: icon }})
+      .bindPopup(popupContent)
+      .addTo(map);
+    storeMarkers.push(marker);
+  }});
+}}
 
 function initMap(stores) {{
-  const center = stores.length > 0 ? [stores[0].lat, stores[0].lng] : [25.05, 121.53];
-  const zoom = stores.length > 0 ? 13 : 12;
+  _stores = stores;
 
-  map = L.map("map", {{ zoomControl: true }}).setView(center, zoom);
-
-  /* CartoDB Dark Matter — 暗色底圖，配合 RPG 濾鏡效果最佳 */
-  rpgTileLayer = L.tileLayer(RPG_TILE_URL, {{
-    attribution: "© CartoDB © OSM",
-    maxZoom: 19,
-    subdomains: "abcd",
+  map = L.map("map", {{
+    zoomControl: true,
+    minZoom: 10,
+    maxZoom: 16,
   }});
-  rpgTileLayer.addTo(map);
 
-  stores.forEach(function(s) {{
-    /* 勢力光暈 */
-    L.circle([s.lat, s.lng], {{
-      radius: 250,
-      color: "#FFD700",
-      fillColor: "#4A7A1A",
-      fillOpacity: 0.18,
-      weight: 1.5,
-      dashArray: "4 4",
-    }}).addTo(map);
-    /* 旗幟標記 */
-    L.marker([s.lat, s.lng], {{ icon: markerIcon }})
-      .bindPopup("<div>⚑ " + s.name + "</div>")
-      .addTo(map);
-  }});
+  /* 預設 RPG 底圖 */
+  rpgOverlay = L.imageOverlay(RPG_IMG_URL, RPG_BOUNDS, {{ opacity: 1.0 }});
+  rpgOverlay.addTo(map);
+  map.fitBounds(RPG_BOUNDS);
+
+  refreshMarkers();
 
   document.getElementById("header-count").textContent =
     "據點：" + stores.length;
@@ -1900,13 +1882,12 @@ liff.init({{ liffId: LIFF_ID }}).then(function() {{
   }});
 }}).then(function(r) {{ return r.json(); }}).then(function(data) {{
   initMap(data.stores || []);
-}}).catch(function() {{
+}}).catch(function(err) {{
   document.getElementById("status").textContent = "▶ 載入失敗，請重試";
-  map = L.map("map").setView([25.05, 121.53], 12);
-  rpgTileLayer = L.tileLayer(RPG_TILE_URL, {{
-    attribution: "© CartoDB © OSM", subdomains: "abcd",
-  }});
-  rpgTileLayer.addTo(map);
+  map = L.map("map").setView([25.05, 121.53], 11);
+  rpgOverlay = L.imageOverlay(RPG_IMG_URL, RPG_BOUNDS, {{ opacity: 1.0 }});
+  rpgOverlay.addTo(map);
+  map.fitBounds(RPG_BOUNDS);
 }});
 </script>
 </body>
