@@ -648,9 +648,8 @@ def _meat_shield_fuzzy_match(query: str) -> list[str]:
     return matches
 
 
-def _meat_shield_evaluate(store_name: str, taste: dict | None) -> str:
-    """依口味偏好對比店家屬性，回傳判定結果文字。無口味偏好時只回傳店家資訊。"""
-    # 取得店家資料
+def _meat_shield_evaluate(store_name: str, taste: dict | None) -> FlexMessage:
+    """依口味偏好對比店家屬性，回傳判定結果 FlexMessage。"""
     store_data = _store_notes.get(store_name) or _hidden_gems.get(store_name, {})
     vp = store_data.get("visual_profile", {})
     store_fat = vp.get("fat_ratio")
@@ -658,20 +657,34 @@ def _meat_shield_evaluate(store_name: str, taste: dict | None) -> str:
     store_sauce_taste = vp.get("sauce_taste")
     store_sauce = store_data.get("sauce_consistency")
 
-    # 店家屬性描述
     fat_label = {"fat_heavy": "偏肥", "lean_heavy": "偏瘦"}.get(store_fat, "不明")
     skin_label = {"with_skin": "黏黏", "no_skin": "不黏"}.get(store_skin, "不明")
     sauce_label = store_sauce or "不明"
     taste_label = store_sauce_taste or "不明"
-    store_desc = f"🍚 {store_name}\n肉質：{fat_label}・黏度：{skin_label}・醬汁：{sauce_label}・口味：{taste_label}"
+    attrs = f"肉質：{fat_label}　黏度：{skin_label}\n醬汁：{sauce_label}　口味：{taste_label}"
 
     if not taste:
-        return (
-            f"🛡️ 大叔查到了！\n\n{store_desc}\n\n"
-            f"想知道適不適合你？先去填個人口味設定，大叔幫你精準判定 🎯"
+        bubble = FlexBubble(
+            body=FlexBox(
+                layout="vertical",
+                background_color="#1A0505",
+                padding_all="xl",
+                contents=[
+                    FlexText(text="🛡️ 大叔查到了", align="center", color="#F87171", size="md", weight="bold", margin="none"),
+                    FlexSeparator(color="#7F1D1D", margin="lg"),
+                    FlexText(text=store_name, align="center", color="#FECACA", size="lg", weight="bold", wrap=True, margin="lg"),
+                    FlexText(text=attrs, align="center", color="#FCA5A5", size="xs", wrap=True, margin="sm"),
+                    FlexSeparator(color="#7F1D1D", margin="lg"),
+                    FlexText(
+                        text="想知道這家適不適合你？\n先去填個人口味設定，大叔幫你精準判定 🎯",
+                        align="center", color="#FECACA", size="sm", wrap=True, margin="lg",
+                    ),
+                ],
+            ),
+            styles=FlexBubbleStyles(body=FlexBlockStyle(background_color="#1A0505")),
         )
+        return FlexMessage(alt_text=f"🛡️ {store_name} 店家資訊", contents=bubble)
 
-    # 比對 4 個屬性（用戶選 None 代表不限，視為符合）
     user_fat = taste.get("fat_ratio")
     user_skin = taste.get("skin")
     user_sauce = taste.get("sauce_consistency")
@@ -685,36 +698,105 @@ def _meat_shield_evaluate(store_name: str, taste: dict | None) -> str:
     ])
 
     if matched >= 3:
-        verdict = "🟢 適合衝！"
-        comment = "跟你的口味偏好高度吻合，大叔建議直接衝！"
+        verdict_text = "🟢  適 合 衝 ！"
+        comment = "口味高度吻合，大叔蓋章認證，直接衝！"
+        bg = "#041A04"
+        accent = "#22C55E"
+        text_col = "#BBF7D0"
+        sub_col = "#86EFAC"
     elif matched == 2:
-        verdict = "🟡 可以試"
-        comment = "部分符合你的偏好，可以試試看，不一定是本命口味。"
+        verdict_text = "🟡  可  以  試"
+        comment = "部分符合你的偏好，可以試試，但不一定是本命口味。"
+        bg = "#1A1500"
+        accent = "#EAB308"
+        text_col = "#FEF08A"
+        sub_col = "#FDE047"
     else:
-        verdict = "🔴 小心踩雷"
-        comment = "跟你的口味落差較大，大叔建議先觀望。"
+        verdict_text = "🔴  不太合拍"
+        comment = "跟你的口味偏好落差較大，不代表不好吃，只是可能不是你的本命款。"
+        bg = "#1A0505"
+        accent = "#EF4444"
+        text_col = "#FECACA"
+        sub_col = "#FCA5A5"
 
-    return f"🛡️ 肉盾判定：{verdict}\n\n{store_desc}\n\n{comment}"
-
-
-def _handle_meat_shield_trigger(user_id: str) -> TextMessage:
-    """肉盾發動，提示用戶輸入店名。"""
-    _save_skill_session(user_id, "meat_shield", "await_store_name")
-    return TextMessage(text="🛡️ 肉盾發動！\n\n你想讓大叔先幫你擋哪一家？\n輸入店名，大叔來幫你把關 👊")
-
-
-def _handle_lura_trigger(user_id: str) -> tuple:
-    """魯拉發動，回覆分類 Quick Reply。"""
-    _save_skill_session(user_id, "lura", "await_category")
-    return (
-        TextMessage(
-            text="🌀 魯拉發動！\n\n召喚你曾經攻略過的魯肉飯據點，選擇要回訪哪一類：",
-            quick_reply=QuickReply(items=[
-                QuickReplyItem(action=MessageAction(label="🍚 最近攻略", text="🍚 最近攻略")),
-                QuickReplyItem(action=MessageAction(label="🍚 最常回訪", text="🍚 最常回訪")),
-                QuickReplyItem(action=MessageAction(label="🍚 好久沒吃", text="🍚 好久沒吃")),
-            ]),
+    bubble = FlexBubble(
+        body=FlexBox(
+            layout="vertical",
+            background_color=bg,
+            padding_all="xl",
+            contents=[
+                FlexText(text="🛡️ 肉盾判定", align="center", color=accent, size="sm", weight="bold", margin="none"),
+                FlexSeparator(color=accent, margin="md"),
+                FlexText(text=verdict_text, align="center", color=text_col, size="xl", weight="bold", margin="lg"),
+                FlexSeparator(color=accent, margin="lg"),
+                FlexText(text=store_name, align="center", color=text_col, size="lg", weight="bold", wrap=True, margin="lg"),
+                FlexText(text=attrs, align="center", color=sub_col, size="xs", wrap=True, margin="sm"),
+                FlexSeparator(color=accent, margin="lg"),
+                FlexText(text=comment, align="center", color=text_col, size="sm", wrap=True, margin="lg"),
+            ],
         ),
+        styles=FlexBubbleStyles(body=FlexBlockStyle(background_color=bg)),
+    )
+    return FlexMessage(alt_text=f"🛡️ 肉盾判定：{store_name}", contents=bubble)
+
+
+def _handle_meat_shield_trigger(user_id: str) -> FlexMessage:
+    """肉盾發動，回覆 Flex Message 技能啟動畫面。"""
+    _save_skill_session(user_id, "meat_shield", "await_store_name")
+    bubble = FlexBubble(
+        body=FlexBox(
+            layout="vertical",
+            background_color="#1A0505",
+            padding_all="xl",
+            contents=[
+                FlexText(text="🛡️", align="center", size="3xl", margin="none"),
+                FlexText(text="肉  盾  發  動", align="center", color="#F87171", size="xl", weight="bold", margin="md"),
+                FlexText(text="Lv.1 技能啟動", align="center", color="#7F1D1D", size="xs", margin="xs"),
+                FlexSeparator(color="#7F1D1D", margin="lg"),
+                FlexText(
+                    text="你想讓大叔幫你擋哪一家？\n輸入店名，大叔來幫你把關 👊",
+                    align="center", color="#FECACA", size="sm", wrap=True, margin="lg",
+                ),
+            ],
+        ),
+        styles=FlexBubbleStyles(body=FlexBlockStyle(background_color="#1A0505")),
+    )
+    return FlexMessage(alt_text="🛡️ 肉盾發動！輸入店名讓大叔幫你把關", contents=bubble)
+
+
+def _handle_lura_trigger(user_id: str) -> FlexMessage:
+    """魯拉發動，回覆魔法陣 Flex Message + 分類 Quick Reply。"""
+    _save_skill_session(user_id, "lura", "await_category")
+    bubble = FlexBubble(
+        body=FlexBox(
+            layout="vertical",
+            background_color="#12082E",
+            padding_all="xl",
+            contents=[
+                FlexText(text="✦  ◇  ◈  ◇  ✦", align="center", color="#7C3AED", size="sm", weight="bold", margin="none"),
+                FlexText(text="◇  ·  ·  ·  ·  ◇", align="center", color="#4C1D95", size="xs", margin="xs"),
+                FlexText(text="🌀", align="center", size="3xl", margin="sm"),
+                FlexText(text="◇  ·  ·  ·  ·  ◇", align="center", color="#4C1D95", size="xs", margin="xs"),
+                FlexText(text="✦  ◇  ◈  ◇  ✦", align="center", color="#7C3AED", size="sm", weight="bold", margin="xs"),
+                FlexText(text="魯 拉（ル ラ）", align="center", color="#C4B5FD", size="xl", weight="bold", margin="lg"),
+                FlexText(text="Lv.3 技能發動", align="center", color="#6D28D9", size="xs", margin="xs"),
+                FlexSeparator(color="#3B1FA3", margin="lg"),
+                FlexText(
+                    text="攻略過的魯肉飯據點，現在為你召喚。\n選擇要回訪哪一類：",
+                    align="center", color="#DDD6FE", size="sm", wrap=True, margin="lg",
+                ),
+            ],
+        ),
+        styles=FlexBubbleStyles(body=FlexBlockStyle(background_color="#12082E")),
+    )
+    return FlexMessage(
+        alt_text="🌀 魯拉發動！召喚你的魯肉飯據點",
+        contents=bubble,
+        quick_reply=QuickReply(items=[
+            QuickReplyItem(action=MessageAction(label="🕐 最近攻略", text="🍚 最近攻略")),
+            QuickReplyItem(action=MessageAction(label="🔥 最常回訪", text="🍚 最常回訪")),
+            QuickReplyItem(action=MessageAction(label="💤 好久沒吃", text="🍚 好久沒吃")),
+        ]),
     )
 
 
@@ -768,9 +850,17 @@ def _get_lura_stores(user_id: str, category: str) -> list[dict]:
 
 
 def _build_lura_flex(stores: list[dict], category: str) -> FlexMessage | None:
-    """組裝魯拉導航 Flex Message。"""
+    """組裝魯拉導航 Flex Message（傳送陣風格）。"""
     if not stores:
         return None
+
+    _CATEGORY_ICON = {
+        "🍚 最近攻略": "🕐",
+        "🍚 最常回訪": "🔥",
+        "🍚 好久沒吃": "💤",
+    }
+    cat_icon = _CATEGORY_ICON.get(category, "✦")
+    cat_label = category.replace("🍚 ", "")
 
     bubbles = []
     for s in stores:
@@ -779,24 +869,42 @@ def _build_lura_flex(stores: list[dict], category: str) -> FlexMessage | None:
         nav_url = f"https://www.google.com/maps/dir/?api=1&destination={lat},{lng}" if lat and lng else None
 
         body_contents = [
-            FlexText(text=name, weight="bold", size="sm", wrap=True, color="#4A2A16"),
+            # 外環
+            FlexText(text="⊙ · · · · · · · ⊙", align="center", color="#22D3EE", size="xs", weight="bold", margin="none"),
+            FlexText(text="· · · · · · · · · · ·", align="center", color="#0E7490", size="xxs", margin="xs"),
+            # 內環
+            FlexText(text="◎ · · · · · ◎", align="center", color="#06B6D4", size="xs", margin="xs"),
+            # 分類標籤
+            FlexText(text=f"{cat_icon}  {cat_label}", align="center", color="#67E8F9", size="xs", weight="bold", margin="md"),
+            # 店名（傳送座標）
+            FlexText(text=name, align="center", weight="bold", size="lg", wrap=True, color="#ECFEFF", margin="sm"),
+            # 內環下
+            FlexText(text="◎ · · · · · ◎", align="center", color="#06B6D4", size="xs", margin="md"),
+            FlexText(text="· · · · · · · · · · ·", align="center", color="#0E7490", size="xxs", margin="xs"),
+            # 外環下
+            FlexText(text="⊙ · · · · · · · ⊙", align="center", color="#22D3EE", size="xs", weight="bold", margin="xs"),
         ]
         if nav_url:
             body_contents.append(
                 FlexButton(
-                    action=URIAction(label="前往導航 🗺️", uri=nav_url),
+                    action=URIAction(label="傳送至此地 🗺️", uri=nav_url),
                     style="primary",
-                    color="#9A4F12",
-                    margin="sm",
+                    color="#0E7490",
+                    margin="lg",
                     height="sm",
                 )
             )
         else:
-            body_contents.append(FlexText(text="（無座標資料）", size="xs", color="#888888"))
+            body_contents.append(FlexText(text="（無座標資料）", size="xs", color="#0E7490", align="center", margin="md"))
 
         bubbles.append(FlexBubble(
-            body=FlexBox(layout="vertical", contents=body_contents, padding_all="lg"),
-            styles=FlexBubbleStyles(body=FlexBlockStyle(background_color="#FFF7EA")),
+            body=FlexBox(
+                layout="vertical",
+                contents=body_contents,
+                padding_all="xl",
+                justify_content="center",
+            ),
+            styles=FlexBubbleStyles(body=FlexBlockStyle(background_color="#050F1A")),
         ))
 
     return FlexMessage(
@@ -3153,7 +3261,7 @@ def _build_footprint_flex(user_id: str):
     bubble_size = "giga" if remaining else None
     user_level = _TITLE_LEVEL_MAP.get(current_title, 0)
     domain_footer = None
-    if user_level >= 2 and ABSOLUTE_DOMAIN_LIFF_URL:
+    if (_is_admin(user_id) or user_level >= 2) and ABSOLUTE_DOMAIN_LIFF_URL:
         domain_footer = FlexBox(
             layout="vertical",
             padding_all="md",
@@ -3372,18 +3480,45 @@ def handle_text(event):
                         matches = _meat_shield_fuzzy_match(text)
                         if not matches:
                             _clear_skill_session(user_id)
-                            reply = TextMessage(text=f"🛡️ 找不到「{text}」這家店耶…\n大叔的資料庫裡沒有，請確認店名是否正確。")
+                            bubble = FlexBubble(
+                                body=FlexBox(
+                                    layout="vertical",
+                                    background_color="#1A0505",
+                                    padding_all="xl",
+                                    contents=[
+                                        FlexText(text="🛡️ 找不到這家店", align="center", color="#F87171", size="md", weight="bold", margin="none"),
+                                        FlexSeparator(color="#7F1D1D", margin="lg"),
+                                        FlexText(text=f"「{text}」", align="center", color="#FECACA", size="lg", weight="bold", wrap=True, margin="lg"),
+                                        FlexText(text="大叔的資料庫裡沒有這家。\n請確認店名是否正確，或換個關鍵字試試。", align="center", color="#FCA5A5", size="sm", wrap=True, margin="md"),
+                                    ],
+                                ),
+                                styles=FlexBubbleStyles(body=FlexBlockStyle(background_color="#1A0505")),
+                            )
+                            reply = FlexMessage(alt_text=f"找不到「{text}」", contents=bubble)
                         elif len(matches) == 1:
                             _clear_skill_session(user_id)
                             taste = _load_taste_preference(user_id)
-                            reply = TextMessage(text=_meat_shield_evaluate(matches[0], taste))
+                            reply = _meat_shield_evaluate(matches[0], taste)
                         else:
                             _save_skill_session(user_id, "meat_shield", "await_store_select", {"candidates": matches})
-                            lines = ["大叔找到好幾家符合的，你說的是哪家？\n"]
-                            for i, name in enumerate(matches[:8], 1):
-                                lines.append(f"{i}. {name}")
-                            lines.append("\n請輸入編號或直接輸入店名")
-                            reply = TextMessage(text="\n".join(lines))
+                            store_lines = "\n".join(f"{i}. {n}" for i, n in enumerate(matches[:8], 1))
+                            bubble = FlexBubble(
+                                body=FlexBox(
+                                    layout="vertical",
+                                    background_color="#1A0505",
+                                    padding_all="xl",
+                                    contents=[
+                                        FlexText(text="🛡️ 找到好幾家", align="center", color="#F87171", size="md", weight="bold", margin="none"),
+                                        FlexSeparator(color="#7F1D1D", margin="lg"),
+                                        FlexText(text="你說的是哪家？", align="center", color="#FECACA", size="sm", margin="lg"),
+                                        FlexText(text=store_lines, color="#FCA5A5", size="sm", wrap=True, margin="md"),
+                                        FlexSeparator(color="#7F1D1D", margin="lg"),
+                                        FlexText(text="請輸入編號，或直接輸入店名", align="center", color="#FECACA", size="xs", margin="md"),
+                                    ],
+                                ),
+                                styles=FlexBubbleStyles(body=FlexBlockStyle(background_color="#1A0505")),
+                            )
+                            reply = FlexMessage(alt_text="找到好幾家，請選擇", contents=bubble)
                     elif step == "await_store_select":
                         candidates = data.get("candidates", [])
                         store_name = None
@@ -3399,7 +3534,7 @@ def handle_text(event):
                         if store_name:
                             _clear_skill_session(user_id)
                             taste = _load_taste_preference(user_id)
-                            reply = TextMessage(text=_meat_shield_evaluate(store_name, taste))
+                            reply = _meat_shield_evaluate(store_name, taste)
                         else:
                             reply = TextMessage(text="請輸入編號（例如：1）或直接輸入店名。")
                     else:
@@ -3540,7 +3675,7 @@ def handle_text(event):
             elif CHECKIN_ENABLED and text == "魯拉":
                 user_title, unique_count = _get_user_title_and_count(user_id)
                 if _is_admin(user_id) or _check_skill_unlocked(user_title, "魯肉飯勇者"):
-                    reply = _handle_lura_trigger(user_id)[0]
+                    reply = _handle_lura_trigger(user_id)
                 else:
                     reply = _build_skill_lock_message(user_title, unique_count, "魯拉（ルラ）")
             elif CHECKIN_ENABLED and text == "號令":
