@@ -3720,6 +3720,96 @@ def handle_text(event):
                         reply = TextMessage(text="📜 滷界敕令啟動！\n\n輸入你要推薦的店名（20 字以內）：")
                 else:
                     reply = _build_skill_lock_message(user_title, unique_count, "滷界敕令")
+            elif CHECKIN_ENABLED and text == "我的稱號":
+                _clear_skill_session(user_id)
+                if _db is None:
+                    reply = TextMessage(text="目前無法讀取稱號，請稍後再試。")
+                else:
+                    try:
+                        user_doc = _db.collection("user_footprint").document(user_id).get()
+                        records_ref = _db.collection("user_footprint").document(user_id).collection("records")
+                        docs = list(records_ref.stream())
+                        if not docs:
+                            title_num = user_id[-4:]
+                            display = f"無職轉生者#{title_num}"
+                            reply = _build_title_flex(display, "無職轉生者", 0)
+                        else:
+                            unique_stores = {d.to_dict().get("store_name") for d in docs}
+                            unique_count = len(unique_stores)
+                            user_data = user_doc.to_dict() if user_doc.exists else {}
+                            current_title = user_data.get("current_title") or _get_title(unique_count)
+                            title_number = user_data.get("title_number") or user_id[-4:]
+                            display = f"{current_title}#{title_number}"
+                            reply = _build_title_flex(display, current_title, unique_count)
+                    except Exception:
+                        reply = TextMessage(text="目前無法讀取稱號，請稍後再試。")
+            elif CHECKIN_ENABLED and text == "足跡":
+                _clear_skill_session(user_id)
+                flex = _build_footprint_flex(user_id)
+                if flex is None:
+                    reply = TextMessage(
+                        text="還沒有打卡記錄！下次吃魯肉飯，傳張照片給大叔，就能開始累積足跡 🍚",
+                    )
+                else:
+                    reply = flex
+            elif text == "怎麼用":
+                _clear_skill_session(user_id)
+                reply = TextMessage(text=_HOW_TO_USE_TEXT)
+            elif text == "店家清單":
+                _clear_skill_session(user_id)
+                reply = _build_store_list_flex()
+            elif text == "大叔雷達":
+                _clear_skill_session(user_id)
+                reply = TextMessage(text=_radar_text())
+            elif text == "巷仔口":
+                _clear_skill_session(user_id)
+                if _hidden_gems:
+                    reply = TextMessage(
+                        text="選個區，大叔帶你逛巷仔口 🏘️",
+                        quick_reply=_build_hidden_gems_quick_reply(),
+                    )
+                else:
+                    reply = TextMessage(text="巷仔口名單還在整理中，敬請期待！")
+            elif text == "大神推薦牆":
+                _clear_skill_session(user_id)
+                posts = _decree_get_today_posts()
+                reply = _build_decree_wall_text(posts)
+            elif text == "個人化":
+                _clear_skill_session(user_id)
+                if not _is_admin(user_id):
+                    _track("personal_recommendation")
+                saved = _load_taste_preference(user_id)
+                if saved:
+                    _save_taste_loaded(user_id, saved)
+                    reply = _build_taste_loaded_flex(saved)
+                else:
+                    _save_taste_quiz(user_id, 0, {})
+                    reply = TextMessage(
+                        text=_TASTE_QUIZ_QUESTIONS[0]["question"],
+                        quick_reply=_taste_quiz_quick_reply(0),
+                    )
+            elif text == "隨機驚喜":
+                _clear_skill_session(user_id)
+                _save_session(event.source.user_id, _RANDOM_SESSION)
+                from datetime import datetime
+                import zoneinfo
+                _hour = datetime.now(zoneinfo.ZoneInfo("Asia/Taipei")).hour
+                if 6 <= _hour < 11:
+                    _meal = "早餐"
+                elif 11 <= _hour < 14:
+                    _meal = "午餐"
+                elif 14 <= _hour < 17:
+                    _meal = "下午茶"
+                elif 17 <= _hour < 21:
+                    _meal = "晚餐"
+                else:
+                    _meal = "宵夜"
+                reply = TextMessage(
+                    text=f"大叔今天幫你決定{_meal}！分享位置讓大叔看看附近有啥 🎲",
+                    quick_reply=QuickReply(items=[
+                        QuickReplyItem(action=LocationAction(label="分享位置 📍"))
+                    ]),
+                )
             elif _get_skill_session(user_id) is not None:
                 sess = _get_skill_session(user_id)
                 skill = sess.get("skill")
@@ -3886,55 +3976,6 @@ def handle_text(event):
                         reply = TextMessage(text="感謝評價！")
                 else:
                     reply = TextMessage(text=_text_reply_greeting())
-            elif CHECKIN_ENABLED and text == "我的稱號":
-                if _db is None:
-                    reply = TextMessage(text="目前無法讀取稱號，請稍後再試。")
-                else:
-                    try:
-                        user_doc = _db.collection("user_footprint").document(user_id).get()
-                        records_ref = _db.collection("user_footprint").document(user_id).collection("records")
-                        docs = list(records_ref.stream())
-                        if not docs:
-                            title_num = user_id[-4:]
-                            display = f"無職轉生者#{title_num}"
-                            reply = _build_title_flex(display, "無職轉生者", 0)
-                        else:
-                            unique_stores = {d.to_dict().get("store_name") for d in docs}
-                            unique_count = len(unique_stores)
-                            user_data = user_doc.to_dict() if user_doc.exists else {}
-                            current_title = user_data.get("current_title") or _get_title(unique_count)
-                            title_number = user_data.get("title_number") or user_id[-4:]
-                            display = f"{current_title}#{title_number}"
-                            reply = _build_title_flex(display, current_title, unique_count)
-                    except Exception:
-                        reply = TextMessage(text="目前無法讀取稱號，請稍後再試。")
-            elif CHECKIN_ENABLED and text == "足跡":
-                flex = _build_footprint_flex(user_id)
-                if flex is None:
-                    reply = TextMessage(
-                        text="還沒有打卡記錄！下次吃魯肉飯，傳張照片給大叔，就能開始累積足跡 🍚",
-                    )
-                else:
-                    reply = flex
-            elif text == "統計" and _is_admin(event.source.user_id):
-                reply = _build_stats_message()
-            elif text == "怎麼用":
-                reply = TextMessage(text=_HOW_TO_USE_TEXT)
-            elif text == "店家清單":
-                reply = _build_store_list_flex()
-            elif text == "大叔雷達":
-                reply = TextMessage(text=_radar_text())
-            elif text == "巷仔口":
-                if _hidden_gems:
-                    reply = TextMessage(
-                        text="選個區，大叔帶你逛巷仔口 🏘️",
-                        quick_reply=_build_hidden_gems_quick_reply(),
-                    )
-                else:
-                    reply = TextMessage(text="巷仔口名單還在整理中，敬請期待！")
-            elif text == "大神推薦牆":
-                posts = _decree_get_today_posts()
-                reply = _build_decree_wall_text(posts)
             elif text == "附近巷仔口店家":
                 last_loc = _get_last_location(user_id)
                 if last_loc and _hidden_gems:
@@ -3965,19 +4006,6 @@ def handle_text(event):
                 reply = _build_hidden_gems_flex(text)
                 if not _is_admin(event.source.user_id):
                     _track("district", f"district_{text}")
-            elif text == "個人化":
-                if not _is_admin(user_id):
-                    _track("personal_recommendation")
-                saved = _load_taste_preference(user_id)
-                if saved:
-                    _save_taste_loaded(user_id, saved)
-                    reply = _build_taste_loaded_flex(saved)
-                else:
-                    _save_taste_quiz(user_id, 0, {})
-                    reply = TextMessage(
-                        text=_TASTE_QUIZ_QUESTIONS[0]["question"],
-                        quick_reply=_taste_quiz_quick_reply(0),
-                    )
             elif text == "下一抽 🎲":
                 last_loc = _get_last_location(user_id)
                 if last_loc:
@@ -3989,27 +4017,6 @@ def handle_text(event):
                             QuickReplyItem(action=LocationAction(label="分享位置 📍"))
                         ]),
                     )
-            elif text == "隨機驚喜":
-                _save_session(event.source.user_id, _RANDOM_SESSION)
-                from datetime import datetime
-                import zoneinfo
-                _hour = datetime.now(zoneinfo.ZoneInfo("Asia/Taipei")).hour
-                if 6 <= _hour < 11:
-                    _meal = "早餐"
-                elif 11 <= _hour < 14:
-                    _meal = "午餐"
-                elif 14 <= _hour < 17:
-                    _meal = "下午茶"
-                elif 17 <= _hour < 21:
-                    _meal = "晚餐"
-                else:
-                    _meal = "宵夜"
-                reply = TextMessage(
-                    text=f"大叔今天幫你決定{_meal}！分享位置讓大叔看看附近有啥 🎲",
-                    quick_reply=QuickReply(items=[
-                        QuickReplyItem(action=LocationAction(label="分享位置 📍"))
-                    ]),
-                )
             else:
                 rescue_stores = _get_rescue_stores(user_id) if CHECKIN_ENABLED else None
                 if rescue_stores and text in rescue_stores:
