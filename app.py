@@ -863,7 +863,7 @@ def _decree_user_posted_today(user_id: str) -> dict | None:
 def _build_decree_wall_text(posts: list[dict]) -> str:
     """組裝大神推薦牆文字。"""
     if not posts:
-        return "📜 今日滷令\n\n今天還沒有大神發布號令，稍後再來看看 🍚"
+        return "📜 今日滷令\n\n目前還沒有大神發布滷界敕令。\n\n這片滷界，仍在等待第一位魯肉飯大神降臨……\n等你升到 Lv.4，就能推薦你認可的魯肉飯店，\n讓眾勇者跟著攻略"
     lines = ["📜 今日滷令\n"]
     for i, p in enumerate(posts):
         display_id = p.get("display_id", "魯肉飯大神")
@@ -2764,7 +2764,8 @@ def _build_hidden_gems_quick_reply() -> QuickReply:
 
     ordered = [d for d in _QUICK_REPLY_ORDER if d in available]
     remaining = sorted(available - set(_QUICK_REPLY_ORDER))
-    items = [
+    items = [QuickReplyItem(action=MessageAction(label="大神推薦牆 📜", text="大神推薦牆"))]
+    items += [
         QuickReplyItem(action=MessageAction(label=d, text=d))
         for d in ordered + remaining
     ]
@@ -3429,6 +3430,18 @@ def handle_text(event):
                             reply = TextMessage(text="大叔審核不通過，請重新輸入。")
                         else:
                             store_name = data.get("store_name", "")
+                            _save_skill_session(user_id, "decree", "await_confirm", {"store_name": store_name, "reason": text})
+                            reply = TextMessage(
+                                text=f"📜 確認號令內容：\n\n推薦店：{store_name}\n理由：{text}\n\n確定發布嗎？",
+                                quick_reply=QuickReply(items=[
+                                    QuickReplyItem(action=MessageAction(label="確認送出 ✅", text="確認送出 ✅")),
+                                    QuickReplyItem(action=MessageAction(label="取消 ❌", text="取消 ❌")),
+                                ]),
+                            )
+                    elif step == "await_confirm":
+                        if text == "確認送出 ✅":
+                            store_name = data.get("store_name", "")
+                            reason = data.get("reason", "")
                             _clear_skill_session(user_id)
                             display_id = "魯肉飯大神"
                             if _db is not None:
@@ -3439,11 +3452,16 @@ def handle_text(event):
                                     display_id = f"魯肉飯大神#{title_number}"
                                 except Exception:
                                     pass
-                            success = _decree_post(user_id, store_name, text, display_id)
+                            success = _decree_post(user_id, store_name, reason, display_id)
                             if success:
-                                reply = TextMessage(text=f"📜 號令已發布！\n\n{display_id} 推薦：{store_name}\n理由：{text}\n\n滷界敕令，眾勇者皆知！")
+                                reply = TextMessage(text=f"📜 號令已發布！\n\n{display_id} 推薦：{store_name}\n理由：{reason}\n\n滷界敕令，眾勇者皆知！")
                             else:
                                 reply = TextMessage(text="號令發布失敗，請稍後再試。")
+                        elif text == "取消 ❌":
+                            _clear_skill_session(user_id)
+                            reply = TextMessage(text="已取消，號令未發布。")
+                        else:
+                            reply = None
                     else:
                         reply = None
                 else:
@@ -3537,9 +3555,7 @@ def handle_text(event):
                         _save_skill_session(user_id, "decree", "await_store_name")
                         reply = TextMessage(text="📜 滷界敕令啟動！\n\n輸入你要推薦的店名（20 字以內）：")
                 else:
-                    posts = _decree_get_today_posts()
-                    wall = _build_decree_wall_text(posts)
-                    reply = TextMessage(text=wall)
+                    reply = _build_skill_lock_message(user_title, unique_count, "滷界敕令")
             elif text == "統計" and _is_admin(event.source.user_id):
                 reply = _build_stats_message()
             elif text == "怎麼用":
@@ -3556,6 +3572,10 @@ def handle_text(event):
                     )
                 else:
                     reply = TextMessage(text="巷仔口名單還在整理中，敬請期待！")
+            elif text == "大神推薦牆":
+                posts = _decree_get_today_posts()
+                wall = _build_decree_wall_text(posts)
+                reply = TextMessage(text=wall)
             elif text == "附近巷仔口店家":
                 last_loc = _get_last_location(user_id)
                 if last_loc and _hidden_gems:
