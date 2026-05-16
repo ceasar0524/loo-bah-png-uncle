@@ -1153,5 +1153,17 @@
       "sauce_taste": "偏甜"
     },
     "sauce_consistency": "水"
+  },
+  "財神台南擔仔麵（松山區）": {
+    "location": {
+      "lat": 25.058588295676966,
+      "lng": 121.56065565321758
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   }
 }

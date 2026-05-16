@@ -3596,7 +3596,7 @@ def _build_footprint_flex(user_id: str):
             unique_stores.append(name)
 
     unique_count = len(unique_stores)
-    total_stores = 118
+    total_stores = 119
 
     # 稱號資料
     user_data = user_doc.to_dict() if user_doc.exists else {}
