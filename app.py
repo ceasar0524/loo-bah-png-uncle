@@ -3667,8 +3667,9 @@ def _build_footprint_flex(user_id: str):
     remaining = unique_stores[10:]
     bubble_size = "giga" if remaining else None
     user_level = _TITLE_LEVEL_MAP.get(current_title, 0)
+    founding_member = bool(user_data.get("founding_member", False))
     domain_footer = None
-    if (_is_admin(user_id) or user_level >= 2) and ABSOLUTE_DOMAIN_LIFF_URL:
+    if (_is_admin(user_id) or user_level >= 2 or founding_member) and ABSOLUTE_DOMAIN_LIFF_URL:
         domain_footer = FlexBox(
             layout="vertical",
             padding_all="md",
