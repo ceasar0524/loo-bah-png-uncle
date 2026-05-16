@@ -728,10 +728,10 @@ def _meat_shield_evaluate(store_name: str, taste: dict | None) -> FlexMessage:
     user_taste = taste.get("sauce_taste")
 
     matched = sum([
-        user_fat is None or user_fat == store_fat,
-        user_skin is None or user_skin == store_skin,
-        user_sauce is None or user_sauce == store_sauce,
-        user_taste is None or user_taste == store_sauce_taste,
+        user_fat is None or store_fat in (None, "均衡") or user_fat == store_fat,
+        user_skin is None or store_skin in (None, "均衡") or user_skin == store_skin,
+        user_sauce is None or store_sauce in (None, "均衡") or user_sauce == store_sauce,
+        user_taste is None or store_sauce_taste in (None, "均衡") or user_taste == store_sauce_taste,
     ])
 
     if matched >= 3:

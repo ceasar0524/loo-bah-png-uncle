@@ -6,7 +6,8 @@
     },
     "visual_profile": {
       "fat_ratio": "fat_heavy",
-      "skin": "with_skin"
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
     },
     "sauce_consistency": "水"
   },
@@ -65,7 +66,8 @@
     },
     "visual_profile": {
       "fat_ratio": "fat_heavy",
-      "skin": "with_skin"
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
     },
     "sauce_consistency": "水"
   },
@@ -121,7 +123,13 @@
     "location": {
       "lat": 25.043815077817502,
       "lng": 121.42505665933807
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
   },
   "魯肉飯家鄉口味（泰山區）": {
     "location": {
@@ -632,7 +640,13 @@
     "location": {
       "lat": 25.050860189556513,
       "lng": 121.52733165377303
-    }
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "稠"
   },
   "龍泉深海鮮魚湯（大安區）": {
     "location": {

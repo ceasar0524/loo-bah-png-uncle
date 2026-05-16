@@ -55,7 +55,7 @@
       "skin": "with_skin",
       "sauce_color": "medium",
       "rice_quality": "soft",
-      "sauce_taste": "均衡"
+      "sauce_taste": "偏鹹"
     },
     "available_toppings": [
       "滷蛋"
@@ -95,7 +95,7 @@
       "skin": "with_skin",
       "sauce_color": "medium",
       "rice_quality": "soft",
-      "sauce_taste": "均衡"
+      "sauce_taste": "偏鹹"
     },
     "topping_names": {
       "yin_gua": "蔭瓜"
@@ -135,7 +135,7 @@
       "skin": "with_skin",
       "sauce_color": "dark",
       "rice_quality": "soft",
-      "sauce_taste": "均衡"
+      "sauce_taste": "偏甜"
     },
     "available_toppings": [
       "滷鴨蛋"
@@ -255,7 +255,7 @@
       "skin": "with_skin",
       "sauce_color": "dark",
       "rice_quality": "soft",
-      "sauce_taste": "均衡"
+      "sauce_taste": "偏甜"
     },
     "location": {
       "lat": 25.040596586220968,
@@ -275,7 +275,7 @@
       "skin": "no_skin",
       "sauce_color": "medium",
       "rice_quality": "soft",
-      "sauce_taste": "均衡"
+      "sauce_taste": "偏鹹"
     },
     "available_toppings": [
       "半熟荷包蛋"
@@ -464,7 +464,7 @@
       "skin": "with_skin",
       "sauce_color": "medium",
       "rice_quality": "soft",
-      "sauce_taste": "均衡"
+      "sauce_taste": "偏甜"
     },
     "available_toppings": [
       "魯蛋"
@@ -501,7 +501,7 @@
       "fat_ratio": "fat_heavy",
       "skin": "with_skin",
       "sauce_color": "medium",
-      "sauce_taste": "均衡",
+      "sauce_taste": "偏鹹",
       "rice_quality": "soft"
     },
     "location": {
@@ -522,7 +522,7 @@
       "skin": "with_skin",
       "sauce_color": "dark",
       "rice_quality": "soft",
-      "sauce_taste": "均衡"
+      "sauce_taste": "偏甜"
     },
     "bowl": {
       "color": "silver",
