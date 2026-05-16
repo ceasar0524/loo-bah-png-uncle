@@ -1093,5 +1093,65 @@
       "sauce_taste": "偏鹹"
     },
     "sauce_consistency": "水"
+  },
+  "葉家藥燉排骨（板橋區）": {
+    "location": {
+      "lat": 25.02039879620303,
+      "lng": 121.48135509554488
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
+  },
+  "有有1969（中山區）": {
+    "location": {
+      "lat": 25.04925313171193,
+      "lng": 121.54207199554587
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
+  },
+  "三合麵（萬華區）": {
+    "location": {
+      "lat": 25.023449016967312,
+      "lng": 121.50047452690453
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
+  },
+  "廣州街無名牛肉湯排骨湯（萬華區）": {
+    "location": {
+      "lat": 25.037051208395656,
+      "lng": 121.49763711328208
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
+  },
+  "老童小吃部（大安區）": {
+    "location": {
+      "lat": 25.019776407626377,
+      "lng": 121.55321442873277
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏甜"
+    },
+    "sauce_consistency": "水"
   }
 }

@@ -1403,6 +1403,20 @@ def _process_checkin_with_title(user_id: str, store_name: str, db_source: str) -
                     pass
 
             threading.Thread(target=_update, daemon=True).start()
+
+            # 升到 Lv.1 時通知管理者
+            if new_title == "肉汁騎士" and _ADMIN_USER_ID:
+                def _notify_admin():
+                    try:
+                        founding_info = f"\n🎖️ 封測成員第 {founding_number} 位" if founding_marked else ""
+                        msg = f"🍚 有用戶升到肉汁騎士！\n稱號：肉汁騎士#{title_number}{founding_info}"
+                        with ApiClient(_config) as api_client:
+                            MessagingApi(api_client).push_message(
+                                PushMessageRequest(to=_ADMIN_USER_ID, messages=[TextMessage(text=msg)])
+                            )
+                    except Exception:
+                        pass
+                threading.Thread(target=_notify_admin, daemon=True).start()
         else:
             title_number = user_data.get("title_number") or user_id[-4:]
             founding_marked, founding_number = (False, 0)
@@ -3582,7 +3596,7 @@ def _build_footprint_flex(user_id: str):
             unique_stores.append(name)
 
     unique_count = len(unique_stores)
-    total_stores = 113
+    total_stores = 118
 
     # 稱號資料
     user_data = user_doc.to_dict() if user_doc.exists else {}
