@@ -17,6 +17,7 @@ from linebot.v3.messaging import (
     ReplyMessageRequest,
     ShowLoadingAnimationRequest,
     TextMessage,
+    ImageMessage,
 )
 from linebot.v3.messaging import (
     LocationAction,
@@ -3787,7 +3788,7 @@ _HOW_TO_USE_TEXT = """怎麼用：
 4. 📍 個人足跡
 每打卡一家店，就會在個人足跡看到已踩點的記錄，以及距離下一個職稱還差幾家。
 
-5. ⬆️ 如何升級
+5. ⬆️ 如何升級（圖文教學：請在文字框輸入「如何升級」）
 雙北目前共有 119 家店可打卡（持續擴充中），丟滷肉飯照片給大叔評論並完成打卡，即可累積經驗值。完成 5 間不同店家打卡，即可解鎖 Lv.1 職業！
 
 6. ⏳ 等待說明：
@@ -3957,6 +3958,12 @@ def handle_text(event):
             elif text == "怎麼用":
                 _clear_skill_session(user_id)
                 reply = TextMessage(text=_HOW_TO_USE_TEXT)
+            elif text == "如何升級":
+                _clear_skill_session(user_id)
+                reply = ImageMessage(
+                    original_content_url="https://storage.googleapis.com/loo-bah-png-assets/how-to-level-up.png",
+                    preview_image_url="https://storage.googleapis.com/loo-bah-png-assets/how-to-level-up.png",
+                )
             elif text == "店家清單":
                 _clear_skill_session(user_id)
                 reply = _build_store_list_flex()
