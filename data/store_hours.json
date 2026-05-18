@@ -11773,282 +11773,651 @@
     }
   },
   "葉家藥燉排骨（板橋區）": {
-    "periods": [
-      {
-        "day": 1,
-        "open": "16:30",
-        "close": "01:00"
-      },
-      {
-        "day": 2,
-        "open": "16:30",
-        "close": "01:00"
-      },
-      {
-        "day": 3,
-        "open": "16:30",
-        "close": "01:00"
-      },
-      {
-        "day": 5,
-        "open": "16:30",
-        "close": "01:00"
-      },
-      {
-        "day": 6,
-        "open": "16:30",
-        "close": "01:00"
-      }
-    ]
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 1,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 1,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 1,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 1,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 16,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 1,
+            "minute": 0
+          }
+        }
+      ]
+    }
   },
   "有有1969（中山區）": {
-    "periods": [
-      {
-        "day": 1,
-        "open": "11:00",
-        "close": "14:00"
-      },
-      {
-        "day": 1,
-        "open": "17:00",
-        "close": "21:30"
-      },
-      {
-        "day": 2,
-        "open": "11:00",
-        "close": "14:00"
-      },
-      {
-        "day": 2,
-        "open": "17:00",
-        "close": "21:30"
-      },
-      {
-        "day": 3,
-        "open": "11:00",
-        "close": "14:00"
-      },
-      {
-        "day": 3,
-        "open": "17:00",
-        "close": "21:30"
-      },
-      {
-        "day": 4,
-        "open": "11:00",
-        "close": "14:00"
-      },
-      {
-        "day": 4,
-        "open": "17:00",
-        "close": "21:30"
-      },
-      {
-        "day": 5,
-        "open": "11:00",
-        "close": "14:00"
-      },
-      {
-        "day": 5,
-        "open": "17:00",
-        "close": "21:30"
-      },
-      {
-        "day": 6,
-        "open": "11:00",
-        "close": "14:00"
-      },
-      {
-        "day": 6,
-        "open": "17:00",
-        "close": "21:30"
-      }
-    ]
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 1,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 17,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 21,
+            "minute": 30
+          }
+        }
+      ]
+    }
   },
   "三合麵（萬華區）": {
-    "periods": [
-      {
-        "day": 2,
-        "open": "07:00",
-        "close": "19:30"
-      },
-      {
-        "day": 3,
-        "open": "07:00",
-        "close": "19:30"
-      },
-      {
-        "day": 4,
-        "open": "07:00",
-        "close": "19:30"
-      },
-      {
-        "day": 5,
-        "open": "07:00",
-        "close": "19:30"
-      },
-      {
-        "day": 6,
-        "open": "07:00",
-        "close": "19:30"
-      }
-    ]
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 2,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 19,
+            "minute": 30
+          }
+        }
+      ]
+    }
   },
   "廣州街無名牛肉湯排骨湯（萬華區）": {
-    "periods": [
-      {
-        "day": 0,
-        "open": "07:00",
-        "close": "12:30"
-      },
-      {
-        "day": 2,
-        "open": "07:00",
-        "close": "12:30"
-      },
-      {
-        "day": 3,
-        "open": "07:00",
-        "close": "12:30"
-      },
-      {
-        "day": 4,
-        "open": "07:00",
-        "close": "12:30"
-      },
-      {
-        "day": 5,
-        "open": "07:00",
-        "close": "12:30"
-      }
-    ]
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 12,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 12,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 12,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 12,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 7,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 12,
+            "minute": 30
+          }
+        }
+      ]
+    }
   },
   "老童小吃部（大安區）": {
-    "periods": [
-      {
-        "day": 0,
-        "open": "11:30",
-        "close": "14:30"
-      },
-      {
-        "day": 0,
-        "open": "17:30",
-        "close": "20:30"
-      },
-      {
-        "day": 1,
-        "open": "11:30",
-        "close": "14:30"
-      },
-      {
-        "day": 1,
-        "open": "17:30",
-        "close": "20:30"
-      },
-      {
-        "day": 2,
-        "open": "11:30",
-        "close": "14:30"
-      },
-      {
-        "day": 2,
-        "open": "17:30",
-        "close": "20:30"
-      },
-      {
-        "day": 3,
-        "open": "11:30",
-        "close": "14:30"
-      },
-      {
-        "day": 3,
-        "open": "17:30",
-        "close": "20:30"
-      },
-      {
-        "day": 4,
-        "open": "11:30",
-        "close": "14:30"
-      },
-      {
-        "day": 4,
-        "open": "17:30",
-        "close": "20:30"
-      },
-      {
-        "day": 5,
-        "open": "11:30",
-        "close": "14:30"
-      },
-      {
-        "day": 5,
-        "open": "17:30",
-        "close": "20:30"
-      },
-      {
-        "day": 6,
-        "open": "11:30",
-        "close": "14:30"
-      },
-      {
-        "day": 6,
-        "open": "17:30",
-        "close": "20:30"
-      }
-    ]
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 0,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 17,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ]
+    }
   },
   "財神台南擔仔麵（松山區）": {
-    "periods": [
-      {
-        "day": 2,
-        "open": "11:30",
-        "close": "14:30"
-      },
-      {
-        "day": 2,
-        "open": "16:00",
-        "close": "20:30"
-      },
-      {
-        "day": 3,
-        "open": "11:30",
-        "close": "14:30"
-      },
-      {
-        "day": 3,
-        "open": "16:00",
-        "close": "20:30"
-      },
-      {
-        "day": 4,
-        "open": "11:30",
-        "close": "14:30"
-      },
-      {
-        "day": 4,
-        "open": "16:00",
-        "close": "20:30"
-      },
-      {
-        "day": 5,
-        "open": "11:30",
-        "close": "14:30"
-      },
-      {
-        "day": 5,
-        "open": "16:00",
-        "close": "20:30"
-      },
-      {
-        "day": 6,
-        "open": "11:30",
-        "close": "14:30"
-      },
-      {
-        "day": 6,
-        "open": "16:00",
-        "close": "20:30"
-      }
-    ]
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 20,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 14,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 16,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 30
+          }
+        }
+      ]
+    }
   }
 }
