@@ -4211,6 +4211,8 @@ def handle_text(event):
                     reply = TextMessage(text="已經沒有更多符合的店囉！")
             elif text == "台北市區":
                 reply = _build_taipei_city_flex()
+                if not _is_admin(event.source.user_id):
+                    _track("district", "district_台北市區")
             elif text in _hidden_gems_districts():
                 reply = _build_hidden_gems_flex(text)
                 if not _is_admin(event.source.user_id):
