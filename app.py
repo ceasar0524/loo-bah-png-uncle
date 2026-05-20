@@ -4193,7 +4193,7 @@ def handle_text(event):
             elif CHECKIN_ENABLED and text == "找不到我吃的店 🤷":
                 _clear_rescue_stores(user_id)
                 _save_skill_session(user_id, "store_report", "await_store_name")
-                reply = TextMessage(text="這家大叔還不認識！\n\n告訴大叔店名，幫你回報給系統，收入名單後就可以打卡了 🍚")
+                reply = TextMessage(text="這家大叔還不認識！\n\n告訴大叔店名，但是要好吃的唷！幫你回報給系統，收入名單後就可以打卡了 🍚")
             elif CHECKIN_ENABLED and text == "打卡這碗 📍":
                 _set_checkin_rescue(user_id)
                 reply = TextMessage(
