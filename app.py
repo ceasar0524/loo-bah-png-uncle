@@ -4173,8 +4173,9 @@ def handle_text(event):
                                                 TextMessage(text=f"🍜 用戶回報新店名：{store}")
                                             ])
                                         )
-                                except Exception:
-                                    pass
+                                except Exception as e:
+                                    import logging
+                                    logging.error(f"[store_report] 推播失敗：{e}")
                             threading.Thread(target=_notify_store_report, daemon=True).start()
                         reply = TextMessage(text=f"「{text}」大叔收到了！\n\n會去考察，收入名單後你就可以打卡了 🍚")
                     else:
