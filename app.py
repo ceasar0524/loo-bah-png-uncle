@@ -4167,9 +4167,10 @@ def handle_text(event):
                         if _ADMIN_USER_ID:
                             def _notify_store_report(store=text):
                                 try:
+                                    from linebot.v3.messaging import PushMessageRequest as _PushMessageRequest
                                     with ApiClient(_config) as api_client:
                                         MessagingApi(api_client).push_message(
-                                            PushMessageRequest(to=_ADMIN_USER_ID, messages=[
+                                            _PushMessageRequest(to=_ADMIN_USER_ID, messages=[
                                                 TextMessage(text=f"🍜 用戶回報新店名：{store}")
                                             ])
                                         )
