@@ -4151,6 +4151,34 @@ def handle_text(event):
                             reply = None
                     else:
                         reply = None
+                elif skill == "store_report":
+                    if step == "await_store_name":
+                        _clear_skill_session(user_id)
+                        if _db is not None:
+                            try:
+                                from datetime import datetime, timezone
+                                _db.collection("store_reports").add({
+                                    "store_name": text,
+                                    "user_id": user_id,
+                                    "timestamp": datetime.now(timezone.utc),
+                                })
+                            except Exception:
+                                pass
+                        if _ADMIN_USER_ID:
+                            def _notify_store_report(store=text):
+                                try:
+                                    with ApiClient(_config) as api_client:
+                                        MessagingApi(api_client).push_message(
+                                            PushMessageRequest(to=_ADMIN_USER_ID, messages=[
+                                                TextMessage(text=f"🍜 用戶回報新店名：{store}")
+                                            ])
+                                        )
+                                except Exception:
+                                    pass
+                            threading.Thread(target=_notify_store_report, daemon=True).start()
+                        reply = TextMessage(text=f"「{text}」大叔收到了！\n\n會去考察，收入名單後你就可以打卡了 🍚")
+                    else:
+                        reply = None
                 else:
                     reply = None
             elif CHECKIN_ENABLED and text == "就是這家 ✅":
@@ -4164,7 +4192,8 @@ def handle_text(event):
                     reply = TextMessage(text=_text_reply_greeting())
             elif CHECKIN_ENABLED and text == "找不到我吃的店 🤷":
                 _clear_rescue_stores(user_id)
-                reply = TextMessage(text="拍謝！這家大叔還不認識，下次再來！")
+                _save_skill_session(user_id, "store_report", "await_store_name")
+                reply = TextMessage(text="這家大叔還不認識！\n\n告訴大叔店名，幫你回報給系統，收入名單後就可以打卡了 🍚")
             elif CHECKIN_ENABLED and text == "打卡這碗 📍":
                 _set_checkin_rescue(user_id)
                 reply = TextMessage(
