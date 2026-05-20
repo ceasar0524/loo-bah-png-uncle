@@ -3242,12 +3242,15 @@ def _build_stats_message() -> TextMessage:
             near = d.get("nearby_search", 0)
             rand = d.get("random_surprise", 0)
             personal = d.get("personal_recommendation", 0)
-            checkin = d.get("checkin_confirmed", 0)
+            checkin_confirmed = d.get("checkin_confirmed", 0)
+            checkin_self = d.get("checkin_self", 0)
+            checkin_total = checkin_confirmed + checkin_self
             rating = d.get("rating_submitted", 0)
             return (
                 f"  丟照片：{img} 次\n  附近相似風格：{near} 次\n"
                 f"  隨機驚喜：{rand} 次\n  個人化：{personal} 次\n"
-                f"  就是這家：{checkin} 次\n  回答評價：{rating} 次"
+                f"  打卡：{checkin_total} 次（自行 {checkin_self}／就是這家 {checkin_confirmed}）\n"
+                f"  回答評價：{rating} 次"
             )
 
         districts = {k[len("district_"):]: v for k, v in total.items() if k.startswith("district_")}
@@ -4235,6 +4238,8 @@ def handle_text(event):
                     _clear_rescue_stores(user_id)
                     if NEARBY_SEARCH_ENABLED:
                         _save_session(user_id, text)
+                    if not _is_admin(user_id):
+                        _track("checkin_self")
                     reply = _process_checkin_with_title(user_id, text, db_source)
                 else:
                     reply = TextMessage(text=_text_reply_greeting())
