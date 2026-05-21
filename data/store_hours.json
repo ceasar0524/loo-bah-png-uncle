@@ -7015,106 +7015,6 @@
       ]
     }
   },
-  "7號鴨生炒新港鴨肉羹（板橋區）": {
-    "place_id": "ChIJl3s3YIADaDQR5cYIxXEfujw",
-    "hours": {
-      "periods": [
-        {
-          "open": {
-            "day": 0,
-            "hour": 11,
-            "minute": 30
-          },
-          "close": {
-            "day": 0,
-            "hour": 21,
-            "minute": 30
-          }
-        },
-        {
-          "open": {
-            "day": 1,
-            "hour": 11,
-            "minute": 30
-          },
-          "close": {
-            "day": 1,
-            "hour": 21,
-            "minute": 0
-          }
-        },
-        {
-          "open": {
-            "day": 2,
-            "hour": 11,
-            "minute": 30
-          },
-          "close": {
-            "day": 2,
-            "hour": 21,
-            "minute": 0
-          }
-        },
-        {
-          "open": {
-            "day": 3,
-            "hour": 11,
-            "minute": 30
-          },
-          "close": {
-            "day": 3,
-            "hour": 21,
-            "minute": 0
-          }
-        },
-        {
-          "open": {
-            "day": 4,
-            "hour": 11,
-            "minute": 30
-          },
-          "close": {
-            "day": 4,
-            "hour": 21,
-            "minute": 0
-          }
-        },
-        {
-          "open": {
-            "day": 5,
-            "hour": 11,
-            "minute": 30
-          },
-          "close": {
-            "day": 5,
-            "hour": 21,
-            "minute": 30
-          }
-        },
-        {
-          "open": {
-            "day": 6,
-            "hour": 11,
-            "minute": 30
-          },
-          "close": {
-            "day": 6,
-            "hour": 21,
-            "minute": 30
-          }
-        }
-      ],
-      "weekday_text": [
-        "Monday: 11:30 AM – 9:00 PM",
-        "Tuesday: 11:30 AM – 9:00 PM",
-        "Wednesday: 11:30 AM – 9:00 PM",
-        "Thursday: 11:30 AM – 9:00 PM",
-        "Friday: 11:30 AM – 9:30 PM",
-        "Saturday: 11:30 AM – 9:30 PM",
-        "Sunday: 11:30 AM – 9:30 PM"
-      ]
-    }
-  },
   "央二巷滷肉飯（土城區）": {
     "place_id": "ChIJ77Y8624daDQRoZpqOMYz08c",
     "hours": {
@@ -12415,6 +12315,250 @@
             "day": 6,
             "hour": 20,
             "minute": 30
+          }
+        }
+      ]
+    }
+  },
+  "7號鴨生炒新港鴨肉羹（萬華區）": {
+    "place_id": "ChIJl3s3YIADaDQR5cYIxXEfujw",
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 0,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 1,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 1,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 2,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 3,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 4,
+            "hour": 21,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 5,
+            "hour": 21,
+            "minute": 30
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 11,
+            "minute": 30
+          },
+          "close": {
+            "day": 6,
+            "hour": 21,
+            "minute": 30
+          }
+        }
+      ],
+      "weekday_text": [
+        "Monday: 11:30 AM – 9:00 PM",
+        "Tuesday: 11:30 AM – 9:00 PM",
+        "Wednesday: 11:30 AM – 9:00 PM",
+        "Thursday: 11:30 AM – 9:00 PM",
+        "Friday: 11:30 AM – 9:30 PM",
+        "Saturday: 11:30 AM – 9:30 PM",
+        "Sunday: 11:30 AM – 9:30 PM"
+      ]
+    }
+  },
+  "豬腳飯,控肉飯（萬華區）": {
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 1,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 6,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 2,
+            "hour": 1,
+            "minute": 0
+          },
+          "close": {
+            "day": 2,
+            "hour": 6,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 1,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 6,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 1,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 6,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 1,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 6,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 1,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 6,
+            "minute": 0
+          }
+        }
+      ]
+    }
+  },
+  "媽祖廟邊魷魚羹（板橋區）": {
+    "hours": {
+      "periods": [
+        {
+          "open": {
+            "day": 0,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 0,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 3,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 3,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 4,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 4,
+            "hour": 20,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 5,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 5,
+            "hour": 19,
+            "minute": 0
+          }
+        },
+        {
+          "open": {
+            "day": 6,
+            "hour": 10,
+            "minute": 0
+          },
+          "close": {
+            "day": 6,
+            "hour": 20,
+            "minute": 0
           }
         }
       ]

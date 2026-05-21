@@ -660,18 +660,6 @@
     },
     "sauce_consistency": "稠"
   },
-  "7號鴨生炒新港鴨肉羹（板橋區）": {
-    "location": {
-      "lat": 25.005879450443675,
-      "lng": 121.46455746982252
-    },
-    "visual_profile": {
-      "fat_ratio": "fat_heavy",
-      "skin": "with_skin",
-      "sauce_taste": "偏鹹"
-    },
-    "sauce_consistency": "水"
-  },
   "央二巷滷肉飯（土城區）": {
     "location": {
       "lat": 24.976910808826602,
@@ -1165,5 +1153,41 @@
       "sauce_taste": "偏鹹"
     },
     "sauce_consistency": "水"
+  },
+  "7號鴨生炒新港鴨肉羹（萬華區）": {
+    "location": {
+      "lat": 25.03664976874638,
+      "lng": 121.49613044141599
+    },
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    },
+    "sauce_consistency": "水"
+  },
+  "豬腳飯,控肉飯（萬華區）": {
+    "location": {
+      "lat": 25.028898404667636,
+      "lng": 121.4922578809059
+    },
+    "sauce_consistency": "水",
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    }
+  },
+  "媽祖廟邊魷魚羹（板橋區）": {
+    "location": {
+      "lat": 25.009694080850217,
+      "lng": 121.4570113250837
+    },
+    "sauce_consistency": "水",
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    }
   }
 }
