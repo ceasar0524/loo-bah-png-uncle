@@ -1189,5 +1189,29 @@
       "skin": "no_skin",
       "sauce_taste": "偏鹹"
     }
+  },
+  "盧杯杯大腸滷肉飯早午餐（北投區）": {
+    "location": {
+      "lat": 25.138528317894096,
+      "lng": 121.50264153859614
+    },
+    "sauce_consistency": "水",
+    "visual_profile": {
+      "fat_ratio": "lean_heavy",
+      "skin": "no_skin",
+      "sauce_taste": "偏鹹"
+    }
+  },
+  "寶杏堂手切滷肉飯（文山區）": {
+    "location": {
+      "lat": 24.981700129243013,
+      "lng": 121.56040849626466
+    },
+    "sauce_consistency": "水",
+    "visual_profile": {
+      "fat_ratio": "fat_heavy",
+      "skin": "with_skin",
+      "sauce_taste": "偏鹹"
+    }
   }
 }
