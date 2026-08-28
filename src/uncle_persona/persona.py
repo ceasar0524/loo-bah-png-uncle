@@ -57,6 +57,13 @@ _NOT_LU_ROU_FAN_RESPONSES = [
     "本來想說些什麼…但沒看到滷肉想想還是算了（喵喵）",
 ]
 
+# 辨識故障（視覺辨識 API 失敗）時的回應，與「不是魯肉飯」區隔開來
+_RECOGNITION_ERROR_RESPONSES = [
+    "哎唷，大叔的老花眼鏡起霧了，這碗暫時看不清楚，等一下再丟一次給大叔看！",
+    "夭壽喔，大叔的眼鏡剛剛摔到地上，等大叔擦一擦，你再拿一次過來！",
+    "齁！大叔的眼睛暫時罷工中，先喝口茶，等一下再給大叔看這碗！",
+]
+
 _SAFE_FALLBACK = "抱歉，大叔這次沒辦法正常回應，請稍後再試。"
 
 _OPENING_PHRASES = [
@@ -362,6 +369,9 @@ class UnclePersona:
         Returns:
             繁體中文回應字串
         """
+        if visual.get("food_type") == "error":
+            return random.choice(_RECOGNITION_ERROR_RESPONSES)
+
         if visual.get("food_type") == "kong_rou_fan":
             return random.choice(_KONG_ROU_FAN_RESPONSES)
 

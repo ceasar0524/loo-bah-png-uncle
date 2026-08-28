@@ -48,8 +48,11 @@ Be precise about bowl color. Only include toppings clearly visible in the photo.
 When is_lu_rou_fan is "no" or "kong_rou_fan", still return bowl_color, bowl_shape, bowl_texture, and toppings fields but set fat_ratio, skin, sauce_color, rice_quality, pork_part to null.
 """
 
+# 辨識故障（API 失敗、回應無法解析）時使用；food_type 標記為 "error"，
+# 讓下游能與「真的不是魯肉飯」區分開來
 _FALLBACK = {
     "is_lu_rou_fan": "no",
+    "food_type": "error",
     "confidence": 0,
     "bowl_color": None,
     "bowl_shape": None,
